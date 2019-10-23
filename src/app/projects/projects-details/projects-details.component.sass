@@ -1,0 +1,109 @@
+@mixin icon-size($size: 3.5em)
+	.devicon-html5-plain-wordmark,
+	.devicon-css3-plain-wordmark,
+	.devicon-sass-original,
+	.devicon-javascript-plain,
+	.devicon-jquery-plain-wordmark,
+	.devicon-angularjs-plain,
+	.devicon-bootstrap-plain-wordmark,
+	.devicon-java-plain,
+	.fa-database,
+	.devicon-git-plain-wordmark,
+	.devicon-github-plain-wordmark,
+	.fa-font-awesome,
+	.devicon-nodejs-plain,
+	.devicon-heroku-plain,
+	.devicon-postgresql-plain-wordmark,
+	.devicon-ruby-plain,
+	.devicon-rails-plain-wordmark,
+	.devicon-mongodb-plain-wordmark,
+	.devicon-express-original-wordmark,
+	.fa-facebook-official,
+	.fa-twitter-square,
+	.fa-linkedin,
+	.fa-angellist,
+	.fa-envelope-o,
+	.devicon-typescript-plain
+
+		@media screen and (min-width: 320px)
+			font-size: $size
+		
+
+		@media screen and (min-width: 768px)
+			font-size: $size + 0.5em
+
+.btn-link
+	padding: 0.5em 0.75em 1.5em 2em
+
+.jumbotron
+	position: relative
+	padding: 0
+	height: 25em
+	filter: grayscale(30%)
+
+	// @media screen and (max-width:)
+
+	background:
+		size: auto
+		position: center
+		repeat: no-repeat
+
+	.footnotes
+		position: absolute
+		bottom: 0
+		right: 0
+		padding: 0 2em 2em 2em
+		color: white
+
+		h4
+			text-align: right
+			// filter: blur(2px)
+
+		ul
+			padding: 0
+			margin: 0
+			display: flex
+			flex-direction: row-reverse
+			list-style: none
+
+			li
+				@include icon-size(2.5em)
+
+	// Specific cover image styling
+	&.portfolio
+		background-size: cover
+
+	&.dance
+		background-size: cover
+
+	&.murders
+		background-size: contain
+		background-color: #fff
+
+		> .footnotes
+			color: #000
+
+	&.health
+		background-size: cover
+
+	&.mongomart
+		background-size: cover
+
+	&.bank
+		background-size: cover
+
+		> .footnotes
+			color: #000
+
+	&.portfolio2
+		background-size: cover
+
+
+.project-detail
+	padding: 0 2em
+	overflow-wrap: break-word
+	word-wrap: break-word
+	font-weight: 300
+
+	h2
+		border-bottom: 1px solid black
