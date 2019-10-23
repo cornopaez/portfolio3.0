@@ -1,0 +1,20 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-6 home-cols">
+      <div class="left-top">
+        <h1>Mauricio_Páez | Developer</h1>
+        <img src="{{ currentContent.content.image }}" class="avatar">
+      </div>
+    </div> <!-- End of Column -->
+    <div class="col-md-6 home-cols">
+      <div class="right-bottom">
+        <div class="intro-paragraph">
+          {{ currentContent.content.description }}
+        </div>
+        <div class="nav-buttons">
+          <a *ngFor="let link of currentContent.content.description_links" routerLink="/{{ link }}" class="btn btn-dark">{{ link }}</a>
+        </div>
+      </div>
+    </div> <!-- End of Column -->
+  </div> <!-- End of Row -->
+</div> <!-- End of Container -->
