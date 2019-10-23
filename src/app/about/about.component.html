@@ -1,0 +1,54 @@
+<nav *ngIf="currentContent.navbar">
+  <h1>{{ '{'}} {{ currentContent.navbar.title }} {{ '}'}}</h1>
+  <div class="links">
+    <ul class="nav nav-pills">
+      <li *ngFor="let link of currentContent.navbar.links" class="nav-item array-coma-2">
+        <a class="nav-link" routerLink="/{{ link }}">{{ link }}</a>
+      </li>
+    </ul> 
+  </div>
+</nav>
+
+<div class="detail">
+  <div class="group"> <!-- Background -->
+    <h2>{{ background.title }}</h2>
+    <div class="points-container">
+      <div class="background points">
+        <p>{{ background.description }}</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="group"> <!-- Lanaguages and Tech -->
+    <h2>{{ languages.title }}</h2>
+    <ul class="icon-container">
+      <li *ngFor="let icon of languages.icons" class="lang-icon">
+        <i class="{{ icon }}"></i>
+      </li>
+    </ul>
+  </div>
+
+  <div class="group"> <!-- Experience -->
+    <h2>{{ experience.title }}</h2>
+    <ul class="experience-container">
+      <li *ngFor="let item of experience.entities" class="entities">
+        <h4>{{ item.title }}</h4>
+        <ul *ngFor="let point of item.points">
+          <li [innerHTML]="point"></li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+
+  <div class="group"> <!-- Education -->
+    <h2>{{ education.title }}</h2>
+    <ul class="education-container">
+      <li *ngFor="let item of education.entities" class="entities">
+        <h4>{{ item.title }}</h4>
+        <ul *ngFor="let point of item.points">
+          <li [innerHTML]="point"></li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</div>
