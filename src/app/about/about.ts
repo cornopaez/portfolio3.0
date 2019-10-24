@@ -1,29 +1,29 @@
 export const BACKGROUND = {
   title: 'Background',
-  description: 'I am a former musician who\'s discovered the joy of coding. I initially learned to code in Java, building small programs for my classes, including some that used SQL databases in the stack. I am handy with SQL and traditional relational database schema design and queries. I’ve since moved on to using a MEAN as my main stack, using it to build this site and deploying exclusively to Heroku. I am familiar and feel comfortable in the languages and technologies below. Feel free to poke around the site and contact me if you have any questions.'
+  description: 'I am a former musician who\'s discovered the joy of coding. I initially learned to code in Java, building small programs for my classes, including some that used SQL databases in the stack. I am handy with SQL and traditional relational database schema design and queries. I’ve since moved on to using a MEAN as my main stack, using it to build this site and deploying exclusively to Heroku. I am familiar and feel comfortable in the languages and technologies below, as well as some Machine Learning Techniques using Octave/MATLAB. Feel free to poke around the site and contact me if you have any questions.'
 }
 
 export const LANGUAGES = {
   title: 'Languages and Technology',
   icons: [
-    "devicon-html5-plain-wordmark",
-    "devicon-css3-plain-wordmark",
-    "devicon-sass-original",
-    "devicon-javascript-plain",
-    "devicon-jquery-plain-wordmark",
-    "devicon-angularjs-plain",
-    "devicon-express-original-wordmark",
-    "devicon-mongodb-plain-wordmark",
-    "devicon-nodejs-plain",
-    "devicon-typescript-plain",
-    "devicon-bootstrap-plain-wordmark",
-    "devicon-git-plain-wordmark",
-    "devicon-github-plain-wordmark",
-    "devicon-java-plain",
-    "devicon-heroku-plain",
-    "devicon-postgresql-plain-wordmark",
-    "devicon-ruby-plain",
-    "devicon-rails-plain-wordmark",
+    "devicon-html5-plain-wordmark colored",
+    "devicon-css3-plain-wordmark colored",
+    "devicon-sass-original colored",
+    "devicon-javascript-plain colored",
+    "devicon-jquery-plain-wordmark colored",
+    "devicon-angularjs-plain colored",
+    "devicon-express-original-wordmark colored",
+    "devicon-mongodb-plain-wordmark colored",
+    "devicon-nodejs-plain colored",
+    "devicon-typescript-plain colored",
+    "devicon-bootstrap-plain-wordmark colored",
+    "devicon-git-plain-wordmark colored",
+    "devicon-github-plain-wordmark colored",
+    "devicon-java-plain colored",
+    "devicon-heroku-plain colored",
+    "devicon-postgresql-plain-wordmark colored",
+    "devicon-ruby-plain colored",
+    "devicon-rails-plain-wordmark colored",
     "fa fa-database"
   ]
 }
