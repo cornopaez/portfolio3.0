@@ -9,6 +9,11 @@ import { ProjectsResolver } from './projects/projects-resolver.component';
 import { ProjectsDetailsComponent } from './projects/projects-details/projects-details.component';
 import { ProjectsHomeComponent } from './projects/projects-home/projects-home.component';
 import { ProjectDetailResolver } from './projects/projects-details/project-details-resolver.component';
+import { ContactComponent } from './contact/contact.component';
+import { ContactFormComponent } from './contact/contact-form/contact-form.component'
+import { ContactHomeComponent } from './contact/contact-home/contact-home.component'
+import { ContactSuccessComponent } from './contact/contact-success/contact-success.component'
+import { CanDeactivateGuard } from './shared/can-deactivate-guard.service'
 
 const routes: Routes = [
 	{ 
@@ -43,6 +48,25 @@ const routes: Routes = [
   { 
     path: 'About', 
     component: AboutComponent 
+  },
+  { 
+    path: 'Contact',
+    component: ContactComponent,
+    children: [
+      {
+        path: 'form',
+        component: ContactFormComponent,
+        canDeactivate: [CanDeactivateGuard]
+      },
+      {
+        path: 'FormSuccess',
+        component: ContactSuccessComponent
+      },
+      {
+        path: '',
+        component: ContactHomeComponent
+      }
+    ]
   },
   {
     path: 'Error', 

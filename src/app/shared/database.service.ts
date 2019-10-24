@@ -6,7 +6,7 @@ import { catchError, retry } from 'rxjs/operators';
 import { Router } from '@angular/router';
 
 import { ProjectCard } from '../projects/project-card'
-// import { ContactSuccess } from '../contact/contact-success/contact-success'
+import { ContactSuccess } from '../contact/contact-success/contact-success'
 
 
 @Injectable()
@@ -68,14 +68,14 @@ export class DatabaseService {
                                   Otherwise, the function prints a user-friendly message to the browser's console and
                                   returns a null observable.
   */
-  // submitContactForm(contactInformation) : Observable<ContactSuccess> {
-  //   let url = this.submitContactFormUrl
-  //   return this.http.post<ContactSuccess>(url, contactInformation)
-  //     .pipe(
-  //       retry(3),
-  //       catchError(this.handleError('submitContactForm', null))
-  //     );
-  // }
+  submitContactForm(contactInformation) : Observable<ContactSuccess> {
+    let url = this.submitContactFormUrl
+    return this.http.post<ContactSuccess>(url, contactInformation)
+      .pipe(
+        retry(3),
+        catchError(this.handleError('submitContactForm', null))
+      );
+  }
 
   /**
    * Handle Http operation that failed.
