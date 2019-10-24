@@ -1,6 +1,6 @@
 import { Injectable, Inject, Optional } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpResponse, HttpHeaders } from '@angular/common/http';
 // import { ErrorObservable } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
 import { Router } from '@angular/router';
@@ -34,6 +34,7 @@ export class DatabaseService {
                                         and returns an empty array.
   */
   getProjectsCards() : Observable<ProjectCard[]> {
+    // console.log(this.httpOptions)
     return this.http.get<Array<ProjectCard>>(this.getProjectsCardsUrl)
     .pipe(
       retry(3),
