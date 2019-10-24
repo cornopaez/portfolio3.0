@@ -24,6 +24,7 @@
     "helmet": "^3.21.2",
     "mongodb": "^3.3.3",
     "ng-recaptcha": "^5.0.0",
+    "request": "^2.88.0",
     "rxjs": "~6.4.0",
     "tslib": "^1.10.0",
     "zone.js": "~0.9.1"
