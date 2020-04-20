@@ -18,7 +18,8 @@ export class AboutComponent implements OnInit {
       links: [
         'Home',
         'Projects',
-        'Contact'
+        'Contact',
+        'Musings'
       ]
     }
   }

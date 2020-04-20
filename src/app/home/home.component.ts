@@ -17,7 +17,8 @@ export class HomeComponent implements OnInit {
         description_links: [
           'Projects',
           'About',
-          'Contact'
+          'Contact',
+          'Musings'
         ]
       }
     };

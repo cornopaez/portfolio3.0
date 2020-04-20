@@ -25,6 +25,7 @@ import { ContactComponent } from './contact/contact.component';
 import { ContactFormComponent } from './contact/contact-form/contact-form.component';
 import { ContactHomeComponent } from './contact/contact-home/contact-home.component';
 import { ContactSuccessComponent } from './contact/contact-success/contact-success.component';
+import { MusingsComponent } from './musings/musings.component';
 
 
 @NgModule({
@@ -39,7 +40,8 @@ import { ContactSuccessComponent } from './contact/contact-success/contact-succe
     ContactComponent,
     ContactFormComponent,
     ContactHomeComponent,
-    ContactSuccessComponent
+    ContactSuccessComponent,
+    MusingsComponent
   ],
   imports: [
     BrowserModule,

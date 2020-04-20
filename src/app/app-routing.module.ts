@@ -4,6 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { HomeComponent } from './home/home.component';
 import { AboutComponent } from './about/about.component';
 import { ErrorComponent } from './error/error.component';
+import { MusingsComponent } from './musings/musings.component';
 import { ProjectsComponent } from './projects/projects.component';
 import { ProjectsResolver } from './projects/projects-resolver.component';
 import { ProjectsDetailsComponent } from './projects/projects-details/projects-details.component';
@@ -67,6 +68,10 @@ const routes: Routes = [
         component: ContactHomeComponent
       }
     ]
+  },
+  {
+    path: 'Musings',
+    component: MusingsComponent
   },
   {
     path: 'Error', 
