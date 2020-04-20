@@ -26,6 +26,8 @@ import { ContactFormComponent } from './contact/contact-form/contact-form.compon
 import { ContactHomeComponent } from './contact/contact-home/contact-home.component';
 import { ContactSuccessComponent } from './contact/contact-success/contact-success.component';
 import { MusingsComponent } from './musings/musings.component';
+import { RpiTwonkyComponent } from './musings/rpi-twonky/rpi-twonky.component';
+import { MusingsHomeComponent } from './musings/musings-home/musings-home.component';
 
 
 @NgModule({
@@ -41,7 +43,9 @@ import { MusingsComponent } from './musings/musings.component';
     ContactFormComponent,
     ContactHomeComponent,
     ContactSuccessComponent,
-    MusingsComponent
+    MusingsComponent,
+    RpiTwonkyComponent,
+    MusingsHomeComponent
   ],
   imports: [
     BrowserModule,

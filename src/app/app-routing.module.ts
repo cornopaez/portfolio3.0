@@ -5,6 +5,8 @@ import { HomeComponent } from './home/home.component';
 import { AboutComponent } from './about/about.component';
 import { ErrorComponent } from './error/error.component';
 import { MusingsComponent } from './musings/musings.component';
+import { MusingsHomeComponent } from './musings/musings-home/musings-home.component';
+import { RpiTwonkyComponent } from './musings/rpi-twonky/rpi-twonky.component';
 import { ProjectsComponent } from './projects/projects.component';
 import { ProjectsResolver } from './projects/projects-resolver.component';
 import { ProjectsDetailsComponent } from './projects/projects-details/projects-details.component';
@@ -71,7 +73,17 @@ const routes: Routes = [
   },
   {
     path: 'Musings',
-    component: MusingsComponent
+    component: MusingsComponent,
+    children: [
+      {
+        path: '',
+        component: MusingsHomeComponent
+      },
+      {
+        path: 'rpi-twonky',
+        component: RpiTwonkyComponent
+      }
+    ]
   },
   {
     path: 'Error', 
