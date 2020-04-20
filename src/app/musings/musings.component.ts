@@ -13,9 +13,9 @@ export class MusingsComponent implements OnInit {
       title: 'Musings',
       links: [
         'Home',
+        'About',
         'Projects',
-        'Contact',
-        'About'
+        'Contact'
       ]
     }
   }
