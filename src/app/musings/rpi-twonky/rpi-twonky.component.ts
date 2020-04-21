@@ -13,7 +13,7 @@ export class RpiTwonkyComponent implements OnInit {
         'fas fa-terminal'
       ],
       twonky: '../../../../assets/twonkyicon-120x120.png',
-      image:'../../../../assets/damir-kopezhanov-P4me0QE8Wlk-unsplash.jpg'
+      image:'../../../../assets/jonathan-velasquez-c1ZN57GfDB0-unsplash.jpg'
     }
   }
 
