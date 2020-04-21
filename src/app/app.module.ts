@@ -18,8 +18,8 @@ import { DialogService } from './shared/dialog.service';
 import { CanDeactivateGuard } from './shared/can-deactivate-guard.service';
 
 // reCaptcha imports
-// import { RecaptchaModule } from 'ng-recaptcha';
-// import { RecaptchaFormsModule } from 'ng-recaptcha';
+import { RecaptchaModule } from 'ng-recaptcha';
+import { RecaptchaFormsModule } from 'ng-recaptcha';
 import { DatabaseService } from './shared/database.service';
 import { ContactComponent } from './contact/contact.component';
 import { ContactFormComponent } from './contact/contact-form/contact-form.component';
@@ -51,9 +51,9 @@ import { MusingsHomeComponent } from './musings/musings-home/musings-home.compon
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
-    HttpClientModule
-    // RecaptchaModule.forRoot(),
-    // RecaptchaFormsModule
+    HttpClientModule,
+    RecaptchaModule,
+    RecaptchaFormsModule
   ],
   providers: [
     Title,
