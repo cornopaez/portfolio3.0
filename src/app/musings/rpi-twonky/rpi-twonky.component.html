@@ -2,31 +2,196 @@
   <a routerLink="/Musings" class="btn btn-link"><i class="fas fa-chevron-left"></i>  Back to Musings</a>  
 </div>
 
-<div class="jumbotron">
+<div class="jumbotron" [style.backgroundImage]="'url(' + currentContent.content.image + ')'">
   <div class="footnotes">
     <h4>Tech used</h4>
     <ul>
-<!--       <li *ngFor="let icon of currentContent.content.icons">
+      <li *ngFor="let icon of currentContent.content.icons">
         <i class="{{icon}}"></i>
-      </li> -->
+      </li>
+      <li class="twonky">
+      	<img src="{{currentContent.content.twonky}}">
+      </li>
     </ul>
   </div>
 </div>
 
 <div class="detail project-detail">
-  <h2>
-    About this project
-  </h2>
+  <h1>
+    Installing Twonky Media Server in a Raspberry Pi
+  </h1>
+  <small class="text-muted">Updated 4/20/2020</small><br>
+  <small class="text-muted">Photo by <a href="https://unsplash.com/@kpzhnv">Damir Kopezhanov</a> on Unsplash</small>
+  <br>
+  <br>
   <div class="project-container">
     <div class="project-points">
-      <!-- <p [innerHtml]=currentContent.content.description></p>
-      <h4>Source Code</h4>
-      <p><a href="{{ currentContent.content.source }}">{{ currentContent.content.source }}</a></p>
-      <h4>Credits</h4>
-      <p [innerHtml]=currentContent.content.footer></p>
-      <a class="btn btn-primary" href="{{ currentContent.content.link }}">Launch Project</a>
-      <br> -->
-      <small>Some projects may take a bit of time loading</small>
+		<p>I generally don't like when a website gives you a whole personal story about whatever you are looking for. Chances are, whoever is doing web searches trying to figure out... whetever, they have been to several other sites trying to get a sense of what's going on. This is not what I do here.</p>
+		<p>You're here and there's a high chance you know what you are doing. To that end, feel free to skip the background section and dive right in.</p>
+		<br>
+		<h2>Twonky Background</h2>
+		<p>Twonky Media Server is a fine DLNA UPnP server that supports lots of media files, a rare example of the right combination of functionality and price. I can hear you asking: "But, Twonky is not free. Why should I bother?." The answer is simple: if you want a media server that doesn't take over your RPi that supports every file type imaginable, this is the way to go.
+		</p>
+		<p>The big caveat here, apart from the cost, is that I'm writing this for the audiophiles amongst us. Twonky is one of the few DLNA servers for Linux that supports the streaming of DSD (DSF and DFF) files. For most people, this is irrelevant, as the playback of DSD files requires expensive equipment, not to mention the fair sourcing of said files in the first place. Most people will be happy streaming from their paid services and not bother with this.</p>
+		<p>If you are interested in DSD as a format, Wikipedia has a good write up on it.</p>
+		<br>
+		<h2>Table of Contents</h2>
+			<ol>
+				<li><a routerLink="../rpi-twonky" fragment="tools">Tools Needed</a></li>
+				<li><a routerLink="../rpi-twonky" fragment="start-rpi">Getting started with Raspberry Pi (Abridged)</a></li>
+				<li><a routerLink="../rpi-twonky" fragment="install-twonky">Downloading and installing Twonky</a></li>
+				<li><a routerLink="../rpi-twonky" fragment="service-twonky">Setting up a service for Twonky</a></li>
+				<li><a routerLink="../rpi-twonky" fragment="firewall">Dealing with the firewall</a></li>
+				<li><a routerLink="../rpi-twonky" fragment="musings">Musings</a></li>
+			</ol>
+			<br>
+		<h2 id="tools">Tools Needed</h2>
+			Well, this part is easy. There's only a few things needed to complete this project:
+			<ul>
+				<li>Raspberry Pi with Raspbian installed (I personally use RPi 4 Model B, 2GB variant)</li>
+				<li>Twonky Install Files</li>
+				<li>Time and patience to go through the process</li>
+			</ul>
+			<p>If you're runnning a headless RPi, you'll also need a second computer to access the RPi.</p>
+			<br>
+		<h2 id="start-rpi">Getting started with Raspberry Pi (Abridged)</h2>
+			<p>
+				I'm going to skip the basic setup of a brand new Raspberry Pi here. Should you need some assistance getting started from zero, <a href="https://projects.raspberrypi.org/en/pathways/getting-started-with-raspberry-pi">I'd recommend Rasbperry Pi's own tutorial.</a>
+			</p>
+			<p>However, there's a few things I should note about the state in which the RPi need to be before we can really get going:</p>
+			<ul>
+				<li>I strongly recommend you don't run your RPi with the default <kbd>pi</kbd> user. If you haven't had the chance to get around to it, do it before continuing. Follow <a href="https://www.raspberrypi.org/documentation/configuration/security.md">this handy guide</a> to get it done.</li>
+				<li>You will need <kbd>sudo</kbd> access to complete this tutorial.</li>
+				<li>This tutorial is targetting the command line, rather than the GUI way.</li>
+				<li>Rasbpian (or Ubuntu) must be fully updated. To do this, launch Terminal (or SSH into the RPi) simply run <kbd>sudo apt update && sudo apt upgrade -y</kbd> to get everything updated</li>
+				<li>If you haven't done so, enable UFW in your RPi to follow best security practices: 
+					<ul>
+						<li>Run <kbd>sudo ufw allow ssh</kbd> to allow SSH access to your RPi from remote machines</li>
+						<li>Then <kbd>sudo ufw enable</kbd> to turn everything on. <strong>Please note that this will break any other access that's not whitelisted.</strong></li>
+					</ul>
+				</li>
+			</ul>
+			<br>
+		<h2 id="install-twonky">Downloading and installing Twonky</h2>
+			<p>Twonky has had a rocky existence. While someone is still supporting the app, the information to get things done is not easily reachable. Tutorials on the web are pretty few and far between, with some including pictures of screen content (not actual screenshots, mind you). This tutorial should fill that gap.</p>
+			<p>The official website for Twonky contains their most recent version for the major platforms (Windows, MacOS, and Linux AMD64). However, they fail to mention that there's a trove of other files in their <a href="https://forum.twonky.com">old forum</a>, which include the files compiled for ARM, amongst many, many other platforms. Let's get started with the commands:</p>
+			<ul>
+				<li>Run <kbd>wget http://download.twonky.com/8.5.1/twonky-armel-glibc-2.13-hf-8.5.1.zip</kbd> to fetch Twonky from their servers.</li>
+				<li>Run <kbd>sudo mkdir /usr/local/twonky</kbd> to create the final destination of Twonky's files.</li>
+				<li>Run <kbd>unzip twonky-armel-glibc-2.13-hf-8.5.1.zip -d /usr/local/twonky</kbd> to unzip the contents to the newly created folder.</li>
+				<li>Run <kbd>cd /usr/local/twonky</kbd> to move to said folder</li>
+				<li>Run <kbd>sudo chmod 700 twonky.sh twonkys* cgi-bin/* plugins/*</kbd> to ensure the necessary files are executable.</li>
+				<li>Run <kbd>sudo chown user:user /usr/local/twonky/*</kbd> to give ownership of the files to your user. Replace <kbd>user:user</kbd> with your own user on both sides.</li>
+				<li>Run <kbd>/usr/local/twonky/twonky.sh start</kbd> to test things out. You should see some output that states many things, including something about missing a TLS certificate. Do not worry about said error.</li>
+				<li>Run <kbd>/usr/local/twonky/twonky.sh stop</kbd> to stop the server we just stood up.</li>
+			</ul>
+			<p>At this point, you have a working copy of Twonky installed. However, having to run the <kbd>start</kbd> command each time the RPi reboots is less than ideal.</p>
+		<h2 id="service-twonky">Setting up a service</h2>
+			<p>Next, we'll setup Twonky as a proper service. This way the OS makes sure the media server is brought up on boot everytime; no user intervention required.</p>
+			<ul>
+				<li>Run <kbd>sudo nano /etc/systemd/system/twonky.service</kbd> to create the service file. In it, we'll paste the following:
+					<ul>
+						<li>
+							<pre>
+[Unit]
+Description=Twonky Media Server service
+After=syslog.target network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/twonky/twonkystarter
+ExecStop=/usr/local/twonky/twonky.sh stop
+PIDFile=/run/mediaserver.pid
+
+[Install]
+WantedBy=multi-user.target
+							</pre>
+						</li>
+					</ul>
+				</li>
+				<li>While in <kbd>nano</kbd>, hit <kbd>^s</kbd> and <kbd>^x</kbd> to save and exit respectively.</li>
+				<li>Now, run <kbd>sudo service twonky status</kbd> to make sure that the OS recognizes the newly created. If everything went well, the output should be something like this:
+					<ul>
+						<li>
+							<pre>
+● twonky.service - Twonky Media Server service
+   Loaded: loaded (/etc/systemd/system/twonky.service; disabled; vendor preset: enabled)
+   Active: inactive (dead)
+							</pre>
+						</li>
+					</ul>
+				</li>
+				<li>Run <kbd>sudo systemctl enable twonky</kbd> to enable the service to run on boot. This command will provide with some feedback about how symlinks where created that looks something like this:
+					<ul>
+						<li>
+							<pre>
+Created symlink /etc/systemd/system/multi-user.target.wants/twonky.service → /etc/systemd/system/twonky.service.
+							</pre>
+						</li>
+					</ul>
+				</li>
+				<li>Lastly, run <kbd>sudo service twonky start</kbd> to start the newly created service. If everything went well, the output should look like this:
+					<ul>
+						<li>
+							<pre>
+<span class="code-green">●</span> twonky.service - Twonky Media Server service
+   Loaded: loaded (/etc/systemd/system/twonky.service; enabled; vendor preset: enable
+   Active: <span class="code-green">active (running)</span> since Mon 2020-04-20 21:59:25 BST; 1h 42min ago
+ Main PID: 30188 (twonkystarter)
+    Tasks: 18 (limit: 4035)
+   Memory: 9.4M
+   CGroup: /system.slice/twonky.service
+           ├─30188 /usr/local/twonky/twonkystarter
+           └─30189 /usr/local/twonky/twonkyserver
+							</pre>
+						</li>
+					</ul>
+				</li>
+				<li>The server comes with a serviceable web UI that can be accessed in port 9000 of the RPi's IP address. But first, let's deal with the firewall.</li>
+			</ul>
+		<h2 id="firewall">Dealing with the firewall</h2>
+			<p>If you followed my advise about turning on <kbd>ufw</kbd> a few steps ago, you won't be able to reach the configuration website of the media server just yet. This is because the firewall simply doesn't know let some of the traffic in the specific port go through. Thankfully, <kbd>ufw</kbd> is easy to deal with when it comes to this.</p>
+			<ul>
+				<li>Run <kbd>sudo ufw allow 9000/tcp</kbd> to open the port to access the configuration website of the media server. The output should look something like this:
+					<ul>
+						<li>
+							<pre>
+Rule added
+Rule added (v6)
+							</pre>
+						</li>
+					</ul>
+				</li>
+				<li>Run <kbd>ip address</kbd> to fetch the address of RPi. The output should look something like this (the value we're looking for is highlighted in green):
+					<ul>
+						<li>
+							<pre>
+2: eth0: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc mq state UP group default qlen 1000
+    link/ether ab:cd:ef:fe:dc:ba brd ff:ff:ff:ff:ff:ff
+    inet <span class="strong code-green">192.168.1.2</span>/24 brd 192.168.1.255 scope global noprefixroute eth0
+       valid_lft forever preferred_lft forever
+    inet6 fe80::95a9:f608:be77:2bbe/64 scope link 
+       valid_lft forever preferred_lft forever
+
+<small>If you're using Wi-Fi, you may be looking for the <kbd>wlan0</kbd> entry in the <kbd>ip address</kbd> output.</small>
+							</pre>
+						</li>
+					</ul>
+				</li>
+				<li>Lastly, for real this time, navigate to the configuration website from a browser by visiting <kbd>http://localhost:9000/webconfig</kbd> or, in the case of our previous query, <kbd>http://192.168.1.2:9000/webconfig</kbd> from any other computer in the same network. You should be greeted by something along these lines:</li>
+				<ul>
+					<li class="list-unstyled">
+						<img src="../../../../assets/twonky-webconfig.png" class="img-fluid" alt="Responsive Image">
+					</li>
+				</ul>
+			</ul>
+		<h2>Musings</h2>
+			<p>I hope you've found this useful. Here are a few take-aways from this:</p>
+			<ul>
+				<li>I tried setting up the service to use its own user. This a good idea for security reasons. However, I failed to make it work. If you have a suggestion on how to achieve this, <a href="contact@cornopaez.com">drop me a line</a> and I'll make sure to include your input on this tutorial.</li>
+				<li>I think Twonky has transcoding-on-the-fly capabilities. However, these are untested for this specific setup. I'm not sure if the little RPi would be up to the task of transcoding on the fly files to make them compatible with your end device. After all, the RPi is equiped with a powerful-yet-modest Quad core Cortex-A72 (ARM v8) 64-bit SoC @ 1.5GHz.</li>
+				<li>After a few days of usage, I've noticed that when the server is, er, serving, the CPU gets a little warmer: about 10c. Doesn't worry me too much at this time.</li>
+			</ul>
     </div>
   </div>
 </div>
