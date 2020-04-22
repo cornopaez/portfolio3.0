@@ -1,3 +1,6 @@
+<meta name="keywords" content="{{ currentContent.indexKeywords }}">
+<meta name="description" content="{{ currentContent.indexDescription }}">
+<meta name="author" content="Mauricio Paez - Developer">
 <div class="btn-container">
   <a routerLink="/Projects" class="btn btn-link"><i class="fas fa-chevron-left"></i>  Back to Projects</a>  
 </div>
@@ -14,6 +17,8 @@
 </div>
 
 <div class="detail project-detail">
+  <h1>{{ currentContent.title }}</h1>
+  <br>
   <h2>
     About this project
   </h2>
@@ -26,7 +31,7 @@
       <p [innerHtml]=currentContent.content.footer></p>
       <a class="btn btn-primary" href="{{ currentContent.content.link }}">Launch Project</a>
       <br>
-      <small>Some projects may take a bit of time loading</small>
+      <small class="text-muted">Some projects may take a bit of time loading</small>
     </div>
   </div>
 </div>

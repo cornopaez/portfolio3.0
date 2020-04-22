@@ -1,1 +1,1 @@
-web: node server.js
+web: node dist/portfolio3/server/main.js

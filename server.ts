@@ -36,7 +36,6 @@ export function app() {
   // Use Helmet for security
   app.use(helmet());
 
-  // 
   app.use(bodyParser.json()); // support json encoded bodies
   app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 
@@ -63,7 +62,7 @@ function run() {
   // Start up the Node server
   const server = app();
   server.listen(port, () => {
-    console.log(`Node Express server listening on http://localhost:${port}`);
+    console.log('Portfolio 3.0 up and running on port ' + port)
   });
 }
 
