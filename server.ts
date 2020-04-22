@@ -17,7 +17,6 @@ import { existsSync } from 'fs';
 export function app() {
   const app = express();
   const distFolder = join(process.cwd(), 'dist/portfolio3/browser');
-  const indexHtml = existsSync(join(distFolder, 'index.original.html')) ? 'index.original.html' : 'index';
 
   // Our Universal express-engine (found @ https://github.com/angular/universal/tree/master/modules/express-engine)
   app.engine('html', ngExpressEngine({
@@ -49,7 +48,7 @@ export function app() {
 
   // Serve static files from /browser
   app.get('*.*', express.static(distFolder, {
-    maxAge: '1y'
+    maxAge: '1w'
   }));
 
   // All regular routes use the Universal engine

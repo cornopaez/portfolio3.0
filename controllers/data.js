@@ -51,9 +51,3 @@ router.get('/:name', (req, res) => {
 	})
 
 })
-
-// router.get('*', function (req, res) {
-// 	// Load landing page
-// 	res.sendFile('index.html', {root: "./" });
-// });
-
