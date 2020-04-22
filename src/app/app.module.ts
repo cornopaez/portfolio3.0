@@ -48,7 +48,7 @@ import { MusingsHomeComponent } from './musings/musings-home/musings-home.compon
     MusingsHomeComponent
   ],
   imports: [
-    BrowserModule,
+    BrowserModule.withServerTransition({ appId: 'serverApp' }),
     AppRoutingModule,
     ReactiveFormsModule,
     HttpClientModule,
