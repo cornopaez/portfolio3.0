@@ -31,7 +31,6 @@ export class ProjectsResolver implements Resolve<ProjectCard[]> {
         return data
       } else {
         this.router.navigate(['/Error'])
-        return []
       }
     }))
   }

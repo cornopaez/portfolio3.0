@@ -4,6 +4,7 @@ import { HttpClient, HttpErrorResponse, HttpResponse, HttpHeaders } from '@angul
 // import { ErrorObservable } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import { environment } from '../../environments/environment';
 
 import { ProjectCard } from '../projects/project-card'
 import { ContactSuccess } from '../contact/contact-success/contact-success'
@@ -11,20 +12,14 @@ import { ContactSuccess } from '../contact/contact-success/contact-success'
 
 @Injectable()
 export class DatabaseService {
-
-  getProjectsCardsUrl = '/data/projects'
-  getProjectDetailsUrl = '/data/'
-  submitContactFormUrl = '/data/contact'
+  getProjectsCardsUrl = environment.baseUrl + '/data/projects'
+  getProjectDetailsUrl = environment.baseUrl + '/data/'
+  submitContactFormUrl = environment.baseUrl + '/data/contact'
 
   constructor(
     private http: HttpClient,
     private router: Router,
-    // @Optional() @Inject(APP_BASE_HREF) origin: string
-    ) {
-      // this.getProjectsCardsUrl = `${origin}${this.getProjectsCardsUrl}`;
-      // this.getProjectDetailsUrl = `${origin}${this.getProjectDetailsUrl}`;
-      // this.submitContactFormUrl = `${origin}${this.submitContactFormUrl}`;
-  }
+    ) {}
 
   /**
     Retrieves the data necessary from the database for the view.
@@ -34,7 +29,6 @@ export class DatabaseService {
                                         and returns an empty array.
   */
   getProjectsCards() : Observable<ProjectCard[]> {
-    // console.log(this.httpOptions)
     return this.http.get<Array<ProjectCard>>(this.getProjectsCardsUrl)
     .pipe(
       retry(3),
@@ -91,6 +85,7 @@ export class DatabaseService {
 
       // TODO: better job of transforming error for user consumption
       console.error(`Could not perform the action requested. Specifically, ${operation}() failed: ${error.message}.`);
+      console.error('The baseUrl for this env is ${environment.baseUrl}')
 
       // Let the app keep running by returning an empty result.
       return of(result as T);

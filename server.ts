@@ -20,7 +20,7 @@ export function app() {
 
   // Our Universal express-engine (found @ https://github.com/angular/universal/tree/master/modules/express-engine)
   app.engine('html', ngExpressEngine({
-    bootstrap: AppServerModule,
+    bootstrap: AppServerModule
   }));
 
   // Start MongoDB connection

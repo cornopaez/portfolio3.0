@@ -28,7 +28,6 @@ router.post('/contact', (req, res) => {
 })
 
 router.get('/projects', (req, res) => {
-
 	queryDb.getProjectsCards()
 	.then((data) => {
 		res.json(data)
