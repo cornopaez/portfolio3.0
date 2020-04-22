@@ -47,6 +47,7 @@
 
 				@media screen and (max-width: 767px)
 					position: relative
+					margin-bottom: 3em
 
 				.intro-paragraph
 					padding: 0 0 3em 0
@@ -54,11 +55,20 @@
 
 				.nav-buttons
 					display: flex
-					flex-direction: row
 					justify-content: space-around
+
+					@media screen and (min-width: 768px)
+						flex-direction: row
+
+					@media screen and (max-width: 767px)
+						flex-direction: column
+
 					
 					.btn
 						font-weight: 200
+
+						@media screen and (max-width: 767px)
+							margin: 1em 0 0 0
 
 			.avatar
 				height: 200px
