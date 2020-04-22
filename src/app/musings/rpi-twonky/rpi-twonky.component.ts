@@ -12,8 +12,7 @@ export class RpiTwonkyComponent implements OnInit {
         'fab fa-raspberry-pi',
         'fas fa-terminal'
       ],
-      twonky: '../../../../assets/twonkyicon-120x120.png',
-      image:'../../../../assets/jonathan-velasquez-c1ZN57GfDB0-unsplash.jpg'
+      twonky: '../../../../assets/twonkyicon-120x120.png'
     }
   }
 

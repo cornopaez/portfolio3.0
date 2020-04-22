@@ -40,11 +40,20 @@
 	// Specific cover image styling
 	&.portfolio
 		background-size: cover
+		$small: '../../../assets/landscape-arch-640w.png'
+		$big: '../../../assets/landscape-arch-1000w.png'
+		@include dynamic-banner-background($small, $big)
 
 	&.dance
 		background-size: cover
+		$small: '../../../assets/jump-photo-640w.png'
+		$big: '../../../assets/jump-photo-1000w.png'
+		@include dynamic-banner-background($small, $big)
 
 	&.murders
+		$small: '../../../assets/Edgar-Allan-Poe-Signature-640w.png'
+		$big: '../../../assets/Edgar-Allan-Poe-Signature-1280w.png'
+		@include dynamic-banner-background($small, $big)
 		background-size: contain
 		background-color: #fff
 
@@ -52,20 +61,37 @@
 			color: #000
 
 	&.health
+		$small: '../../../assets/veggie-casserole-640w.jpg'
+		$big: '../../../assets/veggie-casserole-1000w.jpg'
+		@include dynamic-banner-background($small, $big)
 		background-size: cover
 
 	&.mongomart
+		$small: '../../../assets/overpasses-and-traffic-640w.jpg'
+		$big: '../../../assets/overpasses-and-traffic-1000w.jpg'
+		@include dynamic-banner-background($small, $big)
 		background-size: cover
 
 	&.bank
+		$small: '../../../assets/banking-640w.jpg'
+		$big: '../../../assets/banking-1000w.jpg'
+		@include dynamic-banner-background($small, $big)
 		background-size: cover
 
 		> .footnotes
 			color: #000
 
 	&.portfolio2
+		$small: '../../../assets/maik-jonietz-535261-unsplash-640w.jpg'
+		$big: '../../../assets/maik-jonietz-535261-unsplash-1000w.jpg'
+		@include dynamic-banner-background($small, $big)
 		background-size: cover
 
+	&.portfolio3
+		$small: '../../../assets/programming-640w.jpg'
+		$big: '../../../assets/programming-1000w.jpg'
+		@include dynamic-banner-background($small, $big)
+		background-size: cover
 
 .project-detail
 	padding: 0 2em
