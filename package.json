@@ -4,14 +4,15 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build --prod && ng run portfolio3:server:production",
+    "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
     "dev:ssr": "ng run portfolio3:serve-ssr",
     "serve:ssr": "node dist/portfolio3/server/main.js",
     "build:ssr": "ng build --prod && ng run portfolio3:server:production",
-    "prerender": "ng run portfolio3:prerender"
+    "prerender": "ng run portfolio3:prerender",
+    "heroku-postbuild": "ng build --prod && ng run portfolio3:server:production"
   },
   "private": true,
   "dependencies": {
