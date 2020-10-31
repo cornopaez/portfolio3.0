@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 
 import { ProjectsComponent } from '../projects.component'
+import { ProjectCard } from '../project-card'
 
 @Component({
   selector: 'app-projects-home',
@@ -10,7 +11,7 @@ import { ProjectsComponent } from '../projects.component'
 })
 export class ProjectsHomeComponent implements OnInit {
 
-  currentCards
+  currentCards: ProjectCard[]
 
   currentContent = {
       view_title: 'Mauricio_Páez | Projects',
