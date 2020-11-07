@@ -12,7 +12,7 @@ module.exports =  {
 const url = process.env.MONGOLAB_COPPER_URI ? process.env.MONGOLAB_COPPER_URI : process.env.MONGODB_LOCAL
 
 // Creates a connection to MongoDB and returns the db object.
-function connect() {
+function connect(log = true) {
 
 	options = {
 		useUnifiedTopology: true
@@ -20,13 +20,17 @@ function connect() {
 
 	return new Promise((resolve, reject) => {
 		MongoClient.connect(url, options, (err, db) => {
-			if (err) reject(err);
+			if (err) {
+				console.log(err)
+				reject(false)
+			}
 
-			console.log("Connected successfully to database");
+			if (log) {
+				console.log("Connected successfully to database")
+			}
 			var dbName = db.s.options.dbName
-			// console.log(db.s.options.dbName)
-			_db = db.db(dbName);
-			resolve(db);
+			_db = db.db(dbName)
+			resolve(true)
 		});
 	});
 };
