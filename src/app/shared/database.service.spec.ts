@@ -1,11 +1,19 @@
 import { TestBed, inject } from '@angular/core/testing';
 
 import { DatabaseService } from './database.service';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing'
+import { RouterTestingModule } from '@angular/router/testing'
 
 describe('DatabaseService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [DatabaseService]
+      providers: [
+        DatabaseService
+      ],
+      imports: [
+        HttpClientTestingModule,
+        RouterTestingModule
+      ]
     });
   });
 

@@ -1,8 +1,13 @@
-import { TestBed, async } from '@angular/core/testing';
+import { TestBed, async, ComponentFixture } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { AppComponent } from './app.component';
 
 describe('AppComponent', () => {
+
+  let component : AppComponent
+  let fixture : ComponentFixture<AppComponent>
+  let app
+
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
@@ -12,24 +17,25 @@ describe('AppComponent', () => {
         AppComponent
       ],
     }).compileComponents();
-  }));
+  }))
+
+  beforeEach(() =>{
+    fixture = TestBed.createComponent(AppComponent)
+    component = fixture.componentInstance
+    fixture.detectChanges()
+    app = fixture.debugElement.componentInstance
+  })
 
   it('should create the app', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.debugElement.componentInstance;
     expect(app).toBeTruthy();
   });
 
   it(`should have as title 'portfolio3'`, () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.debugElement.componentInstance;
     expect(app.title).toEqual('portfolio3');
   });
 
-  it('should render title', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
+  it('should render the footer', () => {
     const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector('.content span').textContent).toContain('portfolio3 app is running!');
-  });
+    expect(compiled.querySelector('footer')).toBeTruthy()
+  })
 });

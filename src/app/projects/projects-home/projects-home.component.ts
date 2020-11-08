@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, ParamMap } from '@angular/router';
-
-import { ProjectsComponent } from '../projects.component'
+import { Title } from '@angular/platform-browser'
 import { ProjectCard } from '../project-card'
 
 @Component({
@@ -26,8 +25,8 @@ export class ProjectsHomeComponent implements OnInit {
     };
 
   constructor(
-  	private pc: ProjectsComponent,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private title : Title
     ) { }
 
   ngOnInit() {
@@ -38,7 +37,7 @@ export class ProjectsHomeComponent implements OnInit {
     })
 
     // Set the title for this view
-    this.pc.setViewTitle(this.currentContent.view_title)
+    this.title.setTitle(this.currentContent.view_title)
   }
 
 }

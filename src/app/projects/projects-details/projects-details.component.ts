@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
-
-import { ProjectsComponent } from '../projects.component'
+import { ActivatedRoute } from '@angular/router';
+import { Title } from '@angular/platform-browser'
+import { ProjectDetails } from './project-details'
 
 @Component({
   selector: 'app-projects-details',
@@ -11,20 +11,20 @@ import { ProjectsComponent } from '../projects.component'
 export class ProjectsDetailsComponent implements OnInit {
 
   // Class variables
-  currentContent;
+  currentContent: ProjectDetails
 
   constructor(
   	private route : ActivatedRoute,
-    private pc: ProjectsComponent
+    private title: Title
   	) { }
 
   ngOnInit() {
-  	    // Assign the data to local variable for use
+  	// Assign the data to local variable for use
     this.route.data.subscribe(content => {
-      this.currentContent = content.project[0].view
+      this.currentContent = content.project.view
 
       // Set the title for the Projects view
-      this.pc.setViewTitle(content.project[0].view.view_title)
+      this.title.setTitle(this.currentContent.view_title)
     })
   }
 

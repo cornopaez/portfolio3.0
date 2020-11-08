@@ -17,7 +17,8 @@ describe('MongoDB queries',(done)=>{
 
   it('should get a project view details', (done)=>{
     queryDb.getProjectView('Portfolio3.0').then(data=>{
-      expect(data.length).to.be.greaterThan(0)
+      // expect(data.length).to.be.greaterThan(0)
+      expect(data.project_name).to.be.equal('Portfolio3.0')
       done()
     })
   })
@@ -30,9 +31,9 @@ describe('MongoDB queries',(done)=>{
     })
   })
 
-  it('should not return information for a project it doesn\'t exist', (done)=>{
+  it('should not return information for a project that doesn\'t exist', (done)=>{
     queryDb.getProjectView('notarealproject').then(data=>{
-      expect(data.length).to.be(0)
+      expect(data).to.be(null)
       done()
     })
   })

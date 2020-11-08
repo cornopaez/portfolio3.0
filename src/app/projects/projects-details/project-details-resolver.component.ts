@@ -1,6 +1,6 @@
-import { map, take } from 'rxjs/operators';
-import { Injectable }             from '@angular/core';
-import { Observable }             from 'rxjs';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { Router, Resolve, RouterStateSnapshot,
          ActivatedRouteSnapshot } from '@angular/router';
  
@@ -30,7 +30,7 @@ export class ProjectDetailResolver implements Resolve<ProjectDetails> {
     var projectName = route.paramMap.get('name')
 
     return this.dbs.getProjectDetails(projectName).pipe(map(project => {
-      if (project) {
+      if (project !== null) {
         return project;
       } else {
         this.router.navigate(['/Projects']);
