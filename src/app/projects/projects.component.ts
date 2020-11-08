@@ -20,7 +20,7 @@ export class ProjectsComponent implements OnInit {
           'Musings'
         ]
       }
-    };
+    }
 
   constructor(
   	    private title : Title
