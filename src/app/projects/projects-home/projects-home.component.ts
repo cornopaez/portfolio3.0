@@ -12,18 +12,6 @@ export class ProjectsHomeComponent implements OnInit {
 
   currentCards: ProjectCard[]
 
-  currentContent = {
-      view_title: 'Mauricio_Páez | Projects',
-      navbar: {
-        title: 'Projects',
-        links: [
-          'Home',
-          'About',
-          'Contact'
-        ]
-      }
-    };
-
   constructor(
     private route: ActivatedRoute,
     private title : Title
@@ -35,9 +23,6 @@ export class ProjectsHomeComponent implements OnInit {
       // console.log(content)
       this.currentCards = content.projects
     })
-
-    // Set the title for this view
-    this.title.setTitle(this.currentContent.view_title)
   }
 
 }
