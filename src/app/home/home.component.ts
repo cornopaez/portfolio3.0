@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { Title }     from '@angular/platform-browser';
-import { Router } from '@angular/router';
+import { Component, OnInit } from '@angular/core'
+import { Title }     from '@angular/platform-browser'
+import { Router } from '@angular/router'
 
 @Component({
   selector: 'app-home',
@@ -21,7 +21,7 @@ export class HomeComponent implements OnInit {
           'Musings'
         ]
       }
-    };
+    }
 
   constructor(
   	private title : Title
@@ -30,7 +30,5 @@ export class HomeComponent implements OnInit {
   ngOnInit() {
   	// Set the title for this view
     this.title.setTitle(this.currentContent.view_title)
-    // console.log(this.currentContent)
   }
-
 }

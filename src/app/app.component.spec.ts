@@ -1,6 +1,6 @@
-import { TestBed, async, ComponentFixture } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
-import { AppComponent } from './app.component';
+import { TestBed, async, ComponentFixture } from '@angular/core/testing'
+import { RouterTestingModule } from '@angular/router/testing'
+import { AppComponent } from './app.component'
 
 describe('AppComponent', () => {
 
@@ -16,7 +16,7 @@ describe('AppComponent', () => {
       declarations: [
         AppComponent
       ],
-    }).compileComponents();
+    }).compileComponents()
   }))
 
   beforeEach(() =>{
@@ -27,15 +27,15 @@ describe('AppComponent', () => {
   })
 
   it('should create the app', () => {
-    expect(app).toBeTruthy();
-  });
+    expect(app).toBeTruthy()
+  })
 
   it(`should have as title 'portfolio3'`, () => {
-    expect(app.title).toEqual('portfolio3');
-  });
+    expect(app.title).toEqual('portfolio3')
+  })
 
   it('should render the footer', () => {
-    const compiled = fixture.debugElement.nativeElement;
+    const compiled = fixture.debugElement.nativeElement
     expect(compiled.querySelector('footer')).toBeTruthy()
   })
-});
+})
