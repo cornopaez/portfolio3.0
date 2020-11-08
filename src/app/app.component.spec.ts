@@ -7,6 +7,21 @@ describe('AppComponent', () => {
   let component : AppComponent
   let fixture : ComponentFixture<AppComponent>
   let app
+  let compiled
+  const links = [
+    {
+      'name':'twitter',
+      'link':'https://twitter.com/cornopaez'
+    },
+    {
+      'name':'github',
+      'link':'https://github.com/cornopaez'
+    },
+    {
+      'name':'codewars',
+      'link':'https://www.codewars.com/users/cornopaez'
+    }
+  ]
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -17,25 +32,26 @@ describe('AppComponent', () => {
         AppComponent
       ],
     }).compileComponents()
-  }))
-
-  beforeEach(() =>{
     fixture = TestBed.createComponent(AppComponent)
     component = fixture.componentInstance
     fixture.detectChanges()
     app = fixture.debugElement.componentInstance
-  })
+    compiled = fixture.debugElement.nativeElement
+  }))
 
   it('should create the app', () => {
     expect(app).toBeTruthy()
   })
 
-  it(`should have as title 'portfolio3'`, () => {
-    expect(app.title).toEqual('portfolio3')
-  })
+  describe('Footer', () =>{
+    it('should render the footer', () => {
+      expect(compiled.querySelector('footer')).toBeTruthy()
+    })
 
-  it('should render the footer', () => {
-    const compiled = fixture.debugElement.nativeElement
-    expect(compiled.querySelector('footer')).toBeTruthy()
+    it('should contain three correct links',()=>{
+      for (var i = 0; i < links.length; ++i) {
+        expect(compiled.querySelector("a[href='" + links[i].link + "']").textContent).toEqual(links[i].name)
+      }
+    })
   })
 })

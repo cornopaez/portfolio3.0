@@ -6,5 +6,18 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.sass']
 })
 export class AppComponent {
-  title = 'portfolio3';
+  links = [
+    {
+      'name':'twitter',
+      'link':'https://twitter.com/cornopaez'
+    },
+    {
+      'name':'github',
+      'link':'https://github.com/cornopaez'
+    },
+    {
+      'name':'codewars',
+      'link':'https://www.codewars.com/users/cornopaez'
+    }
+  ]
 }
