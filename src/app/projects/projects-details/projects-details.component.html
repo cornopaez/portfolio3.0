@@ -19,16 +19,14 @@
 <div class="detail project-detail">
   <h1>{{ currentContent.title }}</h1>
   <br>
-  <h2>
-    About this project
-  </h2>
+  <h2>About this project</h2>
   <div class="project-container">
     <div class="project-points">
-      <p [innerHtml]=currentContent.content.description></p>
+      <p class="project-description" [innerHtml]=currentContent.content.description></p>
       <h4>Source Code</h4>
       <p><a href="{{ currentContent.content.source }}">{{ currentContent.content.source }}</a></p>
       <h4>Credits</h4>
-      <p [innerHtml]=currentContent.content.footer></p>
+      <p class="project-footer" [innerHtml]=currentContent.content.footer></p>
       <a class="btn btn-primary" href="{{ currentContent.content.link }}">Launch Project</a>
       <br>
       <small class="text-muted">Some projects may take a bit of time loading</small>
