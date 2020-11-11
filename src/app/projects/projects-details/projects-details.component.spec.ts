@@ -95,7 +95,7 @@ describe('ProjectsDetailsComponent', () => {
       }
     })
 
-    it('should have correct title in .project-detail',()=>{
+    it('should have correct project title',()=>{
       expect(compiled.querySelector("div.project-detail h1").textContent).toEqual(project.title)
     })
 
