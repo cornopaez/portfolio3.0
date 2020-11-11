@@ -1,25 +1,37 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing'
 
-import { ErrorComponent } from './error.component';
+import { ErrorComponent } from './error.component'
 
 describe('ErrorComponent', () => {
-  let component: ErrorComponent;
-  let fixture: ComponentFixture<ErrorComponent>;
+  let component: ErrorComponent
+  let fixture: ComponentFixture<ErrorComponent>
+  let compiled
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ ErrorComponent ]
     })
-    .compileComponents();
-  }));
+    .compileComponents()
+  }))
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ErrorComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+    fixture = TestBed.createComponent(ErrorComponent)
+    component = fixture.componentInstance
+    fixture.detectChanges()
+    compiled = fixture.debugElement.nativeElement
+  })
 
   it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-});
+    expect(component).toBeTruthy()
+  })
+
+  it('should have correct icon',()=>{
+    const icon = compiled.querySelector('.error .container i[class="fa-exclamation-circle fas"]')
+    expect(icon).toBeTruthy()
+  })
+
+  it('should have a link back to baseUrl',()=>{
+    const link = compiled.querySelector('.error .container a[routerLink="/"]')
+    expect(link).toBeTruthy()
+  })
+})
