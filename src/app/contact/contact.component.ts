@@ -28,7 +28,6 @@ export class ContactComponent implements OnInit {
   ngOnInit() {
   	// Set the title for this view
     this.title.setTitle(this.currentContent.view_title)
-    // console.log(this.currentContent)
   }
 
 }
