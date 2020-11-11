@@ -9,8 +9,8 @@ export class RpiTwonkyComponent implements OnInit {
   currentContent = {
     content: {
       icons: [
-        'fab fa-raspberry-pi',
-        'fas fa-terminal'
+        'fa-raspberry-pi fab',
+        'fa-terminal fas'
       ],
       twonky: '../../../../assets/twonkyicon-120x120.png'
     }
