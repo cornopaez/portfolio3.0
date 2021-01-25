@@ -23,7 +23,7 @@
   <h1>
     Installing Twonky Media Server in a Raspberry Pi
   </h1>
-  <small class="text-muted">Updated 4/20/2020</small><br>
+  <small class="text-muted">Updated 1/25/2021</small><br>
   <small class="text-muted">Photo by <a href="https://unsplash.com/@jonathanvez">Jonathan Velasquez</a> on Unsplash</small>
   <br>
   <br>
@@ -104,6 +104,7 @@ Type=simple
 ExecStart=/usr/local/twonky/twonkystarter
 ExecStop=/usr/local/twonky/twonky.sh stop
 PIDFile=/run/mediaserver.pid
+Restart=always
 
 [Install]
 WantedBy=multi-user.target
@@ -204,6 +205,21 @@ WORKDIR2<span class="code-green">=</span><span class="code-burnt-yellow">"`dirna
 					</li>
 				</ul>
 			</li>
+			<li>I had a weird experience with having a Wireguard VPN setup on the same RPi hosting Twonky. In Raspberry OS 32-bit,  would be rebooting at least once per day (sometimes more). In Ubuntu 20.10 64-bit, Twonky would not crash but it would become unresponsive after a while. The logs were not very useful since they contains lots of extraneous information that was difficult to read through. All the more, since I didn't know how long the server would stand for before becoming unresponsive, the logs would be massive by the time it happened. <br>I accidentally stumbled upon a simple solution for this issue: limit the network interfaces to which Twonky binds to. To do this, simply go to <kbd>/var/twonky/twonkyserver/twonkyserver.ini</kbd> and update the following line(s) and then bounce the service:<br>
+				<ul>
+					<li>
+						<pre>
+...
+# Comma separated list of IP addresses to bind to (optionally can include a netmask e.g. 192.168.3.0|255.255.255.0 will match address range 192.168.3.x). Default: blank = all networks - only works with ipv4 addresses
+ip=0.0.0.0 # Optional. Replace this with your IP, if the RPi has a static IP.
+...
+# Specifies a comma separated list of interface names to ignore
+ignoreiface=wg0 # The Wireguard interface name could be different for you. Adjust accordingly.
+...
+						</pre><br>
+					</li>
+				</ul>
+			This stabilized the server and there have been no rogue reboots since the INIs were updated.</li>
 		</ul>
     </div>
 </div>
