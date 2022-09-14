@@ -6,7 +6,7 @@ import { join } from 'path';
 import * as connection from 'middlewares/mongo-connection';
 import * as data from 'controllers/data';
 import * as bodyParser from 'body-parser';
-import * as helmet from 'helmet';
+import helmet from 'helmet';
 import * as home from 'controllers/home'
 
 import { AppServerModule } from './src/main.server';

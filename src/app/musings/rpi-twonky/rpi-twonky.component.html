@@ -69,7 +69,7 @@
 			<li>If you haven't done so, enable UFW in your RPi to follow best security practices: 
 				<ul>
 					<li>Run <kbd>sudo ufw allow ssh</kbd> to allow SSH access to your RPi from remote machines</li>
-					<li>Then <kbd>sudo ufw enable</kbd> to turn everything on. <mark><strong class="code-red"><u>Please note that this will break any other access that's not white-listed.</u></strong></mark></li>
+					<li>Then <kbd>sudo ufw enable</kbd> to turn everything on. <mark><strong class="code-red"><u>Please note that this will break any other access that's not allowlisted.</u></strong></mark></li>
 				</ul>
 			</li>
 		</ul>
@@ -87,6 +87,11 @@
 			<li>Run <kbd>/usr/local/twonky/twonky.sh start</kbd> to test things out. You should see some output that states many things, including something about missing a TLS certificate. Do not worry about said error.</li>
 			<li>Run <kbd>/usr/local/twonky/twonky.sh stop</kbd> to stop the server we just stood up.</li>
 		</ul>
+		<p>There is a possibility that after running the last command, the one that manually launches the application, an error along these lines appears:</p>
+		<pre>Starting /usr/local/twonky/twonkystarter 
+/usr/local/twonky/twonky.sh: 188: /usr/local/twonky/twonkystarter: not found</pre>
+		<p>If this is the case, run the following command to install some missing dependencies: <br>
+		<kbd>sudo apt install libc6:armhf libc6-dbg:armhf libc6-dev:armhf</kbd></p>
 		<p>At this point, you have a working copy of Twonky installed. However, having to run the <kbd>start</kbd> command each time the RPi reboots is less than ideal.</p>
 	<h2 id="service-twonky">Setting up a service</h2>
 		<p>Next, we'll setup Twonky as a proper service. This way the OS makes sure the media server is brought up on boot every time; no user intervention required.</p>
@@ -191,7 +196,7 @@ Rule added (v6)
 	<h2 id="musings">Musings</h2>
 		<p>I hope you've found this useful. Here are a few take-aways from this:</p>
 		<ul>
-			<li>I tried setting up the service to use its own user. This a good idea for security reasons. However, I failed to make it work. If you have a suggestion on how to achieve this, <a href="contact@cornopaez.com">drop me a line</a> and I'll make sure to include your input on this tutorial.</li>
+			<li>I tried setting up the service to use its own user. This a good idea for security reasons. However, I failed to make it work. If you have a suggestion on how to achieve this, <a href="mailto:contact@cornopaez.com">drop me a line</a> and I'll make sure to include your input on this tutorial.</li>
 			<li>I think Twonky has transcoding-on-the-fly capabilities. However, these are untested for this specific setup. I'm not sure if the little RPi would be up to the task of transcoding on the fly files to make them compatible with your end device. After all, the RPi is equipped with a powerful-yet-modest Quad core Cortex-A72 (ARM v8) 64-bit SoC @ 1.5GHz.</li>
 			<li>After a few days of usage, I've noticed that when the server is, er, serving, the CPU gets a little warmer: about 10 Celsius above baseline. Doesn't worry me too much at this time.</li>
 			<li>In the <kbd>twonky.sh</kbd> file, there's a path for the <kbd>PID</kbd> file that the media server would create at runtime. I'm not sure if changing this to the new path is needed or not. I erred on the side of caution and did so anyways. The new path would read the same as what we added in the <kbd>twonky.service</kbd> unit file:
@@ -219,7 +224,9 @@ ignoreiface=wg0 # The Wireguard interface name could be different for you. Adjus
 						</pre><br>
 					</li>
 				</ul>
-			This stabilized the server and there have been no rogue reboots since the INIs were updated.</li>
+			This stabilized the server and there have been no rogue reboots since the INIs were updated.
+		</li>
+		<li>As of 2022-09-14, and probably before that, some clean installations of certain OS' stopped including the dependencies necessary for Twonky to run correctly. Based on the research done by <a href="mailto:corneliu@voiculescu.org">@corneliu</a>, the issue lays in a difference of architecture. Newer OS' are <kbd>arm64</kbd> while Twinky is <kbd>armhf</kbd>. The dependencies that are not shipped by default anymore are the ones for <kbd>libc6</kbd>. Thank you <a href="mailto:corneliu@voiculescu.org">@corneliu</a> for your assistance! </li>
 		</ul>
     </div>
 </div>
