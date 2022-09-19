@@ -1,1 +1,91 @@
-<p>ubuntu-hd-audio works!</p>
+<meta name="keywords" content="ubuntu 22.04 20.04 hd lossless audio 96k 192k high definition asus tuf b550 wifi plus alsamixer pulseaudio">
+<meta name="description" content="How to get HD Audio playback in latest Ubuntu releases">
+<meta name="author" content="Mauricio Paez - Developer">
+<div class="btn-container">
+  <a routerLink="/Musings" class="btn btn-link"><i class="fas fa-chevron-left"></i>  Back to Musings</a>  
+</div>
+
+<div class="jumbotron">
+  <div class="footnotes">
+    <h4>Tech used</h4>
+    <ul>
+      <li *ngFor="let icon of currentContent.content.icons">
+        <i class="{{icon}}"></i>
+      </li>
+      <li class="hd_audio">
+      	<img src="{{currentContent.content.hd_audio}}">
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div class="detail project-detail">
+	<h1>Enabling HD Audio Output in Ubuntu 22.04 (and 20.04)</h1>
+	<small class="text-muted">Updated 2022-09-19</small><br>
+  <small class="text-muted">Photo by <a href="https://unsplash.com/@marius">Marius Masalar</a> on Unsplash</small>
+  <br>
+  <br>
+  <div class="project-container">
+  	<p>I hope this guide to be to the point. I won't provide too much background on the underlying technologies involved and, certainly, I won't bore you with my personal story about how I came to discover this. We won't even delve into the <a href="https://en.wikipedia.org/wiki/High-resolution_audio#Controversy">controversy</a> about higher bitrate giving you better audio or not.</p>
+  	<p>However, there's a few things that are important to mention. This guide assumes there's an <em>fully-functional Ubuntu installation</em> already in the machine, as well as the machine explicitly having a motherboard that supports output of the frequencies stated here, and an external DAC (Digital-to-Analog Converter) that also supports them. Without these items this guide won't yield any improvement in output audio quality from what's already being provided.</p>
+  	<p>Lastly, audio from wireless headsets will not impacted by the configurations stated here either. Most current headsets use lossy codecs to be piped through the limited bandwidth of Bluetooth. Unless the headsets explicitly state that they support Hi-Res audio you won't get any benefits.</p>
+  	<br>
+  	<h2>Table of Contents</h2>
+		<ol>
+			<li><a routerLink="../ubuntu-hd-audio" fragment="tools">Tools Needed</a></li>
+			<li>
+				<a routerLink="../ubuntu-hd-audio" fragment="audio-setup">Ubuntu Audio Setup</a>
+				<ul>
+					<li><a routerLink="../ubuntu-hd-audio" fragment="alsamixer">alsamixer</a></li>
+					<li><a routerLink="../ubuntu-hd-audio" fragment="pulseaudio">pulseaudio</a></li>
+					<li><a routerLink="../ubuntu-hd-audio" fragment="audio-output">Audio Output</a></li>
+				</ul>
+			</li>
+			<li><a routerLink="../rpi-twonky" fragment="service-twonky">Setting up a service for Twonky</a></li>
+			<li><a routerLink="../rpi-twonky" fragment="firewall">Dealing with the firewall</a></li>
+			<li><a routerLink="../rpi-twonky" fragment="musings">Musings</a></li>
+		</ol>
+		<br>
+		<h2 id="tools">Tools Needed</h2>
+		I have created this guide using the following software and hardware. I'm sure it applies to other motherboards as well with similarly supported audio outputs:
+		<ul>
+			<li>Ubuntu 22.04 or 20.04</li>
+			<li>Cursory knowledge of Terminal commands</li>
+			<li><a href="https://www.asus.com/us/Motherboards-Components/Motherboards/TUF-Gaming/TUF-GAMING-B550-PLUS-WI-FI/">Asus TUF Gaming B550 Plus (Wi-Fi) Motherboard</a></li>
+			<li>Yamaha RX-V385 A/V Receiver</li>
+			<li>HDMI Cable</li>
+		</ul>
+		<p>The important spec of the motherboard stated above is under the audio section: "up to 24-Bit/192kHz playback". This allows us to playback music in such formats natively without having to resample. Furthermore, I know that that the RX-V481 receiver works just fine as well for this example -- though, I suspect that <em>any</em> recent Yamaha receiver would work. They have had stellar support for audio formats for a while.</p>
+		<br>
+		<h2 id="audio-setup">Ubuntu Audio Setup</h2>
+		<p>I must give my thanks to <a href="http://mclements.net/blogWP/index.php/2020/06/30/high-res-audio-on-ubuntu/">Mike Clements</a> for their wonderful and truly in-depth guide for high-resolution audio setup in Ubuntu. This guide is based upon that guide -- or at least, the version last updated in June 30th, 2020.</p>
+		<p>That guide is truly detailed. Should you want to know what other options are available, why they are available, and how they work, head over and poke around.</p>
+		<p>To start, let's go over some fundamental items that need to be setup to enjoy better audio output. There's two main packages in Ubuntu doing a lot, if not all, of the work for audio processing: Alsamixer and Pulseaudio. Alsamixer, as far as I can tell, decides which audio card to use, along with some config items for that card, while Pulseaudio decides the parameters used for the audio processing. The last step is to explicitly tell Ubuntu which physical audio output to use. Let's step through each of them.</p>
+		<h3 id="alsamixer">Alsamixer Setup</h3>
+		<p>To get started, open a Terminal window ,type <kbd>alsamixer</kbd>, and hit <kbd>enter</kbd>. You'll be greeted with something like this:</p>
+		<div class="alsamixer">
+			<img src="{{currentContent.content.alsamixer[0]}}">
+		</div>
+		We can hit <kbd>F6</kbd> on the keyboard to bring up the list of sound cards and we should look for the one that matches the specs of the motherboard. Unfortunately, the names are not very descriptive so one does have to try each one until the relevant one is found. In the case of the B550 Plus, we're looking for "Realtek ALC S1200A" to be present in some form. Depending on how many GPUs you have attached to the motherboard, you may get more or less options here. Once you've found the right card, it should look like this:
+		<div class="alsamixer">
+			<img src="{{currentContent.content.alsamixer[1]}}">
+		</div>
+		<p><em>Quick note:</em> Be sure to disable the Auto-Mute Mode. This can cause no-sound to be output even if everything else looks right. To disable it, use the horizontal arrow keys in the keyboard to navigate the different items, and use the vertical ones to enable/disable.</p>
+		<p>Once you find the correct card, make a note of its position in the list as you'll need it coming up. In my case it is #3:</p>
+		<div class="alsamixer">
+			<img src="{{currentContent.content.alsamixer[2]}}">
+		</div>
+		<br>
+		<p>Once Auto-Mute Mode is disabled in the correct card, you can hit <kbd>esc</kbd> to close out of <kbd>alsamixer</kbd>.</p>
+		<p>
+			Next, you'll want to specify the card to use by default. To do this, run the following command to create the relevant file: <kbd>nano /etc/asound.conf</kbd>.
+			The contents of the file will be as follows:
+		</p>
+		<pre>
+<span class="code-green"># Replace the relevant value with the correct card number</span>
+defaults.pcm.card 3
+defaults.ctl.card 3
+		</pre>
+		<h3 id="pulseaudio">Pulseaudio Setup</h3>
+  </div>
+</div>
