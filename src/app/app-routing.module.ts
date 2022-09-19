@@ -7,6 +7,7 @@ import { ErrorComponent } from './error/error.component';
 import { MusingsComponent } from './musings/musings.component';
 import { MusingsHomeComponent } from './musings/musings-home/musings-home.component';
 import { RpiTwonkyComponent } from './musings/rpi-twonky/rpi-twonky.component';
+import { UbuntuHdAudioComponent } from './musings/ubuntu-hd-audio/ubuntu-hd-audio.component';
 import { ProjectsComponent } from './projects/projects.component';
 import { ProjectsResolver } from './projects/projects-resolver.component';
 import { ProjectsDetailsComponent } from './projects/projects-details/projects-details.component';
@@ -82,7 +83,11 @@ const routes: Routes = [
       {
         path: 'rpi-twonky',
         component: RpiTwonkyComponent
-      }
+      },
+      {
+        path: 'ubuntu-hd-audio',
+        component: UbuntuHdAudioComponent
+      },
     ]
   },
   {

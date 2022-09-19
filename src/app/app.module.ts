@@ -29,6 +29,7 @@ import { ContactSuccessComponent } from './contact/contact-success/contact-succe
 import { MusingsComponent } from './musings/musings.component';
 import { RpiTwonkyComponent } from './musings/rpi-twonky/rpi-twonky.component';
 import { MusingsHomeComponent } from './musings/musings-home/musings-home.component';
+import { UbuntuHdAudioComponent } from './musings/ubuntu-hd-audio/ubuntu-hd-audio.component';
 
 
 @NgModule({
@@ -46,7 +47,8 @@ import { MusingsHomeComponent } from './musings/musings-home/musings-home.compon
     ContactSuccessComponent,
     MusingsComponent,
     RpiTwonkyComponent,
-    MusingsHomeComponent
+    MusingsHomeComponent,
+    UbuntuHdAudioComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'serverApp' }),
