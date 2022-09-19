@@ -167,7 +167,6 @@
       }
     }
   },
-  "defaultProject": "portfolio3",
   "cli": {
     "analytics": false
   }

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { DialogService }  from '../../shared/dialog.service';
@@ -14,11 +14,11 @@ import { Message } from './message'
 })
 export class ContactFormComponent implements OnInit {
 
-  contactForm : FormGroup
+  contactForm : UntypedFormGroup
   formSent : boolean
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private dbs: DatabaseService,
     private router : Router,
     private ds: DialogService
