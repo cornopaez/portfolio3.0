@@ -38,12 +38,10 @@
 				<ul>
 					<li><a routerLink="../ubuntu-hd-audio" fragment="alsamixer">alsamixer</a></li>
 					<li><a routerLink="../ubuntu-hd-audio" fragment="pulseaudio">pulseaudio</a></li>
-					<li><a routerLink="../ubuntu-hd-audio" fragment="audio-output">Audio Output</a></li>
+					<li><a routerLink="../ubuntu-hd-audio" fragment="audio-output">Ubuntu Output Device</a></li>
 				</ul>
 			</li>
-			<li><a routerLink="../rpi-twonky" fragment="service-twonky">Setting up a service for Twonky</a></li>
-			<li><a routerLink="../rpi-twonky" fragment="firewall">Dealing with the firewall</a></li>
-			<li><a routerLink="../rpi-twonky" fragment="musings">Musings</a></li>
+			<li><a routerLink="../ubuntu-hd-audio" fragment="musings">Musings</a></li>
 		</ol>
 		<br>
 		<h2 id="tools">Tools Needed</h2>
@@ -58,7 +56,7 @@
 		<p>The important spec of the motherboard stated above is under the audio section: "up to 24-Bit/192kHz playback". This allows us to playback music in such formats natively without having to resample. Furthermore, I know that that the RX-V481 receiver works just fine as well for this example -- though, I suspect that <em>any</em> recent Yamaha receiver would work. They have had stellar support for audio formats for a while.</p>
 		<br>
 		<h2 id="audio-setup">Ubuntu Audio Setup</h2>
-		<p>I must give my thanks to <a href="http://mclements.net/blogWP/index.php/2020/06/30/high-res-audio-on-ubuntu/">Mike Clements</a> for their wonderful and truly in-depth guide for high-resolution audio setup in Ubuntu. This guide is based upon that guide -- or at least, the version last updated in June 30th, 2020.</p>
+		<p>I must give my thanks to <a href="https://mclements.net/blogWP/index.php/2020/06/30/high-res-audio-on-ubuntu/">Mike Clements</a> for their wonderful and truly in-depth guide for high-resolution audio setup in Ubuntu. This guide is based upon that guide -- or at least, the version last updated in June 30th, 2020.</p>
 		<p>That guide is truly detailed. Should you want to know what other options are available, why they are available, and how they work, head over and poke around.</p>
 		<p>To start, let's go over some fundamental items that need to be setup to enjoy better audio output. There's two main packages in Ubuntu doing a lot, if not all, of the work for audio processing: Alsamixer and Pulseaudio. Alsamixer, as far as I can tell, decides which audio card to use, along with some config items for that card, while Pulseaudio decides the parameters used for the audio processing. The last step is to explicitly tell Ubuntu which physical audio output to use. Let's step through each of them.</p>
 		<h3 id="alsamixer">Alsamixer Setup</h3>
@@ -87,5 +85,32 @@ defaults.pcm.card 3
 defaults.ctl.card 3
 		</pre>
 		<h3 id="pulseaudio">Pulseaudio Setup</h3>
+		<p>By default, Pulseaudio is setup to resample all audio being output to two different settings: 44.1kHz or 48kHz. I suspect this has something to do with legacy, and well established, sample rates. The former is the default in CDs and the latter is the default for DVD/Blu-Ray. However, we don't want Pulseaudio to resample our music -- just to output as is as pass-through. In order to do this, we have to head over to the config file located in <kbd>/etc/pulse/daemon.conf</kbd>. In there the following settings need to change:</p>
+		<pre>
+resample-method = soxr-vhq
+default-sample-format = float32le
+default-sample-rate = 44100
+alternate-sample-rate = 48000
+avoid-resampling = true
+		</pre>
+		<p>Find the lines and uncomment them. Be aware that the file has comments starting with <kbd>#</kbd> and <kbd>;</kbd>.</p>
+		<p>There's a single caveat in these configurations. <kbd>resample-method</kbd> has lots of options and it does vary. Before committing to a simple copy/paste from this guide, run <kbd>pulseaudio --dump-resample-methods</kbd> and make sure it is an option in your system. The other two options that are changing, <kbd>default-sample-format</kbd> and <kbd>avoid-resampling</kbd>, are somewhat self-explanatory. The former ensures that audio doesn't get down-sampled in a lossy way, while the latter ensures that, if possible, audio does not get resampled. <a href="https://mclements.net/blogWP/index.php/2020/06/30/high-res-audio-on-ubuntu/">This guide </a>has a little bit of background on those settings if you're curious.</p>
+		<p>Once the settings have been applied, and the config file saved, restart Pulseaudio by running <kbd>pulseaudio -k</kbd>.</p>
+		<h3 id="audio-output">Ubuntu Output Device</h3>
+		<p>Lastly, be sure to explicitly tell Ubuntu which audio output to use. So far, we've ensured that important Ubuntu packages know which audio card to use and which parameters to apply to the audio output. This step, while simple, can save lots of frustrations when troubleshooting the lack of audio on playback.</p>
+		<p>Head over to the Ubuntu settings, top right of screen and then click Settings. Under the Audio section, select the correct Output Device:</p>
+		<div class="ubuntu-settings">
+			<img src="{{currentContent.content.ubuntu_settings[0]}}">
+		</div>
+		<p>For this guide I chose HDMI because I know it has the bandwidth available to cope with this demand.</p>
+		<h2 id="musings">Musings</h2>
+		<ul>
+			<li>There are other settings that may improve playback of Hi-Res Audio Files. Something that stood out from <a href="https://mclements.net/blogWP/index.php/2020/06/30/high-res-audio-on-ubuntu/">this guide</a> was the size of the buffer. Given how everything is setup be default for CD or DVD audio samples, an increase of the size of the buffer may be necessary to keep things running smoothly by preventing clipping.</li>
+			<li>I believe it is possible to stream 192kHz audio through S/PDIF (optical) but, honestly, I'm not completely sure. If I remember correctly, the maximum output available in a Mac mini using a CalDigit TS3's optical output is 96kHz. Your mileage may vary with those experiments.</li>
+			<li><p>Speaking of Mac mini, and macOS really, is the lack of dynamic audio sample setting. While macOS allows you to define the audio sample output, it can only be set manually via the appropriately-named Audio MIDI Setup. However, if the audio source varies in sample rate, like you might find in a well-established music library, the output does not change to match the native audio sample rate. Is this such a big issue? For most folks, the existence of the Audio MIDI Setup app is irrelevant and all of this is a non-issue. But, to me, it makes a difference -- if only in principle.</p>
+			<p>The Yamaha receivers have a nifty compressed-audio enhancer algorithm that, to my ears, does make compressed files and streams (like radio) a bit more lively. When macOS resamples the audio to comply with the set sample rate, it by-passes the algorithm as the receiver believes the source to be of higher quality than it really is.</p>
+			<p>This is a pet-peeve of mine and I really wish they would improve that experience. It makes their whole push for lossless in Apple Music a bit silly when you can't really enjoy it at its native sample rate.</p></li>
+			<li>The HDMI plug being used doesn't really make much of a difference so long as it is correctly configured. For example, my system has at least three HDMI plugs: one built-in from the motherboard, and one on each of the GPUs attached. I can head over to the motherboard's BIOS to explicitly state which video output I want to use, which by proxy defines the audio output. Even though there's two GPUs plugged into this system, the BIOS only allows me to select either the PCIe output or the built-in one. There doesn't appear to be a distinction between GPUs like I've seen in other motherboards.</li>
+		</ul>
   </div>
 </div>

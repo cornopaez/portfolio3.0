@@ -17,6 +17,9 @@ export class UbuntuHdAudioComponent implements OnInit {
         '../../../../assets/alsamixer-1.png',
         '../../../../assets/alsamixer-2.png',
         '../../../../assets/alsamixer-3.png',
+      ],
+      ubuntu_settings: [
+        '../../../../assets/ubuntu-settings-1.png',
       ]
     }
   }
