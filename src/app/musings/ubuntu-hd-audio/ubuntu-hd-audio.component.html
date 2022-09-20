@@ -21,7 +21,7 @@
 
 <div class="detail project-detail">
 	<h1>Enabling HD Audio Output in Ubuntu 22.04 (and 20.04)</h1>
-	<small class="text-muted">Updated 2022-09-19</small><br>
+	<small class="text-muted">Updated 2022-09-20</small><br>
   <small class="text-muted">Photo by <a href="https://unsplash.com/@marius">Marius Masalar</a> on Unsplash</small>
   <br>
   <br>
@@ -42,6 +42,7 @@
 				</ul>
 			</li>
 			<li><a routerLink="../ubuntu-hd-audio" fragment="musings">Musings</a></li>
+			<li><a routerLink="../ubuntu-hd-audio" fragment="acknowledgements">Acknowledgements</a></li>
 		</ol>
 		<br>
 		<h2 id="tools">Tools Needed</h2>
@@ -76,7 +77,7 @@
 		<br>
 		<p>Once Auto-Mute Mode is disabled in the correct card, you can hit <kbd>esc</kbd> to close out of <kbd>alsamixer</kbd>.</p>
 		<p>
-			Next, you'll want to specify the card to use by default. To do this, run the following command to create the relevant file: <kbd>nano /etc/asound.conf</kbd>.
+			Next, you'll want to specify the card to use by default. To do this, run the following command to create the relevant file: <kbd>nano /etc/asound.conf</kbd> (you may need to use <kbd>sudo</kbd> to be able to save the file in the location).
 			The contents of the file will be as follows:
 		</p>
 		<pre>
@@ -111,6 +112,13 @@ avoid-resampling = true
 			<p>The Yamaha receivers have a nifty compressed-audio enhancer algorithm that, to my ears, does make compressed files and streams (like radio) a bit more lively. When macOS resamples the audio to comply with the set sample rate, it by-passes the algorithm as the receiver believes the source to be of higher quality than it really is.</p>
 			<p>This is a pet-peeve of mine and I really wish they would improve that experience. It makes their whole push for lossless in Apple Music a bit silly when you can't really enjoy it at its native sample rate.</p></li>
 			<li>The HDMI plug being used doesn't really make much of a difference so long as it is correctly configured. For example, my system has at least three HDMI plugs: one built-in from the motherboard, and one on each of the GPUs attached. I can head over to the motherboard's BIOS to explicitly state which video output I want to use, which by proxy defines the audio output. Even though there's two GPUs plugged into this system, the BIOS only allows me to select either the PCIe output or the built-in one. There doesn't appear to be a distinction between GPUs like I've seen in other motherboards.</li>
+		</ul>
+		<h2 id="acknowledgements">Acknowledgements</h2>
+		<p>I made liberal use of the following links to gather the information in this guide:</p>
+		<ul>
+			<li><a href="https://www.jas-audio.or.jp/hi-res/definition/acquisition">https://www.jas-audio.or.jp/hi-res/definition/acquisition</a> -- Source of the the Hi-Res Audio logo in the jumbotron.</li>
+			<li><a href="https://www.alsa-project.org/wiki/Setting_the_default_device">https://www.alsa-project.org/wiki/Setting_the_default_device</a> -- Source of the automatic selection of the appropriate audio card.</li>
+			<li><a href="https://mclements.net/blogWP/index.php/2020/06/30/high-res-audio-on-ubuntu/">https://mclements.net/blogWP/index.php/2020/06/30/high-res-audio-on-ubuntu/</a> -- Source of lots of fantastic information that helped me troubleshoot several issues encountered along the way.</li>
 		</ul>
   </div>
 </div>
