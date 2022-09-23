@@ -13,7 +13,7 @@ export class HomeComponent implements OnInit {
       view_title: 'Mauricio_Páez | Developer',
       content: {
         image: '../assets/close-up.png',
-        description: 'IT Business Analysis, Web Development' ,
+        description: 'Data Analysis, IT Business Analysis, Web Development, Corgi enthusiast.' ,
         description_links: [
           'Projects',
           'About',

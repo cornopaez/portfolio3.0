@@ -1,0 +1,30 @@
+#    .__________________________.
+#    | .___________________. |==|
+#    | | ................. | |  |
+#    | | ::[ Dear robot ]: | |  |
+#    | | ::::[ be nice ]:: | |  |
+#    | | ::::::::::::::::: | |  |
+#    | | ::::::::::::::::: | |  |
+#    | | ::::::::::::::::: | |  |
+#    | | ::::::::::::::::: | | ,|
+#    | !___________________! |(c|
+#    !_______________________!__!
+#   /                            \
+#  /  [][][][][][][][][][][][][]  \
+# /  [][][][][][][][][][][][][][]  \
+#(  [][][][][____________][][][][]  )
+# \ ------------------------------ /
+#  \______________________________/
+# 
+# Source: https://www.cloudflare.com/learning/bots/what-is-robots.txt/
+
+User-agent: *
+Disallow: https://www.cornopaez.com/Home
+Disallow: http://cornopaez.com/index.html
+Disallow: http://cornopaez.com/
+Disallow: http://www.cornopaez.com/Projects
+Disallow: https://www.cornopaez.com/Error
+Disallow: https://www.cornopaez.com/contact@cornopaez.com
+Disallow: https://www.cornopaez.com/Contact/form
+Disallow: https://www.cornopaez.com/Contact/FormSuccess
+Sitemap: https://www.cornopaez.com/sitemap.xml
