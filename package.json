@@ -30,7 +30,7 @@
     "express": "^4.17.1",
     "helmet": "^3.23.3",
     "mongodb": "^3.6.6",
-    "ng-recaptcha": "^10.0.0",
+    "ng-recaptcha": "^11.0.0",
     "request": "^2.88.2",
     "rxjs": "~6.5.5",
     "saslprep": "^1.0.3",
