@@ -1,5 +1,5 @@
-<meta name="keywords" content="jose mauricio paez developer about qualifications education languages coding node angular universal typescript type script">
-<meta name="description" content="These is the educational credentials and qualifications of Mauricio Paez - Developer">
+<meta name="keywords" content="jose mauricio paez developer about qualifications education languages coding node angular universal typescript type script hadoop pyspark spark sql it analysis big data python">
+<meta name="description" content="These are the educational credentials and qualifications of Mauricio Paez - Developer">
 <meta name="author" content="Mauricio Paez - Developer">
 <nav *ngIf="currentContent.navbar">
   <h1>{{ '{'}} {{ currentContent.navbar.title }} {{ '}'}}</h1>
@@ -26,7 +26,7 @@
     <h2>{{ languages.title }}</h2>
     <ul class="icon-container">
       <li *ngFor="let icon of languages.icons" class="lang-icon">
-        <i class="{{ icon }}"></i>
+        <i class="{{ icon.icon }}" title="{{ icon.title }}"></i>
       </li>
     </ul>
   </div>

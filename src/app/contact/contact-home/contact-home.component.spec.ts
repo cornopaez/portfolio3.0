@@ -39,12 +39,6 @@ describe('ContactHomeComponent', () => {
         expect(link.getAttribute('href')).toBeNull()
       })
 
-      it('should have a link for angellist',()=>{
-        const link = compiled.querySelector('div.card-columns div.card.social3 a')
-        expect(link.textContent).toEqual('Go to AngelList')
-        expect(link.getAttribute('href')).toEqual('https://angel.co/jose-m-paez')
-      })
-
       it('should have an email link',()=>{
         const link = compiled.querySelector('div.card-columns div.card.social4 a')
         expect(link.textContent).toEqual('Send Email')

@@ -1,27 +1,71 @@
 export const BACKGROUND = {
   title: 'Background',
-  description: 'I am a former musician who\'s discovered the joy of coding. I initially learned to code in Java, building small programs for my classes, including some that used SQL databases in the stack. I am handy with SQL and traditional relational database schema design and queries. I’ve since moved on to using a MEAN as my main stack, using it to build this site and deploying exclusively to Heroku. I am familiar and feel comfortable in the languages and technologies below, as well as some Machine Learning Techniques using Octave/MATLAB. Feel free to poke around the site and contact me if you have any questions.'
+  description: 'I am former musician with a successful pivot to the technology field. For several years I have cultivated knowledge on data analysis, data science, data engineering, and general consulting for both technology, big data, and analysts topics. Along with this, machine learning is a topic that fascinates me and I continually look for application opportunities in various fields. Feel free to poke around the site and contact me if you have any questions.'
 }
 
 export const LANGUAGES = {
   title: 'Languages and Technology',
   icons: [
-    "devicon-html5-plain-wordmark colored",
-    "devicon-css3-plain-wordmark colored",
-    "devicon-sass-original colored",
-    "devicon-javascript-plain colored",
-    "devicon-angularjs-plain colored",
-    "devicon-express-original-wordmark colored",
-    "devicon-mongodb-plain-wordmark colored",
-    "devicon-nodejs-plain colored",
-    "devicon-typescript-plain colored",
-    "devicon-bootstrap-plain-wordmark colored",
-    "devicon-git-plain-wordmark colored",
-    "devicon-github-plain-wordmark colored",
-    "devicon-java-plain colored",
-    "devicon-heroku-plain colored",
-    "devicon-python-plain colored",
-    "fa fa-database"
+    {
+      icon: "devicon-html5-plain-wordmark colored",
+      title: "HTML5"
+    },
+    {
+      icon: "devicon-css3-plain-wordmark colored",
+      title: "CSS3",
+    },
+    {
+      icon: "devicon-sass-original colored",
+      title: "Sass",
+    },
+    {
+      icon: "devicon-javascript-plain colored",
+      title: "Javascript",
+    },
+    {
+      icon: "devicon-angularjs-plain colored",
+      title: "Angular",
+    },
+    {
+      icon: "devicon-express-original-wordmark colored",
+      title: "ExpressJS",
+    },
+    {
+      icon: "devicon-mongodb-plain-wordmark colored",
+      title: "MongoDB",
+    },
+    {
+      icon: "devicon-nodejs-plain colored",
+      title: "NodeJS",
+    },
+    {
+      icon: "devicon-typescript-plain colored",
+      title: "TypeScript",
+    },
+    {
+      icon: "devicon-bootstrap-plain-wordmark colored",
+      title: "Bootstrap",
+    },
+    {
+      icon: "devicon-git-plain-wordmark colored",
+      title: "Git",
+    },
+    {
+      icon: "devicon-github-plain-wordmark colored",
+      title: "GitHub",
+    },
+    {
+      icon: "devicon-heroku-plain colored",
+      title: "Heroku",
+    },
+    {
+      icon: "devicon-python-plain colored",
+      title: "Python",
+    },
+    {
+      icon: "fa fa-database",
+      title: "Databases",
+    },
   ]
 }
 
@@ -31,11 +75,15 @@ export const EXPERIENCE = {
     {
       title : "Corporate",
       points : [
-        "Application Owner of an app used by several teams. Oversee maintenance of the app, as well as other various owner-tasks related.",
         "Analysis of data as needed for projects using big data tools like Python, Hadoop, PySpark, etc.",
+        "Data engineering efforts to enable consumption of unusual data sources.",
+        "Mentor experience by enabling co-workers to use technology at the company, get them up to speed with the team and the company, work through difficult issues to find best possible solutions.",
+        "Consultant experience by assisting different teams within the company to solve problems or suggest how to approach difficult data problems.",
+        "Application Owner of an app used by several teams. Oversee maintenance of the app, as well as other various owner-tasks related.",
+        "IT Business Analysis experience as part of application ownership.",
         "Contributed and maintained code in documents necessary for the course of business.",
         "Assisted in transition from legacy systems and databases to new ones.",
-        "Participated in two hackatons at the company. Out of this, came out the idea of creating my first <a href=\"https://shielded-falls-32861.herokuapp.com/\">Ruby on Rails application</a>. I've also worked on Alexa and Google Home skills, creating an API to consume data to be used in Natual Language Procesing applications."
+        "Participated in two hackatons at the company with one second place finish."
       ]
     },
     {
@@ -49,17 +97,31 @@ export const EXPERIENCE = {
       ]
     },
     {
-      title : "Extras",
+      title : "Hobbies",
       points : [
-        "I use <a href=\"https://www.codewars.com/users/cornopaez\">Codewars</a> to keep up with the languages I know."
+        "Big fan of the Raspberry Pi. I have at least two <a href=\"https://www.cornopaez.com/Musings\">musings</a> (guides) that help folks with niche items I have found useful.",
+        "Fluent in CLI for some Linux distros. I mostly use Ubuntu and RasbperryOS (debian based).",
+        "I manage my own network at home using enterprise-grade equipment. This has exposed me to some network troubleshooting and design topics.",
       ]
-    }
+    },
   ]
 }
 
 export const EDUCATION = {
   title: 'Education and Certifications',
   entities : [
+    {
+      title: 'Carnegie Mellon University - Tepper School of Business - Executive Education',
+      points: [
+          'Strategy and Innovation Cohort - In Progress. Completion expected October 2023.'
+        ]
+    },
+    {
+      title: 'Cornell University (eCornell)',
+      points: [
+          'Machine Learning Certificate - In Progress. Completion expected October 2023.'
+        ]
+    },
     {
       title : "Coursera",
       points : [
