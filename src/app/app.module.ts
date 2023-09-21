@@ -30,6 +30,7 @@ import { MusingsComponent } from './musings/musings.component';
 import { RpiTwonkyComponent } from './musings/rpi-twonky/rpi-twonky.component';
 import { MusingsHomeComponent } from './musings/musings-home/musings-home.component';
 import { UbuntuHdAudioComponent } from './musings/ubuntu-hd-audio/ubuntu-hd-audio.component';
+import { TravelogueItDeComponent } from './musings/travelogue-it-de/travelogue-it-de.component';
 
 
 @NgModule({
@@ -48,7 +49,8 @@ import { UbuntuHdAudioComponent } from './musings/ubuntu-hd-audio/ubuntu-hd-audi
     MusingsComponent,
     RpiTwonkyComponent,
     MusingsHomeComponent,
-    UbuntuHdAudioComponent
+    UbuntuHdAudioComponent,
+    TravelogueItDeComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'serverApp' }),

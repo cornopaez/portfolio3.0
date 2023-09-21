@@ -18,6 +18,7 @@ import { ContactFormComponent } from './contact/contact-form/contact-form.compon
 import { ContactHomeComponent } from './contact/contact-home/contact-home.component'
 import { ContactSuccessComponent } from './contact/contact-success/contact-success.component'
 import { CanDeactivateGuard } from './shared/can-deactivate-guard.service'
+import { TravelogueItDeComponent } from './musings/travelogue-it-de/travelogue-it-de.component';
 
 const routes: Routes = [
 	{ 
@@ -87,6 +88,10 @@ const routes: Routes = [
       {
         path: 'ubuntu-hd-audio',
         component: UbuntuHdAudioComponent
+      },
+      {
+        path: 'travelogue-it-de',
+        component: TravelogueItDeComponent
       },
     ]
   },
