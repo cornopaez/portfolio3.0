@@ -3,6 +3,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule, FormsModule }   from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { MatTableModule } from '@angular/material/table';
 
 
 import { AppRoutingModule } from './app-routing.module';
@@ -30,6 +31,7 @@ import { MusingsComponent } from './musings/musings.component';
 import { RpiTwonkyComponent } from './musings/rpi-twonky/rpi-twonky.component';
 import { MusingsHomeComponent } from './musings/musings-home/musings-home.component';
 import { UbuntuHdAudioComponent } from './musings/ubuntu-hd-audio/ubuntu-hd-audio.component';
+import { TlsCloudflareAndHerokuComponent } from './musings/tls-cloudflare-and-heroku/tls-cloudflare-and-heroku.component';
 
 
 @NgModule({
@@ -48,7 +50,8 @@ import { UbuntuHdAudioComponent } from './musings/ubuntu-hd-audio/ubuntu-hd-audi
     MusingsComponent,
     RpiTwonkyComponent,
     MusingsHomeComponent,
-    UbuntuHdAudioComponent
+    UbuntuHdAudioComponent,
+    TlsCloudflareAndHerokuComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'serverApp' }),
@@ -57,7 +60,8 @@ import { UbuntuHdAudioComponent } from './musings/ubuntu-hd-audio/ubuntu-hd-audi
     ReactiveFormsModule,
     HttpClientModule,
     RecaptchaModule,
-    RecaptchaFormsModule
+    RecaptchaFormsModule,
+    MatTableModule
   ],
   providers: [
     Title,

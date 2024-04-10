@@ -1,0 +1,68 @@
+@import '../../../assets/mixins'
+
+.btn-link
+	padding: 0.5em 0.75em 1.5em 2em
+
+.code-green
+	color: #2AB536
+
+.code-red
+	color: #bf0d40
+
+.code-burnt-yellow
+	color: #A8A333
+
+.jumbotron
+	position: relative
+	padding: 0
+	height: 25em
+	filter: grayscale(30%)
+
+	$small: '../assets/marius-masalar-rPOmLGwai2w-unsplash-640w.jpg'
+	$big: '../assets/marius-masalar-rPOmLGwai2w-unsplash-1000w.jpg'
+	@include dynamic-banner-background($small, $big)
+
+	background:
+		size: cover
+		position: center
+		repeat: no-repeat
+
+	.footnotes
+		position: absolute
+		bottom: 0
+		right: 0
+		padding: 0 2em 2em 2em
+		color: white
+
+		h4
+			text-align: right
+
+		ul
+			padding: 0
+			margin: 0
+			display: flex
+			flex-direction: row-reverse
+			list-style: none
+
+			li
+				padding: 0 0.4em
+				@include icon-size(2.5em)
+
+				img
+					height: 3em
+.project-detail
+	.alsamixer
+		img
+			@media screen and (min-width: 768px)
+				max-width: 40em
+
+			@media screen and (max-width: 767px)
+				max-width: 100%
+
+	.ubuntu-settings
+		img
+			@media screen and (min-width: 768px)
+				max-width: 40em
+
+			@media screen and (max-width: 767px)
+				max-width: 100%

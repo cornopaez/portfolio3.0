@@ -1,1 +1,130 @@
-<p>tls-cloudflare-and-heroku works!</p>
+<meta name="keywords" content="cloudflare heroku ssl tls full strict encryption mode manual certificate upload">
+<meta name="description" content="How to setup TLS Full (Strict) between Cloudflare and Heroku">
+<meta name="author" content="Mauricio Paez - Developer">
+<div class="btn-container">
+  <a routerLink="/Musings" class="btn btn-link"><i class="fas fa-chevron-left"></i>  Back to Musings</a>  
+</div>
+
+<div class="jumbotron">
+  <div class="footnotes">
+    <h4>Tech used</h4>
+    <ul>
+      <li *ngFor="let icon of currentContent.content.icons">
+        <i class="{{icon}}"></i>
+      </li>
+      <li class="hd_audio">
+        <img src="{{currentContent.content.hd_audio}}">
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div class="detail project-detail">
+  <h1>How to setup TLS Full (Strict) between Cloudflare and Heroku with WAF</h1>
+  <small class="text-muted">Updated 2024-04-15</small><br>
+  <small class="text-muted">Photo by <a href="https://unsplash.com/@flyd2069">FlyD</a> on Unsplash</small>
+  <br>
+  <br>
+  <div class="project-container">
+    <p>This guide walks you through setting up a full, end-to-end secure communication between a web browser, Cloudflare, and a Heroku app. This guide has been created after some negative events impacted the availability of this site and some domain squatting related to those events.</p>
+    <p>This guide assumes you have a domain registered with Cloudflare and a Heroku app you are looking to protect.</p>
+    <h2>Table of Contents</h2>
+    <ol>
+      <li><a routerLink="../tls-cloudflare-and-heroku" fragment="intro">Intro</a></li>
+      <li><a routerLink="../tls-cloudflare-and-heroku" fragment="cloudflare">Cloudflare Setup</a></li>
+      <ul>
+        <li><a routerLink="../tls-cloudflare-and-heroku" fragment="cloudflare-certs">Origin Server Certificates</a></li>
+        <li><a routerLink="../tls-cloudflare-and-heroku" fragment="dns-settings">DNS Settings</a></li>
+        <li><a routerLink="../tls-cloudflare-and-heroku" fragment="ssl-settings">SSL/TLS Settings</a></li>
+      </ul>
+      <li><a routerLink="../tls-cloudflare-and-heroku" fragment="cloudflare-certs">Heroku Setup</a></li>
+      <li><a routerLink="../tls-cloudflare-and-heroku" fragment="musings">Musings</a></li>
+      <li><a routerLink="../tls-cloudflare-and-heroku" fragment="acknowledgements">Acknowledgements</a></li>
+    </ol>
+    <br>
+    <h2 id="intro">Intro</h2>
+    <p>For certain apps, as they grow organically (or become targets of bad actors), using Cloudflare's free Web Application Firewall (WAF) is a very attractive proposition. After all, adding a WAF through Heroku itself costs more than hosting the app there in the first place for the lowest paid tier. It is possible, however, if you're paying for hosting in Heroku, that you are already making use of the Automatic Certificate Management (ACM). Using such a service from Heroku, unfortunately, is incompatible with Cloudflare's proxy DNS settings because proxying breaks the DNS checks Heroku performs at the time a certificate is being renewed. In order to ensure you and your customers enjoy a fully encrypted communication channel, and you make full use of Cloudflare's WAF, we'll need to disable the ACM on the Heroku side and create, and then upload to Heroku, an origin certificate from Cloudflare. Let's start, then, at the beginning.</p>
+    <p>Very important note: plan for a little bit of downtime for your site while this is setup. I'm sure you can figure out a better way than presented here to minimize it.</p>
+    <br>
+    <h2 id="cloudflare">Cloudflare Setup</h2>
+    <h3 id="cloudflare-certs">Origin Server Certificates</h3>
+    <p>First, log into the Cloudflare's dashboard and head over to the <kbd>SSL/TLS</kbd> section. Specifically, you're looking for the <kbd>Origin Server</kbd> link:</p>
+
+    <!-- <img src="tbd"> dash origin server -->
+
+    <p>Once within, hit the <kbd>Create Certificate</kbd> button. I did not change the default settings here but you may adjust them to suit your needs. Pay close attention to the <kbd>List of hostnames</kbd> text as it explains how to add other hostnames to be covered by the certificate you're looking to create:</p>
+
+    <!-- <img src="tbd"> dash certificate creation -->
+
+    <p>Once you create the certificate, two text boxes appear: one with the <b>Origin Certificate</b> and one with the <b> Private Key</b>. Be advised that the <kbd>Private Key</kbd> will not be accessible once you navigate away the page. Take a moment to save both keys in a safe place at this point.</p>
+
+    <p>For our purposes, we'll save them in two files locally to respective files to make it easy to move to Heroku via the CLI:</p>
+
+    <!-- <img src="tbd"> nano save cert -->
+
+    <!-- <img src="tbd"> nano save key -->
+
+    <!-- <img src="tbd"> list folder contents -->
+
+    <p>With these files created, let's move to setting up the DNS entries.</p>
+
+    <h3 id="dns-settings">DNS Settings</h3>
+
+    <p>Within the Cloudflare dashboard, move to the <kbd>DNS</kbd> settings. You should land in <kbd>Records</kbd> but, if not, move accordingly. While in here, ensure that both your <kbd>CNAME</kbd> entries zone apex and <kbd>www</kbd> are proxied. Being proxied enables you to use WAF's rules and leverage Bot Fight Mode:</p>
+
+    <!-- <img src="tbd"> dash dns list redacted -->
+
+    <h3 id="ssl-settings">SSL/TLS Settings</h3>
+
+    <p>Navigate to the <kbd>SSL/TLS > Overview</kbd> menu and select <kbd>Full (strict)</kbd> from the list:</p>
+
+    <!-- <img src="tbd"> dash ssl mode -->
+
+    <p>Since we have not uploaded the certificates we donwloaded to Heroku yet, at this point you will be unable to reach your site through your domain. However, you may still be able to access the site by hitting the Heroku DNS Target still. Now, we can move to Heroku for the next steps.</p>
+
+    <h2 id="heroku">Heroku Setup</h2>
+
+    <p>The Heroku setup happens exclusively through the CLI tools. Make sure to download and install them according to their docs.</p>
+
+    <p>Once you're up and running with Heroku CLI, issue the following commands: </p>
+
+    <mat-table [dataSource]="currentContent.heroku_cli_comms" class="mat-elevation-z8">
+
+      <ng-container matColumnDef="no">
+        <th mat-header-cell *matHeaderCellDef> # </th>
+        <td mat-cell *matCellDef="let command"> {{command.no}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="command">
+        <th mat-header-cell *matHeaderCellDef> Command </th>
+        <td mat-cell *matCellDef="let command"> {{command.command}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="description">
+        <th mat-header-cell *matHeaderCellDef> Description </th>
+        <td mat-cell *matCellDef="let command"> {{command.description}} </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="currentContent.columnsToDisplay"></tr>
+      <tr mat-row *matRowDef="let row; columns: currentContent.columnsToDisplay;"></tr>
+    </mat-table>
+    <br>
+    <p>If all went well, you should see the new certificate in your Heroku dashboard:</p>
+
+    <!-- <img src="tbd"> heroku cert listing -->
+
+    <p>If you had any previous certs in there from ACM, this is the time to remove them.</p>
+
+    <p>At this point, you should now be able to visit your site via your domain again.</p>
+
+    <h2 id="musings">Musings</h2>
+    <ul>
+      <li>
+        <p></p>
+      </li>
+    </ul>
+
+    <h2 id="acknowledgements">Acknowledgements</h2>
+
+  </div>
+</div>
