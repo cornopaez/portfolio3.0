@@ -12,9 +12,6 @@
       <li *ngFor="let icon of currentContent.content.icons">
         <i class="{{icon}}"></i>
       </li>
-      <li class="hd_audio">
-        <img src="{{currentContent.content.hd_audio}}">
-      </li>
     </ul>
   </div>
 </div>
@@ -36,6 +33,7 @@
         <li><a routerLink="../tls-cloudflare-and-heroku" fragment="cloudflare-certs">Origin Server Certificates</a></li>
         <li><a routerLink="../tls-cloudflare-and-heroku" fragment="dns-settings">DNS Settings</a></li>
         <li><a routerLink="../tls-cloudflare-and-heroku" fragment="ssl-settings">SSL/TLS Settings</a></li>
+        <li><a routerLink="../tls-cloudflare-and-heroku" fragment="security-settings">SecuritySettings</a></li>
       </ul>
       <li><a routerLink="../tls-cloudflare-and-heroku" fragment="cloudflare-certs">Heroku Setup</a></li>
       <li><a routerLink="../tls-cloudflare-and-heroku" fragment="musings">Musings</a></li>
@@ -52,21 +50,49 @@
 
     <!-- <img src="tbd"> dash origin server -->
 
+    <div class="cloudflare">
+      <img src="{{currentContent.content.cloudflare[0]}}">
+    </div>
+
     <p>Once within, hit the <kbd>Create Certificate</kbd> button. I did not change the default settings here but you may adjust them to suit your needs. Pay close attention to the <kbd>List of hostnames</kbd> text as it explains how to add other hostnames to be covered by the certificate you're looking to create:</p>
+
+    <!-- <img src="tbd"> dash origin server -->
+
+    <div class="cloudflare">
+      <img src="{{currentContent.content.cloudflare[1]}}">
+    </div>
+
+    <p>Once you create the certificate, two text boxes appear: one with the <b>Origin Certificate</b> and one with the <b> Private Key</b>. Be advised that the <kbd>Private Key</kbd> will not be accessible once you navigate away the page. Take a moment to save both keys in a safe place at this point:</p>
 
     <!-- <img src="tbd"> dash certificate creation -->
 
-    <p>Once you create the certificate, two text boxes appear: one with the <b>Origin Certificate</b> and one with the <b> Private Key</b>. Be advised that the <kbd>Private Key</kbd> will not be accessible once you navigate away the page. Take a moment to save both keys in a safe place at this point.</p>
+    <div class="cloudflare">
+      <img src="{{currentContent.content.cloudflare[1]}}">
+    </div>
 
     <p>For our purposes, we'll save them in two files locally to respective files to make it easy to move to Heroku via the CLI:</p>
 
     <!-- <img src="tbd"> nano save cert -->
 
+    <div class="terminal">
+      <img src="{{currentContent.content.terminal[0]}}">
+    </div>
+
     <!-- <img src="tbd"> nano save key -->
+
+    <div class="terminal">
+      <img src="{{currentContent.content.terminal[1]}}">
+    </div>
 
     <!-- <img src="tbd"> list folder contents -->
 
-    <p>With these files created, let's move to setting up the DNS entries.</p>
+    <div class="terminal">
+      <img src="{{currentContent.content.terminal[2]}}">
+    </div>
+
+    <p>After saving the files, don't forget to check the <kbd>Authenticated Origin Pulls</kbd> button.</p>
+
+    <p>With these files created, and the setting on, let's move to setting up the DNS entries.</p>
 
     <h3 id="dns-settings">DNS Settings</h3>
 
@@ -74,13 +100,43 @@
 
     <!-- <img src="tbd"> dash dns list redacted -->
 
+    <div class="cloudflare">
+      <img src="{{currentContent.content.cloudflare[2]}}">
+    </div>
+
     <h3 id="ssl-settings">SSL/TLS Settings</h3>
 
     <p>Navigate to the <kbd>SSL/TLS > Overview</kbd> menu and select <kbd>Full (strict)</kbd> from the list:</p>
 
     <!-- <img src="tbd"> dash ssl mode -->
 
+    <div class="cloudflare">
+      <img src="{{currentContent.content.cloudflare[3]}}">
+    </div>
+
     <p>Since we have not uploaded the certificates we donwloaded to Heroku yet, at this point you will be unable to reach your site through your domain. However, you may still be able to access the site by hitting the Heroku DNS Target still. Now, we can move to Heroku for the next steps.</p>
+
+    <h3 id="security-settings">Security Settings</h3>
+
+    <p>One last important part of the configuration in CLoudflare is setting up the WAF to reject any connections to the Heroku app that do not come from Cloudflare itself. The reason for this is simple, as Cloudflare themselves explain: </p>
+
+    <blockquote cite="https://developers.cloudflare.com/ssl/origin-configuration/authenticated-origin-pull/"> 
+      <p>Authenticated Origin Pulls helps ensure requests to your origin server come from the Cloudflare network, which provides an additional layer of security on top of Full or Full (strict) encryption modes.</p>
+
+      <p>This authentication becomes particularly important with the Cloudflare Web Application Firewall (WAF). Together with the WAF, you can make sure that all traffic is evaluated before receiving a response from your origin server. </p>
+    </blockquote>
+
+    <p>In plain English: this ensures that comms <i>only</i> happen between your app and Cloudlfare -- no one else can hit directly your server and bypass the protections of the WAF.</p>
+
+    <p>To enable this feature, head over to <kbd>Security > WAF</kbd> and use the Rule Template named <kbd>mTLS-enforced authentication</kbd> and set it to <kbd>block</kbd>:</p>
+
+    <!-- <img src="tbd"> dash security rule mtls template -->
+
+    <div class="cloudflare">
+      <img src="{{currentContent.content.cloudflare[4]}}">
+    </div>
+
+    <p>With this done, we can head over to Heroku for the next steps. </p>
 
     <h2 id="heroku">Heroku Setup</h2>
 
@@ -112,6 +168,10 @@
     <p>If all went well, you should see the new certificate in your Heroku dashboard:</p>
 
     <!-- <img src="tbd"> heroku cert listing -->
+
+    <div class="heroku">
+      <img src="{{currentContent.content.heroku[0]}}">
+    </div>
 
     <p>If you had any previous certs in there from ACM, this is the time to remove them.</p>
 

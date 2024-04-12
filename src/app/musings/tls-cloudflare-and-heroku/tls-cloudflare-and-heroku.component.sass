@@ -18,8 +18,8 @@
 	height: 25em
 	filter: grayscale(30%)
 
-	$small: '../assets/marius-masalar-rPOmLGwai2w-unsplash-640w.jpg'
-	$big: '../assets/marius-masalar-rPOmLGwai2w-unsplash-1000w.jpg'
+	$small: '../assets/flyd-ZNOxwCEj5mw-unsplash-640w.jpeg'
+	$big: '../assets/flyd-ZNOxwCEj5mw-unsplash-1000w.jpeg'
 	@include dynamic-banner-background($small, $big)
 
 	background:
@@ -51,7 +51,7 @@
 				img
 					height: 3em
 .project-detail
-	.alsamixer
+	.cloudflare
 		img
 			@media screen and (min-width: 768px)
 				max-width: 40em
@@ -59,7 +59,15 @@
 			@media screen and (max-width: 767px)
 				max-width: 100%
 
-	.ubuntu-settings
+	.terminal
+		img
+			@media screen and (min-width: 768px)
+				max-width: 40em
+
+			@media screen and (max-width: 767px)
+				max-width: 100%
+
+	.heroku
 		img
 			@media screen and (min-width: 768px)
 				max-width: 40em

@@ -11,17 +11,24 @@ export class TlsCloudflareAndHerokuComponent implements OnInit {
   currentContent = {
     content: {
       icons: [
-        'fa-brands fa-ubuntu',
-        'fa-terminal fas'
+        'fa-terminal fas',
+        'fa-brands fa-cloudflare',
+        'devicon-heroku-plain'
       ],
-      hd_audio: 'https://www.jas-audio.or.jp/jas_cms/wp-content/themes/jas2022/old/img/jas/jas-hires-logo/jas-hires-logo_clip_image004.png',
-      alsamixer: [
-        '../../../../assets/alsamixer-1.png',
-        '../../../../assets/alsamixer-2.png',
-        '../../../../assets/alsamixer-3.png',
+      cloudflare: [
+        '../../../../assets/cloudflare-1.png',
+        '../../../../assets/cloudflare-2.png',
+        '../../../../assets/cloudflare-3.png',
+        '../../../../assets/cloudflare-4.png',
+        '../../../../assets/cloudflare-5.png',
       ],
-      ubuntu_settings: [
-        '../../../../assets/ubuntu-settings-1.png',
+      terminal: [
+        '../../../../assets/terminal-1.png',
+        '../../../../assets/terminal-2.png',
+        '../../../../assets/terminal-3.png',
+      ],
+      heroku: [
+        '../../../../assets/heroku-1.png',
       ],
     },
     heroku_cli_comms: [
