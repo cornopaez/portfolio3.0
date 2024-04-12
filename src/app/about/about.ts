@@ -113,19 +113,14 @@ export const EDUCATION = {
     {
       title: 'Cornell University (eCornell)',
       points: [
-          'Python for Data Science Certificate - Expected Completion July 2024.'
+          'Python for Data Science Certificate - Expected Completion July 2024.',
+          'Machine Learning Certificate - October 2023 - [ <a href="../assets/eCornell - MLCertificateReport.pdf">View Completion Certificate</a> ]'
         ]
     },
     {
       title: 'Carnegie Mellon University - Tepper School of Business - Executive Education',
       points: [
           'Strategy and Innovation Cohort - October 2023.'
-        ]
-    },
-    {
-      title: 'Cornell University (eCornell)',
-      points: [
-          'Machine Learning Certificate - October 2023 - [ <a href="../assets/eCornell - MLCertificateReport.pdf">View Completion Certificate</a> ]'
         ]
     },
     {
