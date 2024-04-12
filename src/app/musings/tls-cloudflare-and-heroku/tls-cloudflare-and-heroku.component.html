@@ -33,16 +33,16 @@
         <li><a routerLink="../tls-cloudflare-and-heroku" fragment="cloudflare-certs">Origin Server Certificates</a></li>
         <li><a routerLink="../tls-cloudflare-and-heroku" fragment="dns-settings">DNS Settings</a></li>
         <li><a routerLink="../tls-cloudflare-and-heroku" fragment="ssl-settings">SSL/TLS Settings</a></li>
-        <li><a routerLink="../tls-cloudflare-and-heroku" fragment="security-settings">SecuritySettings</a></li>
+        <li><a routerLink="../tls-cloudflare-and-heroku" fragment="security-settings">Security Settings</a></li>
       </ul>
-      <li><a routerLink="../tls-cloudflare-and-heroku" fragment="cloudflare-certs">Heroku Setup</a></li>
+      <li><a routerLink="../tls-cloudflare-and-heroku" fragment="heroku">Heroku Setup</a></li>
       <li><a routerLink="../tls-cloudflare-and-heroku" fragment="musings">Musings</a></li>
       <li><a routerLink="../tls-cloudflare-and-heroku" fragment="acknowledgements">Acknowledgements</a></li>
     </ol>
     <br>
     <h2 id="intro">Intro</h2>
     <p>For certain apps, as they grow organically (or become targets of bad actors), using Cloudflare's free Web Application Firewall (WAF) is a very attractive proposition. After all, adding a WAF through Heroku itself costs more than hosting the app there in the first place for the lowest paid tier. It is possible, however, if you're paying for hosting in Heroku, that you are already making use of the Automatic Certificate Management (ACM). Using such a service from Heroku, unfortunately, is incompatible with Cloudflare's proxy DNS settings because proxying breaks the DNS checks Heroku performs at the time a certificate is being renewed. In order to ensure you and your customers enjoy a fully encrypted communication channel, and you make full use of Cloudflare's WAF, we'll need to disable the ACM on the Heroku side and create, and then upload to Heroku, an origin certificate from Cloudflare. Let's start, then, at the beginning.</p>
-    <p>Very important note: plan for a little bit of downtime for your site while this is setup. I'm sure you can figure out a better way than presented here to minimize it.</p>
+    <p><span class="important-note-1">Very Important Note:</span><br> Plan for a little bit of downtime for your site while this is setup. You may be able to figure out a better way than presented here to minimize the disruption.</p>
     <br>
     <h2 id="cloudflare">Cloudflare Setup</h2>
     <h3 id="cloudflare-certs">Origin Server Certificates</h3>
@@ -51,7 +51,7 @@
     <!-- <img src="tbd"> dash origin server -->
 
     <div class="cloudflare">
-      <img src="{{currentContent.content.cloudflare[0]}}">
+      <img src="{{currentContent.content.new_cloudflare[0].img}}" alt="{{currentContent.content.new_cloudflare[0].alt}}">
     </div>
 
     <p>Once within, hit the <kbd>Create Certificate</kbd> button. I did not change the default settings here but you may adjust them to suit your needs. Pay close attention to the <kbd>List of hostnames</kbd> text as it explains how to add other hostnames to be covered by the certificate you're looking to create:</p>
@@ -59,7 +59,7 @@
     <!-- <img src="tbd"> dash origin server -->
 
     <div class="cloudflare">
-      <img src="{{currentContent.content.cloudflare[1]}}">
+      <img src="{{currentContent.content.new_cloudflare[5].img}}" alt="{{currentContent.content.new_cloudflare[5].alt}}">
     </div>
 
     <p>Once you create the certificate, two text boxes appear: one with the <b>Origin Certificate</b> and one with the <b> Private Key</b>. Be advised that the <kbd>Private Key</kbd> will not be accessible once you navigate away the page. Take a moment to save both keys in a safe place at this point:</p>
@@ -67,7 +67,7 @@
     <!-- <img src="tbd"> dash certificate creation -->
 
     <div class="cloudflare">
-      <img src="{{currentContent.content.cloudflare[1]}}">
+      <img src="{{currentContent.content.new_cloudflare[1].img}}" alt="{{currentContent.content.new_cloudflare[1].alt}}">
     </div>
 
     <p>For our purposes, we'll save them in two files locally to respective files to make it easy to move to Heroku via the CLI:</p>
@@ -75,19 +75,19 @@
     <!-- <img src="tbd"> nano save cert -->
 
     <div class="terminal">
-      <img src="{{currentContent.content.terminal[0]}}">
+      <img src="{{currentContent.content.new_terminal[0].img}}" alt="{{currentContent.content.new_terminal[0].alt}}">
     </div>
 
     <!-- <img src="tbd"> nano save key -->
 
     <div class="terminal">
-      <img src="{{currentContent.content.terminal[1]}}">
+      <img src="{{currentContent.content.new_terminal[1].img}}" alt="{{currentContent.content.new_terminal[1].alt}}">
     </div>
 
     <!-- <img src="tbd"> list folder contents -->
 
     <div class="terminal">
-      <img src="{{currentContent.content.terminal[2]}}">
+      <img src="{{currentContent.content.new_terminal[2].img}}" alt="{{currentContent.content.new_terminal[2].alt}}">
     </div>
 
     <p>After saving the files, don't forget to check the <kbd>Authenticated Origin Pulls</kbd> button.</p>
@@ -96,12 +96,12 @@
 
     <h3 id="dns-settings">DNS Settings</h3>
 
-    <p>Within the Cloudflare dashboard, move to the <kbd>DNS</kbd> settings. You should land in <kbd>Records</kbd> but, if not, move accordingly. While in here, ensure that both your <kbd>CNAME</kbd> entries zone apex and <kbd>www</kbd> are proxied. Being proxied enables you to use WAF's rules and leverage Bot Fight Mode:</p>
+    <p>Within the Cloudflare dashboard, move to the <kbd>DNS</kbd> settings. You should land in <kbd>Records</kbd> but, if not, move accordingly. While in here, ensure that both your <kbd>CNAME</kbd> entries for Zone Apex and <kbd>www</kbd> are proxied (get the orange icon). Being proxied enables you to use WAF's rules and leverage Bot Fight Mode:</p>
 
     <!-- <img src="tbd"> dash dns list redacted -->
 
     <div class="cloudflare">
-      <img src="{{currentContent.content.cloudflare[2]}}">
+      <img src="{{currentContent.content.new_cloudflare[2].img}}" alt="{{currentContent.content.new_cloudflare[2].alt}}">
     </div>
 
     <h3 id="ssl-settings">SSL/TLS Settings</h3>
@@ -111,17 +111,17 @@
     <!-- <img src="tbd"> dash ssl mode -->
 
     <div class="cloudflare">
-      <img src="{{currentContent.content.cloudflare[3]}}">
+      <img src="{{currentContent.content.new_cloudflare[3].img}}" alt="{{currentContent.content.new_cloudflare[3].alt}}">
     </div>
 
-    <p>Since we have not uploaded the certificates we donwloaded to Heroku yet, at this point you will be unable to reach your site through your domain. However, you may still be able to access the site by hitting the Heroku DNS Target still. Now, we can move to Heroku for the next steps.</p>
+    <p>Since we have not uploaded the certificates we donwloaded to Heroku yet, at this point you will be unable to reach your site through your domain. However, you may still be able to access the site by hitting the Heroku DNS Target still.</p>
 
     <h3 id="security-settings">Security Settings</h3>
 
-    <p>One last important part of the configuration in CLoudflare is setting up the WAF to reject any connections to the Heroku app that do not come from Cloudflare itself. The reason for this is simple, as Cloudflare themselves explain: </p>
+    <p>One last important part of the configuration in Cloudflare is setting up the WAF to reject any connections to the Heroku app that do not come from Cloudflare itself. The reason for this is simple, as Cloudflare themselves explain: </p>
 
     <blockquote cite="https://developers.cloudflare.com/ssl/origin-configuration/authenticated-origin-pull/"> 
-      <p>Authenticated Origin Pulls helps ensure requests to your origin server come from the Cloudflare network, which provides an additional layer of security on top of Full or Full (strict) encryption modes.</p>
+      <p class="blkqt-one">Authenticated Origin Pulls helps ensure requests to your origin server come from the Cloudflare network, which provides an additional layer of security on top of Full or Full (strict) encryption modes.</p><br><br>
 
       <p>This authentication becomes particularly important with the Cloudflare Web Application Firewall (WAF). Together with the WAF, you can make sure that all traffic is evaluated before receiving a response from your origin server. </p>
     </blockquote>
@@ -133,14 +133,14 @@
     <!-- <img src="tbd"> dash security rule mtls template -->
 
     <div class="cloudflare">
-      <img src="{{currentContent.content.cloudflare[4]}}">
+      <img src="{{currentContent.content.new_cloudflare[4].img}}" alt="{{currentContent.content.new_cloudflare[4].alt}}">
     </div>
 
     <p>With this done, we can head over to Heroku for the next steps. </p>
 
     <h2 id="heroku">Heroku Setup</h2>
 
-    <p>The Heroku setup happens exclusively through the CLI tools. Make sure to download and install them according to their docs.</p>
+    <p>The Heroku setup happens exclusively through the CLI tools. Make sure to <a href="https://devcenter.heroku.com/articles/heroku-cli">download and install</a> them according to their docs.</p>
 
     <p>Once you're up and running with Heroku CLI, issue the following commands: </p>
 
@@ -170,7 +170,7 @@
     <!-- <img src="tbd"> heroku cert listing -->
 
     <div class="heroku">
-      <img src="{{currentContent.content.heroku[0]}}">
+      <img src="{{currentContent.content.new_heroku[0].img}}" alt="{{currentContent.content.new_heroku[0].alt}}">
     </div>
 
     <p>If you had any previous certs in there from ACM, this is the time to remove them.</p>
@@ -180,11 +180,11 @@
     <h2 id="musings">Musings</h2>
     <ul>
       <li>
-        <p></p>
+        <p>For some strange reason, this site became part of some test script. I'm not sure why it became a target for testing but I was seeing a lot of bad traffic (~1,700 hit per month) that I decided to stop. It took me a little bit of time to figure out how to configure everything to make sure I was using Cloudflare's WAF while keeping SSL/TLS enabled throughout. After setting everything just so as this guide shows, the bad traffic has dropped significantly and the WAF reports less hits for paths that do not exist or are clearly exploitable in other tech stacks.</p>
+      </li>
+      <li>
+        <p>Along those same lines, I had misconfigured Heroku to only serve the app through the <kbd>www</kbd> CNAME, likely because I did not read through the entire <a href="https://devcenter.heroku.com/articles/custom-domains">Custom Domain guide</a>. This allowed someone to deploy an entirely separate website at the apex domain from within Heroku to serve garbage. My Google Search Console numbers went through the roof for a small period of time while I regained control of the CNAME. If you end up having the same issue, be sure to request a Domain Release from Heroku using <a href="https://tools.heroku.support/domain-release">this</a> tool.</p>
       </li>
     </ul>
-
-    <h2 id="acknowledgements">Acknowledgements</h2>
-
   </div>
 </div>

@@ -15,21 +15,52 @@ export class TlsCloudflareAndHerokuComponent implements OnInit {
         'fa-brands fa-cloudflare',
         'devicon-heroku-plain'
       ],
-      cloudflare: [
-        '../../../../assets/cloudflare-1.png',
-        '../../../../assets/cloudflare-2.png',
-        '../../../../assets/cloudflare-3.png',
-        '../../../../assets/cloudflare-4.png',
-        '../../../../assets/cloudflare-5.png',
-      ],
-      terminal: [
-        '../../../../assets/terminal-1.png',
-        '../../../../assets/terminal-2.png',
-        '../../../../assets/terminal-3.png',
-      ],
-      heroku: [
-        '../../../../assets/heroku-1.png',
-      ],
+      new_cloudflare:[
+          {
+            img:'../../../../assets/cloudflare-1.png',
+            alt:''
+          },
+          {
+            img:'../../../../assets/cloudflare-2.png',
+            alt:''
+          },
+          {
+            img:'../../../../assets/cloudflare-3.png',
+            alt:''
+          },
+          {
+            img:'../../../../assets/cloudflare-4.png',
+            alt:''
+          },
+          {
+            img:'../../../../assets/cloudflare-5.png',
+            alt:''
+          },
+          {
+            img:'../../../../assets/cloudflare-6.png',
+            alt:''
+          },
+        ],
+      new_terminal:[
+          {
+            img:'../../../../assets/terminal-1.png',
+            alt:''
+          },
+          {
+            img:'../../../../assets/terminal-2.png',
+            alt:''
+          },
+          {
+            img:'../../../../assets/terminal-3.png',
+            alt:''
+          },
+        ],
+      new_heroku:[
+          {
+            img:'../../../../assets/heroku-1.png',
+            alt:''
+          },
+        ],
     },
     heroku_cli_comms: [
         {
