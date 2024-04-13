@@ -27,6 +27,12 @@ describe('ContactHomeComponent', () => {
 
   describe('Content of view',()=>{
     describe('Social links',()=>{
+      it('should have a link for blusky',()=>{
+        const link = compiled.querySelector('div.card-columns div.card.social0 a')
+        expect(link.textContent).toEqual('Go to bsky')
+        expect(link.getAttribute('href')).toEqual('https://bsky.app/profile/cornopaez.com')
+      })
+
       it('should have a link for twitter',()=>{
         const link = compiled.querySelector('div.card-columns div.card.social1 a')
         expect(link.textContent).toEqual('Go to Twitter')
@@ -35,7 +41,7 @@ describe('ContactHomeComponent', () => {
 
       it('should NOT have a link for fb',()=>{
         const link = compiled.querySelector('div.card-columns div.card.social2 a.disabled')
-        expect(link.textContent).toEqual('Go to Facebook')
+        expect(link.textContent).toEqual('No Go to Facebook')
         expect(link.getAttribute('href')).toBeNull()
       })
 
