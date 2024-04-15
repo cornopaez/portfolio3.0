@@ -1,1 +1,46 @@
-<p>tls-for-local-lab works!</p>
+<meta name="keywords" content="ssl tls pihole pi-hole ad blocker jupyterlab jupyter notbook local home lab custom domains domain acme.sh">
+<meta name="description" content="How to enable SSL/TLS for your local lab and apps, including Pi-Hole and JupyterLab, using a custom domain.">
+<meta name="author" content="Mauricio Paez - Developer">
+<div class="btn-container">
+  <a routerLink="/Musings" class="btn btn-link"><i class="fas fa-chevron-left"></i>  Back to Musings</a>  
+</div>
+
+<div class="jumbotron">
+  <div class="footnotes">
+    <h4>Tech used</h4>
+    <ul>
+      <li *ngFor="let icon of currentContent.content.icons">
+        <i class="{{icon}}"></i>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<!-- Photo by <a href="https://unsplash.com/@markuswinkler?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Markus Winkler</a> on <a href="https://unsplash.com/photos/brown-padlock-on-brown-wooden-post-SZ98vfIx0pw?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Unsplash</a> -->
+  
+<div class="detail project-detail">
+  <h1>How to enable SSL/TLS for your local lab and apps, including Pi-Hole and JupyterLab, using a custom domain</h1>
+  <small class="text-muted">Updated 2024-04-25</small><br>
+  <small class="text-muted">Photo by <a href="https://unsplash.com/@markuswinkler">Markus Winkler</a> on Unsplash</small>
+  <br>
+  <br>
+  <div class="project-container">
+    <p>This guide walks you through setting up SSL/TLS for your home lab and apps, specifically focusing on securing Pi-Hole's (a well-known ad-blocking app) web interface and JupyterLab's (a well-known ) web interface.</p>
+    <p>This guide assumes you have a domain registered with Cloudflare and a Heroku app you are looking to protect.</p>
+    <h2>Table of Contents</h2>
+    <ol>
+      <li><a routerLink="../tls-cloudflare-and-heroku" fragment="intro">Intro</a></li>
+      <li><a routerLink="../tls-cloudflare-and-heroku" fragment="cloudflare">Cloudflare Setup</a></li>
+      <ul>
+        <li><a routerLink="../tls-cloudflare-and-heroku" fragment="cloudflare-certs">Origin Server Certificates</a></li>
+        <li><a routerLink="../tls-cloudflare-and-heroku" fragment="dns-settings">DNS Settings</a></li>
+        <li><a routerLink="../tls-cloudflare-and-heroku" fragment="ssl-settings">SSL/TLS Settings</a></li>
+        <li><a routerLink="../tls-cloudflare-and-heroku" fragment="security-settings">Security Settings</a></li>
+      </ul>
+      <li><a routerLink="../tls-cloudflare-and-heroku" fragment="heroku">Heroku Setup</a></li>
+      <li><a routerLink="../tls-cloudflare-and-heroku" fragment="musings">Musings</a></li>
+      <li><a routerLink="../tls-cloudflare-and-heroku" fragment="acknowledgements">Acknowledgements</a></li>
+    </ol>
+    <br>
+	</div>
+</div>
