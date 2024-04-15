@@ -32,6 +32,7 @@ import { RpiTwonkyComponent } from './musings/rpi-twonky/rpi-twonky.component';
 import { MusingsHomeComponent } from './musings/musings-home/musings-home.component';
 import { UbuntuHdAudioComponent } from './musings/ubuntu-hd-audio/ubuntu-hd-audio.component';
 import { TlsCloudflareAndHerokuComponent } from './musings/tls-cloudflare-and-heroku/tls-cloudflare-and-heroku.component';
+import { TlsForLocalLabComponent } from './musings/tls-for-local-lab/tls-for-local-lab.component';
 
 
 @NgModule({
@@ -51,7 +52,8 @@ import { TlsCloudflareAndHerokuComponent } from './musings/tls-cloudflare-and-he
     RpiTwonkyComponent,
     MusingsHomeComponent,
     UbuntuHdAudioComponent,
-    TlsCloudflareAndHerokuComponent
+    TlsCloudflareAndHerokuComponent,
+    TlsForLocalLabComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'serverApp' }),

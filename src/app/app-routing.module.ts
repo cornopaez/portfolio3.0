@@ -9,6 +9,7 @@ import { MusingsHomeComponent } from './musings/musings-home/musings-home.compon
 import { RpiTwonkyComponent } from './musings/rpi-twonky/rpi-twonky.component';
 import { UbuntuHdAudioComponent } from './musings/ubuntu-hd-audio/ubuntu-hd-audio.component';
 import { TlsCloudflareAndHerokuComponent } from './musings/tls-cloudflare-and-heroku/tls-cloudflare-and-heroku.component';
+import { TlsForLocalLabComponent } from './musings/tls-for-local-lab/tls-for-local-lab.component';
 import { ProjectsComponent } from './projects/projects.component';
 import { ProjectsResolver } from './projects/projects-resolver.component';
 import { ProjectsDetailsComponent } from './projects/projects-details/projects-details.component';
@@ -92,6 +93,10 @@ const routes: Routes = [
       {
         path: 'tls-cloudflare-and-heroku',
         component: TlsCloudflareAndHerokuComponent
+      },
+      {
+        path: 'tls-for-local-lab',
+        component: TlsForLocalLabComponent
       },
     ]
   },
