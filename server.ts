@@ -5,6 +5,7 @@ import * as express from 'express';
 import { join } from 'path';
 import * as connection from 'middlewares/mongo-connection';
 import * as data from 'controllers/data';
+import * as bots from 'controllers/bots';
 import * as bodyParser from 'body-parser';
 import helmet from 'helmet';
 import * as home from 'controllers/home'
@@ -41,6 +42,9 @@ export function app() {
 
   app.set('view engine', 'html');
   app.set('views', distFolder);
+
+  // Filter routes that are known to be bad or spam
+  app.get('*', bots)
 
   // Routes for getting and posting data in the site
   app.use('/data', data)
