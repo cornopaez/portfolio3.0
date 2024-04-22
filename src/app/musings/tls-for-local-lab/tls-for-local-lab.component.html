@@ -25,22 +25,91 @@
   <br>
   <br>
   <div class="project-container">
-    <p>This guide walks you through setting up SSL/TLS for your home lab and apps, specifically focusing on securing Pi-Hole's (a well-known ad-blocking app) web interface and JupyterLab's (a well-known ) web interface.</p>
-    <p>This guide assumes you have a domain registered with Cloudflare and a Heroku app you are looking to protect.</p>
+    <p>This guide walks you through setting up SSL/TLS for your home lab and apps, specifically focusing on securing the web interface of Pi-Hole (a well-known ad-blocking app) and JupyterLab (a well-known Python development app). Of course, the steps taken here should help you figure out how to secure other local apps as well -- the skills are universal.</p>
+    <p>This guide assumes you have a domain registered with Cloudflare. It also asumes that you have fully functional Pi-Hole and JupyterLab instances in an Ubuntu server. However, the instructions may be applicable or modified accordingly for other OS. On the other hand, you do not need to know about <kbd>acme.sh</kbd> which we'll use to generate the certs. If you do not know where to start on Pi-Hole and JupyterLab, these links should help you get started:</p>
+    <ul>
+      <li>
+        <a href="https://pi-hole.net/">Official Pi-Hole Page</a>
+      </li>
+      <li>
+        <a href="https://jupyter.org/">Official JupyterLab Page</a>
+      </li>
+    </ul>
     <h2>Table of Contents</h2>
     <ol>
-      <li><a routerLink="../tls-cloudflare-and-heroku" fragment="intro">Intro</a></li>
-      <li><a routerLink="../tls-cloudflare-and-heroku" fragment="cloudflare">Cloudflare Setup</a></li>
-      <ul>
-        <li><a routerLink="../tls-cloudflare-and-heroku" fragment="cloudflare-certs">Origin Server Certificates</a></li>
-        <li><a routerLink="../tls-cloudflare-and-heroku" fragment="dns-settings">DNS Settings</a></li>
-        <li><a routerLink="../tls-cloudflare-and-heroku" fragment="ssl-settings">SSL/TLS Settings</a></li>
-        <li><a routerLink="../tls-cloudflare-and-heroku" fragment="security-settings">Security Settings</a></li>
-      </ul>
-      <li><a routerLink="../tls-cloudflare-and-heroku" fragment="heroku">Heroku Setup</a></li>
-      <li><a routerLink="../tls-cloudflare-and-heroku" fragment="musings">Musings</a></li>
-      <li><a routerLink="../tls-cloudflare-and-heroku" fragment="acknowledgements">Acknowledgements</a></li>
+      <li>
+        <a routerLink="../tls-cloudflare-and-heroku" fragment="intro">Intro. Also, why do this?</a>
+      </li>
+      <li>
+        <a routerLink="../tls-cloudflare-and-heroku" fragment="acme"><kbd>acme.sh</kbd> Setup</a>
+      </li>
+<!--       <ul>
+        <li>
+          <a routerLink="../tls-cloudflare-and-heroku" fragment="cloudflare-certs">Origin Server Certificates</a>
+        </li>
+        <li>
+          <a routerLink="../tls-cloudflare-and-heroku" fragment="dns-settings">DNS Settings</a>
+        </li>
+        <li>
+          <a routerLink="../tls-cloudflare-and-heroku" fragment="ssl-settings">SSL/TLS Settings</a>
+        </li>
+        <li>
+          <a routerLink="../tls-cloudflare-and-heroku" fragment="security-settings">Security Settings</a>
+        </li>
+      </ul> -->
+      <li>
+        <a routerLink="../tls-cloudflare-and-heroku" fragment="pi-hole">Pi-Hole Setup</a>
+      </li>
+      <li>
+        <a routerLink="../tls-cloudflare-and-heroku" fragment="jupyterlab">JupyterLab Setup</a>
+      </li>
+      <li>
+        <a routerLink="../tls-cloudflare-and-heroku" fragment="musings">Musings</a>
+      </li>
     </ol>
     <br>
+    <h2 id="intro">Intro. Also, why do this?</h2>
+    <p>
+      This guide makes little sense for some. The two apps I list in this guide, after all, are usually internal apps (inside of your firewall) and, as such, an SSL/TLS certificate should not be needed. This was true in the past, back in the days when browsers were not defaulting to secure connections and displaying warnings about visiting sites without them. However, browsers now display those warnings by default which are annoying but do protect our valudable and sensitive information from prying eyes. 
+    </p>
+    <p> 
+      Of course, you still can just click through the prompts to visit your site and forget about it. But, why not do things properly? If you're here, you are likely already on board and, to that end, let's spend the 10 minutes this guide takes to implement. If not, let's spend 10 minutes anyways getting you setup.
+    </p>
+
+    <h2 id="acme"><kbd>acme.sh</kbd> Setup</h2>
+    <p>
+      As the first step, let's work on the certificates first. We'll be using <kbd>acme.sh</kbd> to create them but you could also use <kbd>certbot</kbd> (though we don't cover that here). Go ahead and download <kbd>acme.sh</kbd> according to their instructions on their <a href="https://github.com/acmesh-official/acme.sh">official GitHub repo</a>. It is good practice to avoid piping scripts into bash (though, convenient it is). Use whichever method you prefer.
+    </p>
+    <p>
+      Note that the software, unlike other, does not need a manual config file. It also does not need to be manually configured to renew certs when the time is right. By running the commands below, the creation of the certs, adding them to the local <kbd>acme.sh</kbd> db, and renewing when necessary will be taken care of automatically. It even includes a cool feature to run custom scripts before and after the creation or refreshing of certs! This was not plainly obvious in their documentation and it is worth spelling out for novices like me.
+    </p>
+    <p>With this in mind, let's break down the command we'll be issuing once <kbd>acme.sh</kbd> is installed. <b>NOTE: DON'T RUN THIS COMMAND YET!</b></p>
+
+    <p>
+      <kbd>
+        acme.sh --issue --dns dns_cf -d mycustomdomain.local -d '*.mycustomdomain.local' --server letsencrypt --pre-hook /usr/local/bin/acme-pre.sh --post-hook /usr/local/bin/acme-post.sh
+      </kbd>
+      <br><br>
+      <mat-table [dataSource]="currentContent.acme_commands" class="mat-elevation-z8">
+        <ng-container matColumnDef="parameter">
+          <th mat-header-cell *matHeaderCellDef> Parameter </th>
+          <td mat-cell *matCellDef="let command"> {{command.parameter}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="description">
+          <th mat-header-cell *matHeaderCellDef> Description </th>
+          <td mat-cell *matCellDef="let command"> {{command.description}} </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="currentContent.columnsToDisplay"></tr>
+        <tr mat-row *matRowDef="let row; columns: currentContent.columnsToDisplay;"></tr>
+      </mat-table>
+    </p>
+    <h2 id="pi-hole">Pi-Hole Setup</h2>
+
+    <h2 id="jupyterlab">JupyterLab Setup</h2>
+
+    <h2 id="musings">Musings</h2>
+
 	</div>
 </div>
