@@ -231,7 +231,83 @@ export CF_Zone_ID="[your_zone_id_goes_here]"
       Also, since my local <kbd>acme.sh</kbd> had already the domain I used to capture outputs for this guide, there's some steps in the output that are missing. If the domain needs to be verified for the first time, validation entries in Cloudflare will appear in the output. You'll also see timers in place to wait for changes to propagate prior to attempting the validation. All of this is normal.
     </p>
     <h2 id="pi-hole">Pi-Hole Setup</h2>
+    <p>
+      Now that we have certs, let's setup Pi-Hole's web UI to use the cert we've created. You may notice that part of the <code>post-hook</code> file was to combine the <kbd>key</kbd> and <kbd>cer</kbd> files into a single one. This was done because <kbd>lighttpd</kbd> requires such a file in order to work correctly and it is not provided by <kbd>acme.sh</kbd> by default. You may also notice we placed the combined file in <kbd>lighttpd</kbd>'s folder under <kbd>/etc</kbd>. You don't need to put it there but it helps since <kbd>lighttpd</kbd> is already the owner of that folder and you don't have to work too hard to make sure the permissions are correct.
+    </p>
+    <h3>Update your local or Cloudflare DNS settings</h3>
+    <p>
+      Since we're going to use an SSL/TLS connection to serve PI-Hole's UI, we need to make sure that your DNS settings are updated accordingly. The certificate we've created needs the domain in the URL to match its contents. This means we can't hit the IP address of the box running Pi-Hole directly and get served over SSL/TLS.
+    </p>
+    <p>
+      Pi-Hole allows you to create your own local DNS entries and that can be one way to ensure the domain matches. Just navigate to the <kbd>Local DNS</kbd> tab on the right hand, and then click on <kbd>DNS Entries</kbd>. Add and entry for the IPv4 address and one for the IPv6 address (if applicable) of the box that's running Pi-Hole:
+    </p>
+    <div class="pihole">
+      <img src="{{currentContent.content.pihole[0].img}}" alt="{{currentContent.content.pihole[0].alt}}">
+    </div>
+    <div class="pihole">
+      <img src="{{currentContent.content.pihole[1].img}}" alt="{{currentContent.content.pihole[1].alt}}">
+    </div>
+    <p>
+      If you have not done so, this would be a good time to set a static IPv4 address for your Pi-hole box -- that is, if it's hosted locally, inside your network and not somewhere like AWS. If you're running IPv6 in your home network, it's best to use <kbd>ddclient</kbd> or any other to Dynamic DNS softwarde to update the DNS settings of your domain at your registrar. Since IPv6 addresses are global in nature, you don't have to worry about setting a static IPv6 locally. This is ideal for ISPs that like to switch IPv6 prefixes to avoid giving people static prefixes (for which they charge money). Plus, you can still set the static IPv4 there -- even if it's in the reserved blocks of addresses like 10.0.0.0/8 or 192.168.0.0/8.
+    </p>
+    <h3>Installing a new <kbd>lighttpd</kbd> version</h3>
+    <p>
+      As of 2024-04-15, the default Pi-Hole installation does not install a version of <kbd>lighttpd</kbd> that includes the <code>mod_openssl</code> module it needs to serve the site using SSL/TLS certificates. To this end, we'll start by installing backing up Pi-Hole's <kbd>lighttpd.conf</kbd> and then install a new version of <kbd>lighttpd</kbd>:
+    </p>
+    <pre>
+<span class="bash-comment"># You may need to run all of this as root to avoid permissions issues</span>
 
+<span class="bash-comment"># Backup the existing lighttpd.conf file to avoid losing Pi-Hole's configs</span>
+<span class="bash-command">cp</span> /etc/lighttpd/lightpd.conf /etc/lighttpd/lightpd.conf.og 
+
+<span class="bash-comment"># Install new version of lighttpd that includes the openSSL module</span>
+<span class="bash-command">apt</span> install lighttpd-mod-openssl
+
+<span class="bash-comment"># Stop service to replace config files</span>
+<span class="bash-command">service</span> lighttpd stop
+
+<span class="bash-comment"># Replace OG lighttpd.conf since it was likely replaced by the install</span>
+<span class="bash-command">mv</span> /etc/lighttpd/lightpd.conf /etc/lighttpd/lightpd.conf.new 
+<span class="bash-command">mv</span> /etc/lighttpd/lightpd.conf.og /etc/lighttpd/lightpd.conf 
+
+<span class="bash-comment"># Start service</span>
+<span class="bash-command">service</span> lighttpd start
+    </pre>
+    <p>
+      Once the package is installed and you have verified the service is up and running without issues, we'll need to create the following file (if it doesn't exist already) to ensure that <kbd>lighttpd</kbd> serves the UI without issues: <code>/etc/lighttpd/external.conf</code>. Use the following template to fill that new file in:
+    </p>
+    <pre>
+<span class="bash-comment">#Loading openssl</span>
+server.modules += ( "mod_openssl" )
+
+<span class="bash-comment"># Enable ipv6 -- Optional. Requires IPv6 config in network.</span>
+#server.use-ipv6 = "enable"
+
+<span class="bash-comment"># Ensure the Pi-hole Block Page knows that this is not a blocked domain</span>
+setenv.add-environment = ("fqdn" => "true")
+
+<span class="bash-comment"># Enable the SSL engine with a cert for IPv4, only for this specific host</span>
+$SERVER["socket"] == ":8443" {{ '{' }} <span class="bash-comment"># Update your port accordingly.</span>
+  ssl.engine = "enable"
+  ssl.pemfile = "/etc/lighttpd/combined.pem"
+{{ '}' }}
+
+<span class="bash-comment"># Enable the SSL engine with a cert for IPv6, only for this specific host  -- Optional. Requires IPv6 config in network.</span>
+$SERVER["socket"] == "[::]:8443" {{ '{' }} <span class="bash-comment"># Update your port accordingly.</span>
+        ssl.engine = "enable"
+        ssl.pemfile = "/etc/lighttpd/combined.pem"
+{{ '}' }}
+
+<span class="bash-comment"># Redirect HTTP to HTTPS</span>
+$HTTP["scheme"] == "http" {{ '{' }}
+  $HTTP["host"] =~ ".*" {{ '{' }}
+    url.redirect = (".*" => "https://%0$0")
+  {{ '}' }}
+{{ '}' }}
+    </pre>
+    <p>
+      Once the file is populated, go ahead and restart <kbd>lighttpd</kbd>. If all went well, the service should come up without errors and you should be able to hit Pi-Hole's UI while it being served with an SSL/TLS connection.
+    </p>
     <h2 id="jupyterlab">JupyterLab Setup</h2>
 
     <h2 id="musings">Musings</h2>

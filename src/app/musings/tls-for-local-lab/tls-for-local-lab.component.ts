@@ -22,7 +22,17 @@ export class TlsForLocalLabComponent {
           img: '../../../../assets/cloudflare-8.png',
           alt: 'Image of the Cloudflare dashboard for a domain, the page to create an API token.'
         },
-      ]
+      ],
+      pihole: [
+        {
+          img: '../../../../assets/pihole-1.png',
+          alt: 'Image of the Cloudflare dashboard for a domain, showing where the Zone ID is in the page and the link to get an API token.'
+        },
+        {
+          img: '../../../../assets/pihole-2.png',
+          alt: 'Image of the Cloudflare dashboard for a domain, showing where the Zone ID is in the page and the link to get an API token.'
+        },
+        ]
     },
     acme_commands: [
       {
