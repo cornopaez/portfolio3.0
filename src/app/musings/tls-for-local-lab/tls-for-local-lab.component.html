@@ -38,33 +38,36 @@
     <h2>Table of Contents</h2>
     <ol>
       <li>
-        <a routerLink="../tls-cloudflare-and-heroku" fragment="intro">Intro. Also, why do this?</a>
+        <a routerLink="../tls-for-local-lab" fragment="intro">Intro. Also, why do this?</a>
       </li>
       <li>
-        <a routerLink="../tls-cloudflare-and-heroku" fragment="acme"><kbd>acme.sh</kbd> Setup</a>
+        <a routerLink="../tls-for-local-lab" fragment="acme"><kbd>acme.sh</kbd> Setup</a>
       </li>
-<!--       <ul>
+      <ul>
         <li>
-          <a routerLink="../tls-cloudflare-and-heroku" fragment="cloudflare-certs">Origin Server Certificates</a>
+          <a routerLink="../tls-for-local-lab" fragment="acme-command"><code>acme.sh</code> command</a>
         </li>
         <li>
-          <a routerLink="../tls-cloudflare-and-heroku" fragment="dns-settings">DNS Settings</a>
+          <a routerLink="../tls-for-local-lab" fragment="acme-post-hook"><code>post-hook</code> file</a>
         </li>
         <li>
-          <a routerLink="../tls-cloudflare-and-heroku" fragment="ssl-settings">SSL/TLS Settings</a>
+          <a routerLink="../tls-for-local-lab" fragment="acme-pre-hook">Notes about the <code>pre-hook</code> file</a>
         </li>
         <li>
-          <a routerLink="../tls-cloudflare-and-heroku" fragment="security-settings">Security Settings</a>
+          <a routerLink="../tls-for-local-lab" fragment="acme-cf-zone-token">Cloudflare Zone ID and API Token</a>
         </li>
-      </ul> -->
+        <li>
+          <a routerLink="../tls-for-local-lab" fragment="acme-command-run">Run the <code>acme.sh</code> command</a>
+        </li>
+      </ul>
       <li>
-        <a routerLink="../tls-cloudflare-and-heroku" fragment="pi-hole">Pi-Hole Setup</a>
+        <a routerLink="../tls-for-local-lab" fragment="pi-hole">Pi-Hole Setup</a>
       </li>
       <li>
-        <a routerLink="../tls-cloudflare-and-heroku" fragment="jupyterlab">JupyterLab Setup</a>
+        <a routerLink="../tls-for-local-lab" fragment="jupyterlab">JupyterLab Setup</a>
       </li>
       <li>
-        <a routerLink="../tls-cloudflare-and-heroku" fragment="musings">Musings</a>
+        <a routerLink="../tls-for-local-lab" fragment="musings">Musings</a>
       </li>
     </ol>
     <br>
@@ -77,8 +80,9 @@
     </p>
 
     <h2 id="acme"><kbd>acme.sh</kbd> Setup</h2>
+    <h3 id="acme-command"><code>acme.sh</code> command</h3>
     <p>
-      As the first step, let's work on the certificates first. We'll be using <kbd>acme.sh</kbd> to create them but you could also use <kbd>certbot</kbd> (though we don't cover that here). Go ahead and download <kbd>acme.sh</kbd> according to their instructions on their <a href="https://github.com/acmesh-official/acme.sh">official GitHub repo</a>. It is good practice to avoid piping scripts into bash (though, convenient it is). Use whichever method you prefer.
+      As the first step, let's work on the certificates first. We'll be using <kbd>acme.sh</kbd> to create them but you could also use <kbd>certbot</kbd> (though we don't cover that here). Go ahead and download <kbd>acme.sh</kbd> according to their instructions on their <a href="https://github.com/acmesh-official/acme.sh">official GitHub repo</a>. It is good practice to avoid piping scripts into bash (though, convenient it is). Use whichever method you prefer. We'll run all the commands as <code>root</code> since it's recommended by the software itself. You may look for better ways to do this once you've gotten the process down.
     </p>
     <p>
       Note that the software, unlike other, does not need a manual config file. It also does not need to be manually configured to renew certs when the time is right. By running the commands below, the creation of the certs, adding them to the local <kbd>acme.sh</kbd> db, and renewing when necessary will be taken care of automatically. It even includes a cool feature to run custom scripts before and after the creation or refreshing of certs! This was not plainly obvious in their documentation and it is worth spelling out for novices like me.
@@ -86,9 +90,9 @@
     <p>With this in mind, let's break down the command we'll be issuing once <kbd>acme.sh</kbd> is installed. <b>NOTE: DON'T RUN THIS COMMAND YET!</b></p>
 
     <p>
-      <kbd>
+      <code>
         acme.sh --issue --dns dns_cf -d mycustomdomain.local -d '*.mycustomdomain.local' --server letsencrypt --pre-hook /usr/local/bin/acme-pre.sh --post-hook /usr/local/bin/acme-post.sh
-      </kbd>
+      </code>
       <br><br>
       <mat-table [dataSource]="currentContent.acme_commands" class="mat-elevation-z8">
         <ng-container matColumnDef="parameter">
@@ -104,6 +108,127 @@
         <tr mat-header-row *matHeaderRowDef="currentContent.columnsToDisplay"></tr>
         <tr mat-row *matRowDef="let row; columns: currentContent.columnsToDisplay;"></tr>
       </mat-table>
+    </p>
+    <p>
+      Of course, you may not need <kbd>pre-hook</kbd> or <kbd>post-hook</kbd> scripts for other tech stacks -- you can certainly adapt that command to suit your needs. However, in this case, we will need at least the <kbd>post-hook</kbd> script to compile the combined keys file Pi-Hole needs, move it into place, and restart <code>lighttpd</code> so it can pick up the newly created file. The <kbd>pre-hook</kbd> and <kbd>post-hook</kbd> files <b>must</b> exist but don't need to have anything in them at the time the command is run and, as such, you can fill them later. Failure to create the files results in having to start again from scratch for this domain. Don't forget to create them!
+    </p>
+    <h3 id="acme-post-hook"><code>post-hook</code> file</h3>
+    <p>
+      Let's create the file we're going to be using for the <code>post-hook</code>.
+    </p>
+    <p>
+      First, let's move to <kbd>sudo</kbd> using the following command:<br>
+      <code>sudo su</code>
+    </p>
+    <p>
+      Then, let's create the file:<br>
+      <code>nano /usr/local/bin/acme-post.sh</code>
+    </p>
+    <p>
+      The contents of the file, with replacements for your own domain, are as follows:
+    </p>
+    <pre>
+<span class="hash-bang">#!/bin/bash</span>
+
+<span class="bash-comment"># Combine cert and key for lighttpd</span>
+<span class="bash-command">cat</span> /root/.acme.sh/mycustomdomain.local_ecc/mycustomdomain.local.key /root/.acme.sh/mycustomdomain.local_ecc/mycustomdomain.local.cer > /root/.acme.sh/mycustomdomain.local_ecc/combined.pem
+
+<span class="bash-comment"># Make backup of old key</span>
+<span class="bash-command">mv</span> /etc/lighttpd/combined.pem /etc/lighttpd/combined.pem.old
+
+<span class="bash-comment"># Move new key into place</span>
+<span class="bash-command">mv</span> /root/.acme.sh/mycustomdomain.local_ecc/combined.pem /etc/lighttpd/combined.pem
+
+<span class="bash-comment"># Restart lighttpd</span>
+<span class="bash-command">service</span> lighttpd restart
+    </pre>  
+    <p>
+      Finally, let's make sure that the file has execution permissions:<br>
+      <code>chmod +x /usr/local/bin/acme-post.sh</code>
+    </p>
+    <h3 id="acme-pre-hook">Notes about the <code>pre-hook</code> file</h3>
+    The instructions above for the <kbd>post-hook</kbd> file can be used to create a <kbd>pre-hook</kbd> file all the same. I will not include a template for such a file here since there's no use for it in this guide. However, and this is very important, <b><i>the file should be created prior to running the <kbd>acme.sh</kbd> command. Failure to do so will result in you having to start over again or figure out how to add it to the config file manually (which is not easy).</i></b>
+    <h3 id="acme-cf-zone-token">Cloudflare Zone ID and API Token</h3>
+    <p>
+      Now that we have everything lined up, the command has been crafted, the files have been created and/or populated, we are almost ready to run the command.
+    </p>
+    <p>
+      The last piece of preparation we need is to get two pieces of data from Cloudflare: the Zone ID and the API Token. To fetch those, log into your Cloudflare dashboard. For the Zone ID, it can be found in the <kbd>domain</kbd> overview page, right hand side, near the bottom of the page:
+    </p>
+    <div class="cloudflare">
+      <img src="{{currentContent.content.cloudflare[0].img}}" alt="{{currentContent.content.cloudflare[0].alt}}">
+    </div>
+    <p>
+      Note that there's a handy link to get an API token right there. Click it and then hit the <kbd>Create Token</kbd> button:
+    </p>
+    <div class="cloudflare">
+      <img src="{{currentContent.content.cloudflare[1].img}}" alt="{{currentContent.content.cloudflare[1].alt}}">
+    </div>
+    <p>
+      When creating the token, make sure you select the appropriate zone and permissions needed. You'll need <kbd>read</kbd> and <kbd>write</kbd> permissions. To this end, be sure to keep this token safe as it can seriously mess up your domain.
+    </p>
+    <p>
+      Once you've gotten your API Token and your Zone ID, issue the following commands in your terminal to load the values as environment variables:
+    </p>
+    <pre>
+export CF_Token="[your_token_goes_here]"
+export CF_Zone_ID="[your_zone_id_goes_here]"
+    </pre>
+    <h3 id="acme-command-run">Run the <code>acme.sh</code> command</h3>
+    <p>
+      We are now ready to run the command. However, if you are unsure as to what we've done so far, here's a quick refresher:
+    </p>
+    <pre>
+<span class="bash-comment"># Move to root</span>
+<span class="bash-command">sudo</span> su
+
+<span class="bash-comment"># Create the post-hook script and populate with template above</span>
+<span class="bash-command">nano</span> /usr/local/bin/acme-post.sh
+
+<span class="bash-comment"># Modify file properties to enable execution</span>
+<span class="bash-command">chmod</span> +x /usr/local/bin/acme-post.sh
+
+<span class="bash-comment"># Export Cloudflare's API Token and Zone ID as environment variables</span>
+<span class="bash-command">export</span> CF_Token="[your_token_goes_here]"
+<span class="bash-command">export</span> CF_Zone_ID="[your_zone_id_goes_here]"
+    </pre>
+    <p>
+      To those commands, we'll add the following one that actually fetches the certificates and keys. Replace your domain accordingly:
+    </p>
+    <pre>
+<span class="bash-command">acme.sh</span> --issue --dns dns_cf -d mycustomdomain.local -d '*.mycustomdomain.local' --server letsencrypt --post-hook /usr/local/bin/acme-post.sh
+    </pre>
+    <p>
+      If all went well, the output would look something like this:
+    </p>
+    <pre>
+[Tue Apr 23 11:35:25 EDT 2024] Using CA: https://acme-v02.api.letsencrypt.org/directory
+[Tue Apr 23 11:35:25 EDT 2024] Creating domain key
+[Tue Apr 23 11:35:25 EDT 2024] The domain key is here: <span class="code-green">/root/.acme.sh/mycustomdomain.local_ecc/mycustomdomain.local.key</span>
+[Tue Apr 23 11:35:25 EDT 2024] Multi domain='DNS:mycustomdomain.local,DNS:*.mycustomdomain.local'
+[Tue Apr 23 11:35:27 EDT 2024] Getting webroot for domain='mycustomdomain.local'
+[Tue Apr 23 11:35:27 EDT 2024] Getting webroot for domain='*.mycustomdomain.local'
+[Tue Apr 23 11:35:28 EDT 2024] mycustomdomain.local is already verified, skip dns-01.
+[Tue Apr 23 11:35:28 EDT 2024] *.mycustomdomain.local is already verified, skip dns-01.
+[Tue Apr 23 11:35:28 EDT 2024] Verify finished, start to sign.
+[Tue Apr 23 11:35:28 EDT 2024] Lets finalize the order.
+[Tue Apr 23 11:35:28 EDT 2024] Le_OrderFinalize='https://acme-v02.api.letsencrypt.org/acme/finalize/[number_goes_here]/[number_goes_here]'
+[Tue Apr 23 11:35:29 EDT 2024] Downloading cert.
+[Tue Apr 23 11:35:29 EDT 2024] Le_LinkCert='https://acme-v02.api.letsencrypt.org/acme/cert/[long_number_goes_here]'
+[Tue Apr 23 11:35:29 EDT 2024] <span class="code-green">Cert success.</span>
+-----BEGIN CERTIFICATE-----
+<span class="bash-comment"># Certificate in plaintext goes here</span>
+-----END CERTIFICATE-----
+[Tue Apr 23 11:35:29 EDT 2024] Your cert is in: <span class="code-green">/root/.acme.sh/mycustomdomain.local_ecc/mycustomdomain.local.cer</span>
+[Tue Apr 23 11:35:29 EDT 2024] Your cert key is in: <span class="code-green">/root/.acme.sh/mycustomdomain.local_ecc/mycustomdomain.local.key</span>
+[Tue Apr 23 11:35:29 EDT 2024] The intermediate CA cert is in: <span class="code-green">/root/.acme.sh/mycustomdomain.local_ecc/ca.cer</span>
+[Tue Apr 23 11:35:29 EDT 2024] And the full chain certs is there: <span class="code-green">/root/.acme.sh/mycustomdomain.local_ecc/fullchain.cer</span>
+    </pre>
+    <p>
+      There's a possibility the output includes an error that reads <code>/etc/lighttpd/combined.pem: path or file does not exist.</code> This is expected, as the first time the script runs the file does not exist. Afterwards, though, the file does and the error is not going to be around anymore.
+    </p>
+    <p>
+      Also, since my local <kbd>acme.sh</kbd> had already the domain I used to capture outputs for this guide, there's some steps in the output that are missing. If the domain needs to be verified for the first time, validation entries in Cloudflare will appear in the output. You'll also see timers in place to wait for changes to propagate prior to attempting the validation. All of this is normal.
     </p>
     <h2 id="pi-hole">Pi-Hole Setup</h2>
 

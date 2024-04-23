@@ -12,7 +12,17 @@ export class TlsForLocalLabComponent {
         'fa-raspberry-pi fab',
         'fa-terminal fas'
       ],
-      twonky: '../../../../assets/twonkyicon-120x120.png'
+      twonky: '../../../../assets/twonkyicon-120x120.png',
+      cloudflare: [
+        {
+          img: '../../../../assets/cloudflare-7.png',
+          alt: 'Image of the Cloudflare dashboard for a domain, showing where the Zone ID is in the page and the link to get an API token.'
+        },
+        {
+          img: '../../../../assets/cloudflare-8.png',
+          alt: 'Image of the Cloudflare dashboard for a domain, the page to create an API token.'
+        },
+      ]
     },
     acme_commands: [
       {
@@ -21,7 +31,7 @@ export class TlsForLocalLabComponent {
       },
       {
         parameter: "-d",
-        description: "We'll need at least two of these. One for your domain, `mycustomdomain.local` in our case, and one for type of certificate we want, `'*.mycustomdomain.local'` in our case. You can certainly specify a single subdomain here instead of a wildcard one if that suits your needs. You can also add as many other subdomains as you want. To that end, the certificate created can be used for any of the subdomains you add."
+        description: "We'll need at least two of these. One for your domain, `mycustomdomain.local` in our case, and one for type of certificate we want, `'*.mycustomdomain.local'` in our case. You can certainly specify a single subdomain here instead of a wildcard one if that suits your needs. You can also add as many other subdomains as you want by adding more `-d` arguments to the command you issue, each with its own subdomain. To that end, the certificate created can be used for any of the subdomains you add."
       },
       {
         parameter: "--server",
@@ -33,7 +43,7 @@ export class TlsForLocalLabComponent {
       },
       {
         parameter: "--post-hook",
-        description: "The customer `bash` script to run after the certificates are installed or renewd. Useful to bring back services online or moving files in place. "
+        description: "The customer `bash` script to run after the certificates are installed or renewed. Useful to bring back services online or moving files in place. "
       }
     ],
     columnsToDisplay: [
