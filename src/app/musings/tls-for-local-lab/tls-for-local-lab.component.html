@@ -39,7 +39,7 @@
         <a routerLink="../tls-for-local-lab" fragment="intro">Intro. Also, why do this?</a>
       </li>
       <li>
-        <a routerLink="../tls-for-local-lab" fragment="acme"><kbd>acme.sh</kbd> Setup</a>
+        <a routerLink="../tls-for-local-lab" fragment="acme"><code>acme.sh</code> Setup</a>
       </li>
       <ul>
         <li>
@@ -82,7 +82,7 @@
       Of course, you still can just click through the prompts to visit your site and forget about it. But, why not do things properly? If you're here, you are likely already on board and, to that end, let's spend the 10 minutes this guide takes to implement. If not, let's spend 10 minutes anyways getting you setup.
     </p>
 
-    <h2 id="acme"><kbd>acme.sh</kbd> Setup</h2>
+    <h2 id="acme"><code>acme.sh</code> Setup</h2>
     <h3 id="acme-command"><code>acme.sh</code> command</h3>
     <p>
       As the first step, let's work on the certificates first. We'll be using <kbd>acme.sh</kbd> to create them but you could also use <kbd>certbot</kbd> (though we don't cover that here). Go ahead and download <kbd>acme.sh</kbd> according to their instructions on their <a href="https://github.com/acmesh-official/acme.sh">official GitHub repo</a>. It is good practice to avoid piping scripts into bash (though, convenient it is). Use whichever method you prefer. We'll run all the commands as <code>root</code> since it's recommended by the software itself. You may look for better ways to do this once you've gotten the process down.
@@ -105,7 +105,9 @@
 
         <ng-container matColumnDef="description">
           <th mat-header-cell *matHeaderCellDef> Description </th>
-          <td mat-cell *matCellDef="let command"> {{command.description}} </td>
+          <td mat-cell *matCellDef="let command">
+            <div [innerHtml]="command.description"></div>
+          </td>
         </ng-container>
 
         <tr mat-header-row *matHeaderRowDef="currentContent.columnsToDisplay"></tr>
@@ -113,7 +115,7 @@
       </mat-table>
     </p>
     <p>
-      Of course, you may not need <kbd>pre-hook</kbd> or <kbd>post-hook</kbd> scripts for other tech stacks -- you can certainly adapt that command to suit your needs. However, in this case, we will need at least the <kbd>post-hook</kbd> script to compile the combined keys file Pi-Hole needs, move it into place, and restart <code>lighttpd</code> so it can pick up the newly created file. The <kbd>pre-hook</kbd> and <kbd>post-hook</kbd> files <b>must</b> exist but don't need to have anything in them at the time the command is run and, as such, you can fill them later. Failure to create the files results in having to start again from scratch for this domain. Don't forget to create them!
+      Of course, you may not need <code>pre-hook</code> or <code>post-hook</code> scripts for other tech stacks -- you can certainly adapt that command to suit your needs. However, in this case, we will need at least the <code>post-hook</code> script to compile the combined keys file Pi-Hole needs, move it into place, and restart <kbd>lighttpd</kbd> so it can pick up the newly created file. The <code>pre-hook</code> and <code>post-hook</code> files <b>must</b> exist but don't need to have anything in them at the time the command is run and, as such, you can fill them later. Failure to create the files results in having to start again from scratch for this domain. Don't forget to create them!
     </p>
     <h3 id="acme-post-hook"><code>post-hook</code> file</h3>
     <p>
@@ -149,7 +151,7 @@
 <span class="bash-command">chmod</span> +x /usr/local/bin/acme-post.sh
     </pre>
     <h3 id="acme-pre-hook">Notes about the <code>pre-hook</code> file</h3>
-    The instructions above for the <kbd>post-hook</kbd> file can be used to create a <kbd>pre-hook</kbd> file all the same. I will not include a template for such a file here since there's no use for it in this guide. However, and this is very important, <b><i>the file should be created prior to running the <kbd>acme.sh</kbd> command. Failure to do so will result in you having to start over again or figure out how to add it to the config file manually (which is not easy).</i></b>
+    The instructions above for the <code>post-hook</code> file can be used to create a <code>pre-hook</code> file all the same. I will not include a template for such a file here since there's no use for it in this guide. However, and this is very important, <b><i>the file should be created prior to running the <kbd>acme.sh</kbd> command. Failure to do so will result in you having to start over again or figure out how to add it to the config file manually (which is not easy).</i></b>
     <h3 id="acme-cf-zone-token">Cloudflare Zone ID and API Token</h3>
     <p>
       Now that we have everything lined up, the command has been crafted, the files have been created and/or populated, we are almost ready to run the command.
@@ -199,7 +201,7 @@ export CF_Zone_ID="[your_zone_id_goes_here]"
     </p>
     <h2 id="pi-hole">Pi-Hole Setup</h2>
     <p>
-      Now that we have certs, let's setup Pi-Hole's web UI to use the cert we've created. You may notice that part of the <code>post-hook</code> file was to combine the <kbd>key</kbd> and <kbd>cer</kbd> files into a single one. This was done because <kbd>lighttpd</kbd> requires such a file in order to work correctly and it is not provided by <kbd>acme.sh</kbd> by default. You may also notice we placed the combined file in <kbd>lighttpd</kbd>'s folder under <kbd>/etc</kbd>. You don't need to put it there but it helps since <kbd>lighttpd</kbd> is already the owner of that folder and you don't have to work too hard to make sure the permissions are correct.
+      Now that we have certs, let's setup Pi-Hole's web UI to use the cert we've created. You may notice that part of the <code>post-hook</code> file was to combine the <code>key</code> and <code>cer</code> files into a single one. This was done because <kbd>lighttpd</kbd> requires such a file in order to work correctly and it is not provided by <kbd>acme.sh</kbd> by default. You may also notice we placed the combined file in <kbd>lighttpd</kbd>'s folder under <code>/etc</code>. You don't need to put it there but it helps since <kbd>lighttpd</kbd> is already the owner of that folder and you don't have to work too hard to make sure the permissions are correct.
     </p>
     <h3 id="dns-updates">Update your local or Cloudflare DNS settings</h3>
     <p>
@@ -215,7 +217,7 @@ export CF_Zone_ID="[your_zone_id_goes_here]"
       <img src="{{currentContent.content.pihole[1].img}}" alt="{{currentContent.content.pihole[1].alt}}">
     </div>
     <p>
-      If you have not done so, this would be a good time to set a static IPv4 address for your Pi-hole box -- that is, if it's hosted locally, inside your network and not somewhere like AWS. If you're running IPv6 in your home network, it's best to use <kbd>ddclient</kbd> or any other to Dynamic DNS softwarde to update the DNS settings of your domain at your registrar. Since IPv6 addresses are global in nature, you don't have to worry about setting a static IPv6 locally. This is ideal for ISPs that like to switch IPv6 prefixes to avoid giving people static prefixes (for which they charge money). Plus, you can still set the static IPv4 there -- even if it's in the reserved blocks of addresses like 10.0.0.0/8 or 192.168.0.0/8.
+      If you have not done so, this would be a good time to set a static IPv4 address for your Pi-hole box -- that is, if it's hosted locally, inside your network and not somewhere like AWS. If you're running IPv6 in your home network, it's best to use <kbd>ddclient</kbd> or any other to Dynamic DNS software to update the DNS settings of your domain at your registrar. Since IPv6 addresses are global in nature, you don't have to worry about setting a static IPv6 locally. This is ideal for ISPs that like to switch IPv6 prefixes to avoid giving people static prefixes (for which they charge money). Plus, you can still set the static IPv4 there -- even if it's in the reserved blocks of addresses like 10.0.0.0/8 or 192.168.0.0/8.
     </p>
     <h3>Installing a new <kbd>lighttpd</kbd> version</h3>
     <p>
@@ -237,7 +239,7 @@ export CF_Zone_ID="[your_zone_id_goes_here]"
       To start, we'll need to update the <code>post-hook</code> file for <kbd>acme.sh</kbd> (if JupyterLab runs on the same box as Pi-Hole) or create a new one (if they are different boxes). By now, though, you've become a professional and this new challenge does not phase you -- you've got this with unerring confidence (but not cockiness).
     </p>
     <p>
-      <b>Side Note:</b> If you have no clue what we're talking about here, go to the <a routerLink="../tls-for-local-lab" fragment="acme"><kbd>acme.sh</kbd> Setup</a> section to get started. I've included a tab in that section with the contents for the <code>post-hook</code> file that contains the info for <kbd>JupyterLab</kbd> for ease of reference.
+      <b>Side Note:</b> If you have no clue what we're talking about here, go to the <a routerLink="../tls-for-local-lab" fragment="acme"><code>acme.sh</code> Setup</a> section to get started. I've included a tab in that section with the contents for the <code>post-hook</code> file that contains the info for <kbd>JupyterLab</kbd> for ease of reference.
     </p>
     <p>
       In any case, whether you have a <code>post-hook</code> file or you need to create one, the code needed for <kbd>JupyterLab</kbd> is as follows:
@@ -271,7 +273,7 @@ export CF_Zone_ID="[your_zone_id_goes_here]"
         I struggled a lot with Pi-Hole's <kbd>lighttpd</kbd> installation. As I mentioned in the guide, the default installation of the package provided by Pi-Hole does not include the <kbd>mod-openssl</kbd> module that's needed to serve the UI using SSL/TLS. There's a <a href="https://discourse.pi-hole.net/t/enabling-https-for-your-pi-hole-web-interface/5771">wiki in their website</a> that all but fails to mention that this is not included by default -- or maybe it was back then. Looking around the web also resulted in "it should be there already" but it is clearly not the case. I wanted to build on that guide to make sure I included information for IPv6, as it's more and more common, and some sure fire instructions to get the desired results.
       </li>
       <li>
-        When installing the new version of <kbd>lighttpd</kbd> and creating or filling in the <code>external.conf</code> file, there's an oppotunity to run Pi-Hole's UI on which ever port you desire. This is specially useful if port <code>443</code> is already taken by another process. As I mention in the comments of that file, you can update that to whatever port you want to use, including <code>443</code>.
+        When installing the new version of <kbd>lighttpd</kbd> and creating or filling in the <code>external.conf</code> file, there's an opportunity to run Pi-Hole's UI on which ever port you desire. This is specially useful if port <code>443</code> is already taken by another process. As I mention in the comments of that file, you can update that to whatever port you want to use, including <code>443</code>.
       </li>
       <li>
         I admit that the instructions to setup JupyterLab include a <code>chmod</code> command that opens wide the access of the certificate key. I did not try too hard to figure out exactly what the minimum access is needed by JupyterHub is which is poor practice. If you figure this out, <a href="mailto:contact@cornopaez.com">reach out</a> and I'll update the guide with the better access.
