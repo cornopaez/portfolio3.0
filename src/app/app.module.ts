@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 import { ReactiveFormsModule, FormsModule }   from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { MatTableModule } from '@angular/material/table';
+import { MatTabsModule } from '@angular/material/tabs';
 
 
 import { AppRoutingModule } from './app-routing.module';
@@ -33,6 +34,12 @@ import { MusingsHomeComponent } from './musings/musings-home/musings-home.compon
 import { UbuntuHdAudioComponent } from './musings/ubuntu-hd-audio/ubuntu-hd-audio.component';
 import { TlsCloudflareAndHerokuComponent } from './musings/tls-cloudflare-and-heroku/tls-cloudflare-and-heroku.component';
 import { TlsForLocalLabComponent } from './musings/tls-for-local-lab/tls-for-local-lab.component';
+import { PhLighttpdComponent } from './musings/tls-for-local-lab/ph-lighttpd/ph-lighttpd.component';
+import { PhJupyterlabComponent } from './musings/tls-for-local-lab/ph-jupyterlab/ph-jupyterlab.component';
+import { PiholeLighttpdExternalComponent } from './musings/tls-for-local-lab/pihole-lighttpd-external/pihole-lighttpd-external.component';
+import { PiholeLighttpdModOpensslInstallComponent } from './musings/tls-for-local-lab/pihole-lighttpd-mod-openssl-install/pihole-lighttpd-mod-openssl-install.component';
+import { AcmeCommandRecapComponent } from './musings/tls-for-local-lab/acme-command-recap/acme-command-recap.component';
+import { AcmeCommandOutputComponent } from './musings/tls-for-local-lab/acme-command-output/acme-command-output.component';
 
 
 @NgModule({
@@ -53,7 +60,13 @@ import { TlsForLocalLabComponent } from './musings/tls-for-local-lab/tls-for-loc
     MusingsHomeComponent,
     UbuntuHdAudioComponent,
     TlsCloudflareAndHerokuComponent,
-    TlsForLocalLabComponent
+    TlsForLocalLabComponent,
+    PhLighttpdComponent,
+    PhJupyterlabComponent,
+    PiholeLighttpdExternalComponent,
+    PiholeLighttpdModOpensslInstallComponent,
+    AcmeCommandRecapComponent,
+    AcmeCommandOutputComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'serverApp' }),
@@ -63,7 +76,8 @@ import { TlsForLocalLabComponent } from './musings/tls-for-local-lab/tls-for-loc
     HttpClientModule,
     RecaptchaModule,
     RecaptchaFormsModule,
-    MatTableModule
+    MatTableModule,
+    MatTabsModule
   ],
   providers: [
     Title,

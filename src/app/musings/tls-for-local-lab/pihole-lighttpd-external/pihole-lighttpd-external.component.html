@@ -1,0 +1,29 @@
+<pre>
+<span class="bash-comment">#Loading openssl</span>
+server.modules += ( "mod_openssl" )
+
+<span class="bash-comment"># Enable ipv6 -- Optional. Requires IPv6 config in network.</span>
+#server.use-ipv6 = "enable"
+
+<span class="bash-comment"># Ensure the Pi-hole Block Page knows that this is not a blocked domain</span>
+setenv.add-environment = ("fqdn" => "true")
+
+<span class="bash-comment"># Enable the SSL engine with a cert for IPv4, only for this specific host</span>
+$SERVER["socket"] == ":8443" {{ '{' }} <span class="bash-comment"># Update your port accordingly.</span>
+  ssl.engine = "enable"
+  ssl.pemfile = "/etc/lighttpd/combined.pem"
+{{ '}' }}
+
+<span class="bash-comment"># Enable the SSL engine with a cert for IPv6, only for this specific host  -- Optional. Requires IPv6 config in network.</span>
+$SERVER["socket"] == "[::]:8443" {{ '{' }} <span class="bash-comment"># Update your port accordingly.</span>
+        ssl.engine = "enable"
+        ssl.pemfile = "/etc/lighttpd/combined.pem"
+{{ '}' }}
+
+<span class="bash-comment"># Redirect HTTP to HTTPS</span>
+$HTTP["scheme"] == "http" {{ '{' }}
+  $HTTP["host"] =~ ".*" {{ '{' }}
+    url.redirect = (".*" => "https://%0$0")
+  {{ '}' }}
+{{ '}' }}
+</pre>

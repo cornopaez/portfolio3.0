@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 @Component({
   selector: 'app-tls-for-local-lab',
   templateUrl: './tls-for-local-lab.component.html',
-  styleUrls: ['./tls-for-local-lab.component.sass']
+  styleUrls: ['./tls-for-local-lab.component.sass'],
 })
 export class TlsForLocalLabComponent {
   currentContent = {
@@ -32,7 +32,7 @@ export class TlsForLocalLabComponent {
           img: '../../../../assets/pihole-2.png',
           alt: 'Image of the Cloudflare dashboard for a domain, showing where the Zone ID is in the page and the link to get an API token.'
         },
-        ]
+        ],
     },
     acme_commands: [
       {

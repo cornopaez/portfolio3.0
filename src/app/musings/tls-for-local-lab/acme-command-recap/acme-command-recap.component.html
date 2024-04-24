@@ -1,0 +1,14 @@
+<pre>
+<span class="bash-comment"># Move to root</span>
+<span class="bash-command">sudo</span> su
+
+<span class="bash-comment"># Create the post-hook script and populate with template above</span>
+<span class="bash-command">nano</span> /usr/local/bin/acme-post.sh
+
+<span class="bash-comment"># Modify file properties to enable execution</span>
+<span class="bash-command">chmod</span> +x /usr/local/bin/acme-post.sh
+
+<span class="bash-comment"># Export Cloudflare's API Token and Zone ID as environment variables</span>
+<span class="bash-command">export</span> CF_Token="[your_token_goes_here]"
+<span class="bash-command">export</span> CF_Zone_ID="[your_zone_id_goes_here]"
+</pre>	

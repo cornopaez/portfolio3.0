@@ -41,21 +41,11 @@
 
 				img
 					height: 3em
+
 .project-detail
 	.project-container
 		pre
-			.hash-bang
-				color: #AA22FF
-
-			.bash-comment
-				color: #408080
-
-			.bash-command
-				color: #43A047
-
-			.code-green
-				color: #2AB536
-
+			@include bash-code-highlight()
 		.cloudflare
 				img
 					@media screen and (min-width: 768px)

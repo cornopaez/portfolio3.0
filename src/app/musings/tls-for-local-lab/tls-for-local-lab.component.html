@@ -1,4 +1,4 @@
-<meta name="keywords" content="ssl tls pihole pi-hole ad blocker jupyterlab jupyter notbook local home lab custom domains domain acme.sh">
+<meta name="keywords" content="ssl tls pihole pi-hole ad blocker jupyterlab jupyter notbook local home lab custom domains domain acme.sh ipv6 config">
 <meta name="description" content="How to enable SSL/TLS for your local lab and apps, including Pi-Hole and JupyterLab, using a custom domain.">
 <meta name="author" content="Mauricio Paez - Developer">
 <div class="btn-container">
@@ -16,8 +16,6 @@
   </div>
 </div>
 
-<!-- Photo by <a href="https://unsplash.com/@markuswinkler?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Markus Winkler</a> on <a href="https://unsplash.com/photos/brown-padlock-on-brown-wooden-post-SZ98vfIx0pw?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Unsplash</a> -->
-  
 <div class="detail project-detail">
   <h1>How to enable SSL/TLS for your local lab and apps, including Pi-Hole and JupyterLab, using a custom domain</h1>
   <small class="text-muted">Updated 2024-04-25</small><br>
@@ -127,21 +125,14 @@
     <p>
       The contents of the file, with replacements for your own domain, are as follows:
     </p>
-    <pre>
-<span class="hash-bang">#!/bin/bash</span>
-
-<span class="bash-comment"># Combine cert and key for lighttpd</span>
-<span class="bash-command">cat</span> /root/.acme.sh/mycustomdomain.local_ecc/mycustomdomain.local.key /root/.acme.sh/mycustomdomain.local_ecc/mycustomdomain.local.cer > /root/.acme.sh/mycustomdomain.local_ecc/combined.pem
-
-<span class="bash-comment"># Make backup of old key</span>
-<span class="bash-command">mv</span> /etc/lighttpd/combined.pem /etc/lighttpd/combined.pem.old
-
-<span class="bash-comment"># Move new key into place</span>
-<span class="bash-command">mv</span> /root/.acme.sh/mycustomdomain.local_ecc/combined.pem /etc/lighttpd/combined.pem
-
-<span class="bash-comment"># Restart lighttpd</span>
-<span class="bash-command">service</span> lighttpd restart
-    </pre>  
+    <mat-tab-group>
+      <mat-tab label="lighttpd file">
+        <app-ph-lighttpd></app-ph-lighttpd>
+      </mat-tab>
+      <mat-tab label="JupyterLab file">
+        <app-ph-jupyterlab></app-ph-jupyterlab>
+      </mat-tab>
+    </mat-tab-group>
     <p>
       Finally, let's make sure that the file has execution permissions:<br>
       <code>chmod +x /usr/local/bin/acme-post.sh</code>
@@ -178,20 +169,7 @@ export CF_Zone_ID="[your_zone_id_goes_here]"
     <p>
       We are now ready to run the command. However, if you are unsure as to what we've done so far, here's a quick refresher:
     </p>
-    <pre>
-<span class="bash-comment"># Move to root</span>
-<span class="bash-command">sudo</span> su
-
-<span class="bash-comment"># Create the post-hook script and populate with template above</span>
-<span class="bash-command">nano</span> /usr/local/bin/acme-post.sh
-
-<span class="bash-comment"># Modify file properties to enable execution</span>
-<span class="bash-command">chmod</span> +x /usr/local/bin/acme-post.sh
-
-<span class="bash-comment"># Export Cloudflare's API Token and Zone ID as environment variables</span>
-<span class="bash-command">export</span> CF_Token="[your_token_goes_here]"
-<span class="bash-command">export</span> CF_Zone_ID="[your_zone_id_goes_here]"
-    </pre>
+    <app-acme-command-recap></app-acme-command-recap>
     <p>
       To those commands, we'll add the following one that actually fetches the certificates and keys. Replace your domain accordingly:
     </p>
@@ -201,29 +179,7 @@ export CF_Zone_ID="[your_zone_id_goes_here]"
     <p>
       If all went well, the output would look something like this:
     </p>
-    <pre>
-[Tue Apr 23 11:35:25 EDT 2024] Using CA: https://acme-v02.api.letsencrypt.org/directory
-[Tue Apr 23 11:35:25 EDT 2024] Creating domain key
-[Tue Apr 23 11:35:25 EDT 2024] The domain key is here: <span class="code-green">/root/.acme.sh/mycustomdomain.local_ecc/mycustomdomain.local.key</span>
-[Tue Apr 23 11:35:25 EDT 2024] Multi domain='DNS:mycustomdomain.local,DNS:*.mycustomdomain.local'
-[Tue Apr 23 11:35:27 EDT 2024] Getting webroot for domain='mycustomdomain.local'
-[Tue Apr 23 11:35:27 EDT 2024] Getting webroot for domain='*.mycustomdomain.local'
-[Tue Apr 23 11:35:28 EDT 2024] mycustomdomain.local is already verified, skip dns-01.
-[Tue Apr 23 11:35:28 EDT 2024] *.mycustomdomain.local is already verified, skip dns-01.
-[Tue Apr 23 11:35:28 EDT 2024] Verify finished, start to sign.
-[Tue Apr 23 11:35:28 EDT 2024] Lets finalize the order.
-[Tue Apr 23 11:35:28 EDT 2024] Le_OrderFinalize='https://acme-v02.api.letsencrypt.org/acme/finalize/[number_goes_here]/[number_goes_here]'
-[Tue Apr 23 11:35:29 EDT 2024] Downloading cert.
-[Tue Apr 23 11:35:29 EDT 2024] Le_LinkCert='https://acme-v02.api.letsencrypt.org/acme/cert/[long_number_goes_here]'
-[Tue Apr 23 11:35:29 EDT 2024] <span class="code-green">Cert success.</span>
------BEGIN CERTIFICATE-----
-<span class="bash-comment"># Certificate in plaintext goes here</span>
------END CERTIFICATE-----
-[Tue Apr 23 11:35:29 EDT 2024] Your cert is in: <span class="code-green">/root/.acme.sh/mycustomdomain.local_ecc/mycustomdomain.local.cer</span>
-[Tue Apr 23 11:35:29 EDT 2024] Your cert key is in: <span class="code-green">/root/.acme.sh/mycustomdomain.local_ecc/mycustomdomain.local.key</span>
-[Tue Apr 23 11:35:29 EDT 2024] The intermediate CA cert is in: <span class="code-green">/root/.acme.sh/mycustomdomain.local_ecc/ca.cer</span>
-[Tue Apr 23 11:35:29 EDT 2024] And the full chain certs is there: <span class="code-green">/root/.acme.sh/mycustomdomain.local_ecc/fullchain.cer</span>
-    </pre>
+    <app-acme-command-output></app-acme-command-output>
     <p>
       There's a possibility the output includes an error that reads <code>/etc/lighttpd/combined.pem: path or file does not exist.</code> This is expected, as the first time the script runs the file does not exist. Afterwards, though, the file does and the error is not going to be around anymore.
     </p>
@@ -254,62 +210,31 @@ export CF_Zone_ID="[your_zone_id_goes_here]"
     <p>
       As of 2024-04-15, the default Pi-Hole installation does not install a version of <kbd>lighttpd</kbd> that includes the <code>mod_openssl</code> module it needs to serve the site using SSL/TLS certificates. To this end, we'll start by installing backing up Pi-Hole's <kbd>lighttpd.conf</kbd> and then install a new version of <kbd>lighttpd</kbd>:
     </p>
-    <pre>
-<span class="bash-comment"># You may need to run all of this as root to avoid permissions issues</span>
-
-<span class="bash-comment"># Backup the existing lighttpd.conf file to avoid losing Pi-Hole's configs</span>
-<span class="bash-command">cp</span> /etc/lighttpd/lightpd.conf /etc/lighttpd/lightpd.conf.og 
-
-<span class="bash-comment"># Install new version of lighttpd that includes the openSSL module</span>
-<span class="bash-command">apt</span> install lighttpd-mod-openssl
-
-<span class="bash-comment"># Stop service to replace config files</span>
-<span class="bash-command">service</span> lighttpd stop
-
-<span class="bash-comment"># Replace OG lighttpd.conf since it was likely replaced by the install</span>
-<span class="bash-command">mv</span> /etc/lighttpd/lightpd.conf /etc/lighttpd/lightpd.conf.new 
-<span class="bash-command">mv</span> /etc/lighttpd/lightpd.conf.og /etc/lighttpd/lightpd.conf 
-
-<span class="bash-comment"># Start service</span>
-<span class="bash-command">service</span> lighttpd start
-    </pre>
+    <app-pihole-lighttpd-mod-openssl-install></app-pihole-lighttpd-mod-openssl-install>
     <p>
       Once the package is installed and you have verified the service is up and running without issues, we'll need to create the following file (if it doesn't exist already) to ensure that <kbd>lighttpd</kbd> serves the UI without issues: <code>/etc/lighttpd/external.conf</code>. Use the following template to fill that new file in:
     </p>
-    <pre>
-<span class="bash-comment">#Loading openssl</span>
-server.modules += ( "mod_openssl" )
-
-<span class="bash-comment"># Enable ipv6 -- Optional. Requires IPv6 config in network.</span>
-#server.use-ipv6 = "enable"
-
-<span class="bash-comment"># Ensure the Pi-hole Block Page knows that this is not a blocked domain</span>
-setenv.add-environment = ("fqdn" => "true")
-
-<span class="bash-comment"># Enable the SSL engine with a cert for IPv4, only for this specific host</span>
-$SERVER["socket"] == ":8443" {{ '{' }} <span class="bash-comment"># Update your port accordingly.</span>
-  ssl.engine = "enable"
-  ssl.pemfile = "/etc/lighttpd/combined.pem"
-{{ '}' }}
-
-<span class="bash-comment"># Enable the SSL engine with a cert for IPv6, only for this specific host  -- Optional. Requires IPv6 config in network.</span>
-$SERVER["socket"] == "[::]:8443" {{ '{' }} <span class="bash-comment"># Update your port accordingly.</span>
-        ssl.engine = "enable"
-        ssl.pemfile = "/etc/lighttpd/combined.pem"
-{{ '}' }}
-
-<span class="bash-comment"># Redirect HTTP to HTTPS</span>
-$HTTP["scheme"] == "http" {{ '{' }}
-  $HTTP["host"] =~ ".*" {{ '{' }}
-    url.redirect = (".*" => "https://%0$0")
-  {{ '}' }}
-{{ '}' }}
-    </pre>
+    <app-pihole-lighttpd-external></app-pihole-lighttpd-external>
     <p>
       Once the file is populated, go ahead and restart <kbd>lighttpd</kbd>. If all went well, the service should come up without errors and you should be able to hit Pi-Hole's UI while it being served with an SSL/TLS connection.
     </p>
     <h2 id="jupyterlab">JupyterLab Setup</h2>
-
+    <p>
+      If you've made it this far, we don't have much left. Setting up JupyterLab is not different from what we've accomplished so far. We'll reuse as many things as possible.
+    </p>
+    <p>
+      To start, we'll need to update the <code>post-hook</code> file for <kbd>acme.sh</kbd> (if JupyterLab runs on the same box as Pi-Hole) or create a new one (if they are different boxes). By now, though, you've become a professional and this new challenge does not phase you -- you've got this with unerring confidence (but not cockiness).
+    </p>
+    <p>
+      <b>Side Note:</b> If you have no clue what we're talking about here, go to the <a routerLink="../tls-for-local-lab" fragment="acme"><kbd>acme.sh</kbd> Setup</a> section to get started. I've included a tab in that section with the contents for the <code>post-hook</code> file that contains the info for <kbd>JupyterLab</kbd> for ease of reference.
+    </p>
+    <p>
+      In any case, whether you have a <code>post-hook</code> file or you need to create one, the code needed for <kbd>JupyterLab</kbd> is as follows:
+    </p>
+    <app-ph-jupyterlab></app-ph-jupyterlab>
+    <p>
+      You may append (if you already have a file) or fill in the file (if you're creating one). If you do h
+    </p>
     <h2 id="musings">Musings</h2>
 
 	</div>
