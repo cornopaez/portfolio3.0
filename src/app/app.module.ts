@@ -1,6 +1,6 @@
 import { BrowserModule, Title } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NgModule } from '@angular/core';
+import { NgModule, APP_ID } from '@angular/core';
 import { ReactiveFormsModule, FormsModule }   from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { MatTableModule } from '@angular/material/table';
@@ -71,7 +71,7 @@ import { JupyterConfigUpdatesComponent } from './musings/tls-for-local-lab/jupyt
     JupyterConfigUpdatesComponent
   ],
   imports: [
-    BrowserModule.withServerTransition({ appId: 'serverApp' }),
+    BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
     ReactiveFormsModule,
@@ -87,7 +87,9 @@ import { JupyterConfigUpdatesComponent } from './musings/tls-for-local-lab/jupyt
     ProjectDetailResolver,
     DatabaseService,
     DialogService,
-    CanDeactivateGuard],
+    CanDeactivateGuard,
+    { provide: APP_ID, useValue: 'serverApp' },
+    ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
