@@ -33,6 +33,12 @@ export class TlsForLocalLabComponent {
           alt: 'Image of the Cloudflare dashboard for a domain, showing where the Zone ID is in the page and the link to get an API token.'
         },
         ],
+      jupyterlab:[
+        {
+          img: '../../../../assets/jupyterlab-1.png',
+          alt: 'Image of the Cloudflare dashboard for a domain, showing where the Zone ID is in the page and the link to get an API token.'
+        },
+        ]
     },
     acme_commands: [
       {

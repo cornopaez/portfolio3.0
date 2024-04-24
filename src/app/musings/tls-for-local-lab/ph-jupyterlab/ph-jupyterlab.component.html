@@ -2,13 +2,13 @@
 <span class="hash-bang">#!/bin/bash</span>
 
 <span class="bash-comment"># Move new key into place</span>
-<span class="bash-command">cp</span> /root/.acme.sh/mycustomdomain.local_ecc/fullchain.cer /home/mauriciopaez/.jupyter/ssl/fullchain.cer
+<span class="bash-command">cp</span> /root/.acme.sh/mycustomdomain.local_ecc/fullchain.cer /home/[your_username]/.jupyter/ssl/fullchain.cer
 
 <span class="bash-comment"># Move new key into place</span>
-<span class="bash-command">cp</span> /root/.acme.sh/mycustomdomain.local_ecc/mycustomdomain.local.key /home/mauriciopaez/.jupyter/ssl/mycustomdomain.local.key
+<span class="bash-command">cp</span> /root/.acme.sh/mycustomdomain.local_ecc/mycustomdomain.local.key /home/[your_username]/.jupyter/ssl/mycustomdomain.local.key
 
 <span class="bash-comment"># Update file permissions</span>
-<span class="bash-command">chmod 777</span> /home/mauriciopaez/.jupyter/ssl/fullchain.cer /home/mauriciopaez/.jupyter/ssl/mycustomdomain.local.key
+<span class="bash-command">chmod 777</span> /home/[your_username]/.jupyter/ssl/fullchain.cer /home/[your_username]/.jupyter/ssl/mycustomdomain.local.key
 
 <span class="bash-comment"># Restart jupyter</span>
 <span class="bash-command">service</span> jupyterlab restart

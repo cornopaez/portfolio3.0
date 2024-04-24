@@ -40,6 +40,7 @@ import { PiholeLighttpdExternalComponent } from './musings/tls-for-local-lab/pih
 import { PiholeLighttpdModOpensslInstallComponent } from './musings/tls-for-local-lab/pihole-lighttpd-mod-openssl-install/pihole-lighttpd-mod-openssl-install.component';
 import { AcmeCommandRecapComponent } from './musings/tls-for-local-lab/acme-command-recap/acme-command-recap.component';
 import { AcmeCommandOutputComponent } from './musings/tls-for-local-lab/acme-command-output/acme-command-output.component';
+import { JupyterConfigUpdatesComponent } from './musings/tls-for-local-lab/jupyter-config-updates/jupyter-config-updates.component';
 
 
 @NgModule({
@@ -66,7 +67,8 @@ import { AcmeCommandOutputComponent } from './musings/tls-for-local-lab/acme-com
     PiholeLighttpdExternalComponent,
     PiholeLighttpdModOpensslInstallComponent,
     AcmeCommandRecapComponent,
-    AcmeCommandOutputComponent
+    AcmeCommandOutputComponent,
+    JupyterConfigUpdatesComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'serverApp' }),
