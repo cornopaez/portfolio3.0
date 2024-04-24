@@ -83,25 +83,10 @@
 
 
 	.cloudflare
-		img
-			@media screen and (min-width: 768px)
-				max-width: 55em
-
-			@media screen and (max-width: 767px)
-				max-width: 100%
+		@include screenshot-dynamic-width()
 
 	.terminal
-		img
-			@media screen and (min-width: 768px)
-				max-width: 45em
-
-			@media screen and (max-width: 767px)
-				max-width: 100%
+		@include screenshot-dynamic-width()
 
 	.heroku
-		img
-			@media screen and (min-width: 768px)
-				max-width: 55em
-
-			@media screen and (max-width: 767px)
-				max-width: 100%
+		@include screenshot-dynamic-width()
