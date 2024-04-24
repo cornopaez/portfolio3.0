@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Musing } from './Musing';
+import { Musing } from './musing';
 
 @Component({
   selector: 'app-musings-home',
