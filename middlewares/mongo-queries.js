@@ -1,17 +1,10 @@
-// const express = require("express");
-const connection = require("./mongo-connection.js");
+import { getDb } from './mongo-connection.js';
 
-module.exports = {
-	getProjectView : getProjectView,
-	getProjectsCards: getProjectsCards,
-	postContactRequest: postContactRequest
-}
-
-function getProjectView(projectName) {
+export function getProjectView(projectName) {
 
 	return new Promise((resolve, reject) => {
-		var db = connection.getDb();
-		var query = {'project_name' : projectName};
+		const db = getDb();
+		const query = {'project_name' : projectName};
 
 		db.collection('projects').findOne(query).then(data =>{
 			resolve(data)
@@ -23,34 +16,33 @@ function getProjectView(projectName) {
 	})
 }
 
-function getProjectsCards() {
+export function getProjectsCards() {
 	return new Promise((resolve, reject) => {
-		var db = connection.getDb()
-		var query = {}
-		var projection = {
+		const db = getDb()
+		const query = {}
+		const projection = {
 			'_id': 0,
 			'card': 1,
 			'project_name': 1
 		}
-		var sort = {'lastUpdate':-1}
-		var cursor = db.collection('projects').find().sort(sort).project(projection)
+		const sort = {'lastUpdate':-1}
 
-		cursor.toArray((err, docs) => {
-			// console.log(docs)
-			if (docs === null || docs === undefined) {
-				// res.redirect("/error");
-				reject('Meine Damen und Herren, dieser Inhalt ist verboten')
-			} else {
-				resolve(docs)
+		db.collection('projects').find().sort(sort).project(projection).toArray().then(result => {
+			if (result !== null || result !== undefined) {
+				resolve(result)
 			}
-		});
+		})
+		.catch(error => {
+			console.log(error)
+			reject('Meine Damen und Herren, dieser Inhalt ist verboten')
+		})
 	})
 }
 
-function postContactRequest(info) {
+export function postContactRequest(info) {
 	return new Promise((resolve, reject) => {
-		var db = connection.getDb()
-		var query = {
+		const db = getDb()
+		const query = {
 			"name": info.name,
 			"email": info.email,
 			"text": info.message,
@@ -58,12 +50,19 @@ function postContactRequest(info) {
 			"date": Date()
 		}
 
-		var cursor = db.collection('requests').insertOne(query, (error, response) => {
-			if (error) {
-				reject(error)
-			} else {
-				resolve(response)
-			}
+		db.collection('requests').insertOne(query).then(result =>{
+			resolve(response)
 		})
+		.catch(error =>{
+			reject(error)
+		})
+
+		// var cursor = db.collection('requests').insertOne(query, (error, response) => {
+		// 	if (error) {
+		// 		reject(error)
+		// 	} else {
+		// 		resolve(response)
+		// 	}
+		// })
 	})
 }

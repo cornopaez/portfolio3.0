@@ -1,41 +1,34 @@
-const express = require("express");
-const MongoClient = require('mongodb').MongoClient
-const assert = require('assert');
+// Declare module vars
 var _db = null;
-const dotenv = require('dotenv').config();
 
-module.exports =  {
-	getDb: getDb,
-	connect: connect
-}
+// Import things needed
+import { MongoClient } from 'mongodb';
+import { config } from 'dotenv';
 
-const url = process.env.MONGOLAB_COPPER_URI ? process.env.MONGOLAB_COPPER_URI : process.env.MONGODB_LOCAL
+// Populate the env variables
+config();
+
+// Get the url for the mongodb connection
+const uri = process.env.MONGOLAB_COPPER_URI ? process.env.MONGOLAB_COPPER_URI : process.env.MONGODB_LOCAL
 
 // Creates a connection to MongoDB and returns the db object.
-function connect(log = true) {
+export async function connect(log = true) {
 
-	options = {
+	const options = {
 		useUnifiedTopology: true
 	};
 
-	return new Promise((resolve, reject) => {
-		MongoClient.connect(url, options, (err, db) => {
-			if (err) {
-				console.log(err)
-				reject(false)
-			}
+	try {
+		const client = new MongoClient(uri);
+		_db = client.db();
+		console.log('Connected to db.')
+	} catch(err) {
+		console.log(err)
+	}
 
-			if (log) {
-				console.log("Connected successfully to database")
-			}
-			var dbName = db.s.options.dbName
-			_db = db.db(dbName)
-			resolve(true)
-		});
-	});
 };
 
 // Gets the db object created by MongoClient.connect()
-function getDb() {
+export function getDb() {
 	return _db;
 }
