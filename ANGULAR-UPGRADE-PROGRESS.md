@@ -3,7 +3,7 @@
 Working branch: `feature/angular-upgrade` (created off `feature/gen-maintenance`).
 Full plan: see the plan approved at the start of this effort — one commit per major version, `ng update` one hop at a time, non-Angular packages only bumped if they genuinely block a step.
 
-## Status: v18 done and committed, starting v19
+## Status: PAUSED at v18 (committed) — blocked on an ng-recaptcha decision before v19 can proceed
 
 ### Done and committed
 - **v16** — commit `85fe661` "Upgrade Angular to v16" on `feature/angular-upgrade`.
@@ -45,7 +45,23 @@ The `npm run dev:ssr` smoke test connects to the **real** MongoDB Atlas cluster 
 - All verification passed the same way as v17 (build, SSR build, 59/59 tests, `dev:ssr` smoke test on `/` and `/data/projects`).
 - Committed as `f607ff6` "Upgrade Angular to v18" (5 files: `package.json`, `package-lock.json`, `src/app/app.module.ts`, `src/app/contact/contact-form/contact-form.component.spec.ts`, `src/app/shared/database.service.spec.ts`).
 
-### Next up: v19, v20, v21
+### BLOCKED at v19: ng-recaptcha has no version compatible with Angular 19+
+
+`npx ng update @angular/core@19 @angular/cli@19 --allow-dirty` fails immediately:
+```
+Package "ng-recaptcha" has an incompatible peer dependency to "@angular/core"
+(requires "^17.0.0" (extended), would install "19.2.25").
+```
+Checked the registry: `ng-recaptcha`'s last release is `13.2.1`, published 2023-11-25, peer dep capped at `@angular/core ^17.0.0`. There is no newer version — unlike the v16/v17 blockers (`@nguniversal/*`, earlier `ng-recaptcha` bump), there's nothing to bump *to* this time. This attempt made **no changes** to the working tree (it fails before writing anything) — confirmed via `git diff --stat`, tree is clean at the v18 commit.
+
+**Asked the user how to proceed; they chose to pause the upgrade here** rather than decide immediately between:
+1. `ng update --force` through the peer-dep check, keeping `ng-recaptcha@13.2.1` — its actual API (a simple component + NgModule wrapping the Google reCAPTCHA widget, used in `src/app/contact/contact-form/`) is plausibly fine on newer Angular even though the declared peer range doesn't cover it, but this is unverified and unsupported upstream if it does break.
+2. Swap to an actively maintained alternative (e.g. `recaptcha-angular`, found on the registry, actively published) — bigger change, touches `contact-form.component.ts` and its module wiring, not just `package.json`.
+3. Stay paused here indefinitely / decide later.
+
+**Next session: start by asking the user which of the above they want**, then proceed with v19 accordingly. Do not silently pick option 1 or 2 without checking — this was explicitly left as an open decision.
+
+### Once ng-recaptcha is resolved: v19, v20, v21
 Same pattern each time:
 1. `npx ng update @angular/core@N @angular/cli@N --allow-dirty` (add any other package `ng update` flags as incompatible, matching its major if one exists — that's how `@nguniversal/*` and `ng-recaptcha` got handled at v16/v17). Decline any *optional* migrations offered (like the application-builder one at v18) unless something later actually requires it — note if that ever changes.
 2. Fix any resulting compile/test breakage by hand.
