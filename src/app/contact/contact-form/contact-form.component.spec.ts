@@ -4,8 +4,9 @@ import { ContactFormComponent } from './contact-form.component'
 import { DatabaseService } from '../../shared/database.service'
 import { DialogService } from '../../shared/dialog.service'
 import { RecaptchaModule ,RecaptchaFormsModule } from 'ng-recaptcha';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing'
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing'
 import { RouterTestingModule } from '@angular/router/testing'
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('ContactFormComponent', () => {
   let component: ContactFormComponent;
@@ -13,22 +14,21 @@ describe('ContactFormComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ 
+    declarations: [
         ContactFormComponent
-      ],
-      imports:[
-        FormsModule, 
+    ],
+    imports: [FormsModule,
         ReactiveFormsModule,
-        HttpClientTestingModule,
         RouterTestingModule,
         RecaptchaModule,
-        RecaptchaFormsModule
-      ],
-      providers: [
+        RecaptchaFormsModule],
+    providers: [
         DatabaseService,
-        DialogService
-      ]
-    })
+        DialogService,
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+    ]
+})
     .compileComponents();
   }));
 

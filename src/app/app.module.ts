@@ -2,7 +2,7 @@ import { BrowserModule, Title } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule, FormsModule }   from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 
 import { AppRoutingModule } from './app-routing.module';
@@ -32,40 +32,35 @@ import { MusingsHomeComponent } from './musings/musings-home/musings-home.compon
 import { UbuntuHdAudioComponent } from './musings/ubuntu-hd-audio/ubuntu-hd-audio.component';
 
 
-@NgModule({
-  declarations: [
-    AppComponent,
-    HomeComponent,
-    AboutComponent,
-    ErrorComponent,
-    ProjectsComponent,
-    ProjectsHomeComponent,
-    ProjectsDetailsComponent,
-    ContactComponent,
-    ContactFormComponent,
-    ContactHomeComponent,
-    ContactSuccessComponent,
-    MusingsComponent,
-    RpiTwonkyComponent,
-    MusingsHomeComponent,
-    UbuntuHdAudioComponent
-  ],
-  imports: [
-    BrowserModule.withServerTransition({ appId: 'serverApp' }),
-    BrowserAnimationsModule,
-    AppRoutingModule,
-    ReactiveFormsModule,
-    HttpClientModule,
-    RecaptchaModule,
-    RecaptchaFormsModule
-  ],
-  providers: [
-    Title,
-    ProjectsResolver,
-    ProjectDetailResolver,
-    DatabaseService,
-    DialogService,
-    CanDeactivateGuard],
-  bootstrap: [AppComponent]
-})
+@NgModule({ declarations: [
+        AppComponent,
+        HomeComponent,
+        AboutComponent,
+        ErrorComponent,
+        ProjectsComponent,
+        ProjectsHomeComponent,
+        ProjectsDetailsComponent,
+        ContactComponent,
+        ContactFormComponent,
+        ContactHomeComponent,
+        ContactSuccessComponent,
+        MusingsComponent,
+        RpiTwonkyComponent,
+        MusingsHomeComponent,
+        UbuntuHdAudioComponent
+    ],
+    bootstrap: [AppComponent], imports: [BrowserModule.withServerTransition({ appId: 'serverApp' }),
+        BrowserAnimationsModule,
+        AppRoutingModule,
+        ReactiveFormsModule,
+        RecaptchaModule,
+        RecaptchaFormsModule], providers: [
+        Title,
+        ProjectsResolver,
+        ProjectDetailResolver,
+        DatabaseService,
+        DialogService,
+        CanDeactivateGuard,
+        provideHttpClient(withInterceptorsFromDi())
+    ] })
 export class AppModule { }
