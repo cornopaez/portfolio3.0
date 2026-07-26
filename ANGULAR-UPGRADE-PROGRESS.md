@@ -3,7 +3,7 @@
 Working branch: `feature/angular-upgrade` (created off `feature/gen-maintenance`).
 Full plan: see the plan approved at the start of this effort — one commit per major version, `ng update` one hop at a time, non-Angular packages only bumped if they genuinely block a step.
 
-## Status: v17 done and committed, starting v18
+## Status: v18 done and committed, starting v19
 
 ### Done and committed
 - **v16** — commit `85fe661` "Upgrade Angular to v16" on `feature/angular-upgrade`.
@@ -38,11 +38,18 @@ Mid-upgrade, `node_modules/@jridgewell/resolve-uri` (and a couple of sibling pac
 ### Note for later steps
 The `npm run dev:ssr` smoke test connects to the **real** MongoDB Atlas cluster configured in the local `.env` (`MONGODB_LOCAL`) — it worked fine (outbound network egress is allowed in this environment), so re-run this smoke test at each remaining step, not just v17. Be careful never to echo or write the Mongo connection string (it contains live credentials) into this file, commit messages, or any other tracked output — Node itself prints it once via a `DEP0170` deprecation warning on startup, which is harmless locally but don't propagate it further.
 
-### Next up: v18, v19, v20, v21
+### v18 — done
+- `npx ng update @angular/core@18 @angular/cli@18 --allow-dirty` — no peer-dep conflicts this time, no non-Angular package needed bumping.
+- Automatic migration: replaced deprecated `HttpClientModule`/`HttpClientTestingModule` with `provideHttpClient(withInterceptorsFromDi())`/`provideHttpClientTesting()` in `src/app/app.module.ts` and two specs (`contact-form.component.spec.ts`, `database.service.spec.ts`).
+- `ng update` also offered an **optional** migration ("migrate application projects to the new build system" — the unified `application` builder replacing separate browser/server builders). Skipped deliberately: not required to reach v21, and it would restructure how the custom `server.ts` plugs into the build, which deserves a dedicated look rather than folding into this pass. `angular.json` was untouched this step, confirming the skip took effect.
+- All verification passed the same way as v17 (build, SSR build, 59/59 tests, `dev:ssr` smoke test on `/` and `/data/projects`).
+- Committed as `f607ff6` "Upgrade Angular to v18" (5 files: `package.json`, `package-lock.json`, `src/app/app.module.ts`, `src/app/contact/contact-form/contact-form.component.spec.ts`, `src/app/shared/database.service.spec.ts`).
+
+### Next up: v19, v20, v21
 Same pattern each time:
-1. `npx ng update @angular/core@N @angular/cli@N --allow-dirty` (add any other package `ng update` flags as incompatible, matching its major if one exists — that's how `@nguniversal/*` and `ng-recaptcha` got handled at v16/v17).
+1. `npx ng update @angular/core@N @angular/cli@N --allow-dirty` (add any other package `ng update` flags as incompatible, matching its major if one exists — that's how `@nguniversal/*` and `ng-recaptcha` got handled at v16/v17). Decline any *optional* migrations offered (like the application-builder one at v18) unless something later actually requires it — note if that ever changes.
 2. Fix any resulting compile/test breakage by hand.
-3. Verify: `ng build`, `ng run portfolio3:server`, `ng test --watch=false --browsers=ChromeHeadless`, and a `dev:ssr` smoke test (curl `/` and `/data/projects`).
+3. Verify: `ng build`, `ng run portfolio3:server`, `ng test --watch=false --browsers=ChromeHeadless`, and a `dev:ssr` smoke test (curl `/` and `/data/projects`, checking both return 200 with real content — not just that the process started).
 4. `git diff --stat | awk '$0 !~ /\|\s+0$/'` to find just the real changes, stage only those, commit as "Upgrade Angular to vN".
 5. Update this file.
 
