@@ -73,18 +73,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "portfolio3:build"
+            "buildTarget": "portfolio3:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "portfolio3:build:production"
+              "buildTarget": "portfolio3:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "portfolio3:build"
+            "buildTarget": "portfolio3:build"
           }
         },
         "test": {
@@ -143,7 +143,7 @@
           "defaultConfiguration": ""
         },
         "serve-ssr": {
-          "builder": "@nguniversal/builders:ssr-dev-server",
+          "builder": "@angular-devkit/build-angular:ssr-dev-server",
           "options": {
             "browserTarget": "portfolio3:build",
             "serverTarget": "portfolio3:server"
@@ -156,7 +156,7 @@
           }
         },
         "prerender": {
-          "builder": "@nguniversal/builders:prerender",
+          "builder": "@angular-devkit/build-angular:prerender",
           "options": {
             "browserTarget": "portfolio3:build:production",
             "serverTarget": "portfolio3:server:production",
