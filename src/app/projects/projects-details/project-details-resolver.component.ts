@@ -1,15 +1,14 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { Router, Resolve, RouterStateSnapshot,
-         ActivatedRouteSnapshot } from '@angular/router';
+import { Router, RouterStateSnapshot, ActivatedRouteSnapshot } from '@angular/router';
  
 import { DatabaseService } from '../../shared/database.service'
 import { ProjectDetails } from './project-details'
 
  
 @Injectable()
-export class ProjectDetailResolver implements Resolve<ProjectDetails> {
+export class ProjectDetailResolver  {
   constructor(
     private dbs: DatabaseService,
     private router: Router
