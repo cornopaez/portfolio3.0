@@ -3,7 +3,7 @@
 Working branch: `feature/angular-upgrade` (created off `feature/gen-maintenance`).
 Full plan: see the plan approved at the start of this effort — one commit per major version, `ng update` one hop at a time, non-Angular packages only bumped if they genuinely block a step.
 
-## Status: v19 done and committed, starting v20
+## Status: v20 done and committed, starting v21 (final version)
 
 ### Important environment note for future steps
 This project lives on a **network-mounted SMB share** (`//mauriciopaez@rpi5.cornopaez.net/Rome`, a Raspberry Pi 5 NAS), not local disk. This causes real, recurring flakiness: corrupted `node_modules` entries mid-install, `rm -rf` hitting "Resource busy", a hung `ssr-dev-server` file watcher, and — most seriously — the esbuild-based `application` builder consistently crashing with SIGABRT under full-build load (see the v19 section below). A trivial isolated `esbuild.build()` call works fine; only sustained/heavy concurrent file I/O seems to trigger it. If something inexplicably hangs or crashes, suspect the volume before the code — retry once or twice, and prefer the legacy webpack builder over the esbuild `application` builder on this machine until/unless the volume issue is resolved.
@@ -80,14 +80,22 @@ Once the real bug was found, the need for the application-builder migration evap
 
 Committed as `2c4fcd0` "Upgrade Angular to v19" (21 files — `controllers/home.ts`, `package.json`, `package-lock.json`, `server.ts`, `tsconfig.json`, `src/app/app.module.ts`, plus the 15 components that got `standalone: false` added).
 
-### Next: v20, v21
-Same pattern each time — and per the v19 detour above, **don't reach for the application-builder migration reflexively if a build looks flaky; read the full untruncated error output first**:
-1. `npx ng update @angular/core@N @angular/cli@N --allow-dirty`.
+### v20 — done
+- `npx ng update @angular/core@20 @angular/cli@20 --allow-dirty` — clean, no peer-dep conflicts.
+- Automatic/mandatory migration: `tsconfig.json`'s `moduleResolution` changed `"node"` → `"bundler"`. Verified this doesn't break the bare-specifier imports in `server.ts` (`middlewares/mongo-connection`, `controllers/data`, `controllers/home`) that rely on `baseUrl` resolution under the legacy webpack builder — build/SSR build/tests/smoke test all still pass.
+- `angular.json` got default `@schematics/angular:*` naming-convention entries added (affects future `ng generate` output only, no build impact).
+- Declined the same three optional migrations again (application builder, control-flow syntax, `Router.currentNavigation` signal) — none required to reach v21.
+- All verification passed (build, SSR build, 59/59 tests, `dev:ssr` smoke test including the Turnstile widget on `/Contact/form`).
+- Committed as `e44e95c` "Upgrade Angular to v20" (4 files: `angular.json`, `package.json`, `package-lock.json`, `tsconfig.json`).
+
+### Next: v21 (final)
+Same pattern — and per the v19 detour above, **don't reach for the application-builder migration reflexively if a build looks flaky; read the full untruncated error output first**:
+1. `npx ng update @angular/core@21 @angular/cli@21 --allow-dirty`.
 2. Fix any resulting compile/test breakage by hand — capture full build output to a file (not just a truncated `tail`) before concluding something is a builder bug rather than a real, findable error.
 3. Verify: `ng build`, `ng run portfolio3:server`, `ng test --watch=false --browsers=ChromeHeadless`, and a `dev:ssr` smoke test (curl `/`, `/data/projects`, and `/Contact/form` for the Turnstile widget markup — all real 200s with real content).
-4. `git diff --stat | awk '$0 !~ /\|\s+0$/'` to find just the real changes, stage only those, commit as "Upgrade Angular to vN".
+4. `git diff --stat | awk '$0 !~ /\|\s+0$/'` to find just the real changes, stage only those, commit as "Upgrade Angular to v21".
 5. Update this file.
-6. Final pass once at v21: full build + SSR build + tests + `dev:ssr` smoke test, then a summary for the user covering what moved and anything worth a future todo item (e.g. standalone/control-flow migration or revisiting the application builder, both explicitly left out of scope here).
+6. Final pass: full build + SSR build + tests + `dev:ssr` smoke test, then a summary for the user covering what moved (15 → 21) and anything worth a future todo item (e.g. standalone/control-flow migration, or revisiting the application-builder migration once the network-volume flakiness is understood — both explicitly left out of scope for this pass).
 
 ### Standing rules for the rest of this task
 - Always `git diff --stat | awk '$0 !~ /\|\s+0$/'` before staging, to separate real changes from the pre-existing mode-bit noise (159 files, `.gitignore`'s `TODO.md` line) that isn't part of this task — never `git add -A`.
