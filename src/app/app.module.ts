@@ -18,9 +18,9 @@ import { ProjectDetailResolver } from './projects/projects-details/project-detai
 import { DialogService } from './shared/dialog.service';
 import { CanDeactivateGuard } from './shared/can-deactivate-guard.service';
 
-// reCaptcha imports
-import { RecaptchaModule } from 'ng-recaptcha';
-import { RecaptchaFormsModule } from 'ng-recaptcha';
+// Turnstile imports
+import { NgxTurnstileModule } from 'ngx-turnstile';
+import { NgxTurnstileFormsModule } from 'ngx-turnstile';
 import { DatabaseService } from './shared/database.service';
 import { ContactComponent } from './contact/contact.component';
 import { ContactFormComponent } from './contact/contact-form/contact-form.component';
@@ -53,8 +53,8 @@ import { UbuntuHdAudioComponent } from './musings/ubuntu-hd-audio/ubuntu-hd-audi
         BrowserAnimationsModule,
         AppRoutingModule,
         ReactiveFormsModule,
-        RecaptchaModule,
-        RecaptchaFormsModule], providers: [
+        NgxTurnstileModule,
+        NgxTurnstileFormsModule], providers: [
         Title,
         ProjectsResolver,
         ProjectDetailResolver,

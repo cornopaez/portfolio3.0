@@ -6,6 +6,7 @@ import { DialogService }  from '../../shared/dialog.service';
 
 import { DatabaseService } from '../../shared/database.service'
 import { Message } from './message'
+import { environment } from '../../../environments/environment'
 
 @Component({
   selector: 'app-contact-form',
@@ -16,6 +17,7 @@ export class ContactFormComponent implements OnInit {
 
   contactForm : UntypedFormGroup
   formSent : boolean
+  turnstileSiteKey = environment.turnstileSiteKey
 
   constructor(
     private fb: UntypedFormBuilder,

@@ -1,25 +1,14 @@
-var request = require('request');
-
 module.exports = {
 	validate: validate
 }
 
 function validate(req) {
-	return new Promise((resolve, reject) => {
-
-		request.post(
-			{
-				url:'https://www.google.com/recaptcha/api/siteverify', 
-				form: {
-					secret: process.env.RECAPTCHA_SECRET,
-					response: req.body.recaptcha
-				}
-			}, 
-			(err,httpResponse,body) => {
-				if (err) reject(err);
-
-				resolve(body);
-			}
-		);
-	});
+	return fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+		method: 'POST',
+		headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify({
+			secret: process.env.TURNSTILE_SECRET_KEY,
+			response: req.body.recaptcha
+		})
+	}).then(response => response.json());
 }

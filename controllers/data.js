@@ -11,7 +11,7 @@ router.post('/contact', (req, res) => {
 	validation.validate(req)
 	.then((body) => {
 		// If validation was successful, continue on
-		if (body.success = true) {
+		if (body.success) {
 			queryDb.postContactRequest(req.body)
 			.then(success => {
 				res.json(success)
