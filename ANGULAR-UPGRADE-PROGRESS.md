@@ -3,7 +3,7 @@
 Working branch: `feature/angular-upgrade` (created off `feature/gen-maintenance`).
 Full plan: see the plan approved at the start of this effort — one commit per major version, `ng update` one hop at a time, non-Angular packages only bumped if they genuinely block a step.
 
-## Status: PAUSED at v18 (committed) — blocked on an ng-recaptcha decision before v19 can proceed
+## Status: ng-recaptcha blocker RESOLVED — ready to resume at v19
 
 ### Done and committed
 - **v16** — commit `85fe661` "Upgrade Angular to v16" on `feature/angular-upgrade`.
@@ -59,9 +59,11 @@ Checked the registry: `ng-recaptcha`'s last release is `13.2.1`, published 2023-
 2. Swap to an actively maintained alternative (e.g. `recaptcha-angular`, found on the registry, actively published) — bigger change, touches `contact-form.component.ts` and its module wiring, not just `package.json`.
 3. Stay paused here indefinitely / decide later.
 
-**Next session: start by asking the user which of the above they want**, then proceed with v19 accordingly. Do not silently pick option 1 or 2 without checking — this was explicitly left as an open decision.
+**Resolved in a later session (todo.md item 6):** replaced `ng-recaptcha` with `ngx-turnstile` (Cloudflare Turnstile) entirely, rather than forcing through or picking a different reCAPTCHA library. `ngx-turnstile`'s peer deps (`@angular/core`/`@angular/common >=16.0.0`, no upper bound) won't create this problem again on future majors. Full details in git commit `6e2d04a` "Replace ng-recaptcha with Cloudflare Turnstile" on this branch — touched `package.json`, `app.module.ts`, `contact-form.component.{ts,html,spec.ts}`, `environment.ts`/`environment.prod.ts`, `middlewares/reCaptcha-validation.js`, `controllers/data.js` (fixed the `if (body.success = true)` assignment bug as an unavoidable side effect), plus `.env`/`CLAUDE.md` (both untracked, updated directly on disk). Verified via headless Chrome `--dump-dom` (confirmed the real Cloudflare script loads and the widget initializes against the real site key) and a direct POST to `/data/contact` with a bogus token (confirmed it's now actually rejected, 302 to `/error`, no DB write).
 
-### Once ng-recaptcha is resolved: v19, v20, v21
+**`ng-recaptcha`/`request` are fully gone from the codebase now** — the next `ng update @angular/core@19` attempt should no longer hit this peer-dep wall. Worth double-checking `npm ls ng-recaptcha` comes back empty before running it, just in case.
+
+### Once resuming: v19, v20, v21
 Same pattern each time:
 1. `npx ng update @angular/core@N @angular/cli@N --allow-dirty` (add any other package `ng update` flags as incompatible, matching its major if one exists — that's how `@nguniversal/*` and `ng-recaptcha` got handled at v16/v17). Decline any *optional* migrations offered (like the application-builder one at v18) unless something later actually requires it — note if that ever changes.
 2. Fix any resulting compile/test breakage by hand.
@@ -77,5 +79,5 @@ Same pattern each time:
 ### Standing rules for the rest of this task
 - Always `git diff --stat | awk '$0 !~ /\|\s+0$/'` before staging, to separate real changes from the pre-existing mode-bit noise (159 files, `.gitignore`'s `TODO.md` line) that isn't part of this task — never `git add -A`.
 - `ng lint` has no target configured in `angular.json` at all (pre-existing, not caused by this upgrade) — dropped as a per-step gate; worth a mention in the final summary since `todo.md` item 2 already flags moving off TSLint.
-- Bump a non-Angular package only as far as needed to unblock a step (peer-dep conflict or break), not to its own latest — call it out when it happens. (`ng-recaptcha` → 13.2.1 is the one so far.)
+- Bump a non-Angular package only as far as needed to unblock a step (peer-dep conflict or break), not to its own latest — call it out when it happens. `ng-recaptcha` was bumped to 13.2.1 at v17, then replaced entirely with `ngx-turnstile` before v19 once it hit a hard ceiling with nothing left to bump to.
 - `CLAUDE.md` shows as untracked in git — pre-existing, not part of this task, leave it alone.
