@@ -3,9 +3,11 @@
 <footer>
   <div class="links">
     <ul class="nav nav-pills">
-      <li class="nav-item" *ngFor="let link of links">
-        <a class="nav-link" href="{{link.link}}">{{link.name}}</a>
-      </li>
-    </ul> 
+      @for (link of links; track link) {
+        <li class="nav-item">
+          <a class="nav-link" href="{{link.link}}">{{link.name}}</a>
+        </li>
+      }
+    </ul>
   </div>
 </footer>

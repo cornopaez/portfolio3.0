@@ -2,16 +2,18 @@
 <meta name="description" content="{{ currentContent.indexDescription }}">
 <meta name="author" content="Mauricio Paez - Developer">
 <div class="btn-container">
-  <a routerLink="/Projects" class="btn btn-link"><i class="fas fa-chevron-left"></i>  Back to Projects</a>  
+  <a routerLink="/Projects" class="btn btn-link"><i class="fas fa-chevron-left"></i>  Back to Projects</a>
 </div>
 
 <div class="jumbotron" [ngClass]="currentContent.content.imageStyle">
   <div class="footnotes">
     <h4>Tech used</h4>
     <ul>
-      <li *ngFor="let icon of currentContent.content.icons">
-        <i class="{{icon}}"></i>
-      </li>
+      @for (icon of currentContent.content.icons; track icon) {
+        <li>
+          <i class="{{icon}}"></i>
+        </li>
+      }
     </ul>
   </div>
 </div>
@@ -19,17 +21,17 @@
 <div class="detail project-detail">
   <h1>{{ currentContent.title }}</h1>
   <br>
-  <h2>About this project</h2>
-  <div class="project-container">
-    <div class="project-points">
-      <p class="project-description" [innerHtml]=currentContent.content.description></p>
-      <h4>Source Code</h4>
-      <p><a href="{{ currentContent.content.source }}">{{ currentContent.content.source }}</a></p>
-      <h4>Credits</h4>
-      <p class="project-footer" [innerHtml]=currentContent.content.footer></p>
-      <a class="btn btn-primary" href="{{ currentContent.content.link }}">Launch Project</a>
-      <br>
-      <small class="text-muted">Some projects may take a bit of time loading</small>
+    <h2>About this project</h2>
+    <div class="project-container">
+      <div class="project-points">
+        <p class="project-description" [innerHtml]=currentContent.content.description></p>
+        <h4>Source Code</h4>
+        <p><a href="{{ currentContent.content.source }}">{{ currentContent.content.source }}</a></p>
+        <h4>Credits</h4>
+        <p class="project-footer" [innerHtml]=currentContent.content.footer></p>
+        <a class="btn btn-primary" href="{{ currentContent.content.link }}">Launch Project</a>
+        <br>
+          <small class="text-muted">Some projects may take a bit of time loading</small>
+        </div>
+      </div>
     </div>
-  </div>
-</div>

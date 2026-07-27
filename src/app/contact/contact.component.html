@@ -1,13 +1,17 @@
-<nav *ngIf="currentContent.navbar">
-  <h1>{{ '{'}} {{ currentContent.navbar.title }} {{ '}'}}</h1>
-  <div class="links">
-    <ul class="nav nav-pills">
-      <li *ngFor="let link of currentContent.navbar.links" class="nav-item array-coma-3">
-        <a class="nav-link" routerLink="/{{ link }}">{{ link }}</a>
-      </li>
-    </ul> 
-  </div>
-</nav>
+@if (currentContent.navbar) {
+  <nav>
+    <h1>{{ '{'}} {{ currentContent.navbar.title }} {{ '}'}}</h1>
+    <div class="links">
+      <ul class="nav nav-pills">
+        @for (link of currentContent.navbar.links; track link) {
+          <li class="nav-item array-coma-3">
+            <a class="nav-link" routerLink="/{{ link }}">{{ link }}</a>
+          </li>
+        }
+      </ul>
+    </div>
+  </nav>
+}
 
 <div class="jumbotron contact">
   <div class="text-container">

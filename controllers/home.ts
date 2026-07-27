@@ -6,7 +6,9 @@ import { join } from 'path';
 import bootstrap from '../src/main.server';
 
 const distFolder = join(process.cwd(), 'dist/portfolio3/browser');
-const commonEngine = new CommonEngine();
+const commonEngine = new CommonEngine({
+  allowedHosts: ['localhost', 'cornopaez.com', 'www.cornopaez.com'],
+});
 
 export const home = (req: Request, res: Response, next: NextFunction) => {
   // Check for secure connection

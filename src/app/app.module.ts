@@ -2,7 +2,7 @@ import { BrowserModule, Title } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule, FormsModule }   from '@angular/forms';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { provideHttpClient, withFetch, withInterceptorsFromDi } from '@angular/common/http';
 
 
 import { AppRoutingModule } from './app-routing.module';
@@ -61,6 +61,6 @@ import { UbuntuHdAudioComponent } from './musings/ubuntu-hd-audio/ubuntu-hd-audi
         DatabaseService,
         DialogService,
         CanDeactivateGuard,
-        provideHttpClient(withInterceptorsFromDi())
+        provideHttpClient(withFetch(), withInterceptorsFromDi())
     ] })
 export class AppModule { }

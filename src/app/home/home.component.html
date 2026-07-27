@@ -13,7 +13,9 @@
       <div class="right-bottom">
         <div class="intro-paragraph">{{ currentContent.content.description }}</div>
         <div class="nav-buttons">
-          <a *ngFor="let link of currentContent.content.description_links" routerLink="/{{ link }}" class="btn btn-dark">{{ link }}</a>
+          @for (link of currentContent.content.description_links; track link) {
+            <a routerLink="/{{ link }}" class="btn btn-dark">{{ link }}</a>
+          }
         </div>
       </div>
     </div> <!-- End of Column -->
