@@ -3,7 +3,10 @@
 Working branch: `feature/angular-upgrade` (created off `feature/gen-maintenance`).
 Full plan: see the plan approved at the start of this effort — one commit per major version, `ng update` one hop at a time, non-Angular packages only bumped if they genuinely block a step.
 
-## Status: ng-recaptcha blocker RESOLVED — ready to resume at v19
+## Status: v19 done and committed, starting v20
+
+### Important environment note for future steps
+This project lives on a **network-mounted SMB share** (`//mauriciopaez@rpi5.cornopaez.net/Rome`, a Raspberry Pi 5 NAS), not local disk. This causes real, recurring flakiness: corrupted `node_modules` entries mid-install, `rm -rf` hitting "Resource busy", a hung `ssr-dev-server` file watcher, and — most seriously — the esbuild-based `application` builder consistently crashing with SIGABRT under full-build load (see the v19 section below). A trivial isolated `esbuild.build()` call works fine; only sustained/heavy concurrent file I/O seems to trigger it. If something inexplicably hangs or crashes, suspect the volume before the code — retry once or twice, and prefer the legacy webpack builder over the esbuild `application` builder on this machine until/unless the volume issue is resolved.
 
 ### Done and committed
 - **v16** — commit `85fe661` "Upgrade Angular to v16" on `feature/angular-upgrade`.
@@ -63,18 +66,28 @@ Checked the registry: `ng-recaptcha`'s last release is `13.2.1`, published 2023-
 
 **`ng-recaptcha`/`request` are fully gone from the codebase now** — the next `ng update @angular/core@19` attempt should no longer hit this peer-dep wall. Worth double-checking `npm ls ng-recaptcha` comes back empty before running it, just in case.
 
-### Once resuming: v19, v20, v21
-Same pattern each time:
-1. `npx ng update @angular/core@N @angular/cli@N --allow-dirty` (add any other package `ng update` flags as incompatible, matching its major if one exists — that's how `@nguniversal/*` and `ng-recaptcha` got handled at v16/v17). Decline any *optional* migrations offered (like the application-builder one at v18) unless something later actually requires it — note if that ever changes.
-2. Fix any resulting compile/test breakage by hand.
-3. Verify: `ng build`, `ng run portfolio3:server`, `ng test --watch=false --browsers=ChromeHeadless`, and a `dev:ssr` smoke test (curl `/` and `/data/projects`, checking both return 200 with real content — not just that the process started).
+### v19 — done, and a real detour worth reading before v20/v21
+
+`npx ng update @angular/core@19 @angular/cli@19 --allow-dirty` itself succeeded cleanly (no peer-dep conflicts, now that `ng-recaptcha` is gone). But the resulting build failed with `NG8002`/`NG8001` errors ("routerLink"/"router-outlet"/"ngClass" not recognized) on a handful of components, and re-running the build showed a *different* subset of failing components each time — looked exactly like the kind of flaky compiler bug that would justify migrating off the legacy webpack builder.
+
+**That appearance was misleading.** The real cause: `src/app/app.module.ts` had `BrowserModule.withServerTransition({ appId: 'serverApp' })` in its `imports` array, and that method no longer exists on `BrowserModule` in Angular 19. Because that one array entry fails static analysis, the *entire* `imports` array becomes unresolvable to the compiler, so every component that uses `routerLink`/`router-outlet`/`ngClass` loses access to those directives. The "flakiness" was never real — every run always had the same full list of affected components, but I was only ever looking at the tail end of a long truncated error list, so different runs' tails looked different. Fix: plain `BrowserModule`. Separately, `@types/node` (still `^12.20.12`) was too old for `@angular/ssr/node`'s own `node:http`/`node:http2` type references — bumped to `^20.19.0`.
+
+**Before finding that**, acting on the (wrong) flaky-builder theory, I ran the "migrate to new build system" optional migration (`ng update @angular/cli --name use-application-builder`, needed `NG_DISABLE_VERSION_CHECK=1` + pinning to the local v19 CLI binary to avoid it fetching a Node-22-requiring v22 CLI). That migration itself completed and, combined with the two real fixes above, produced a build with **zero compile errors**. But actually running that build consistently crashed the Node process with `SIGABRT` (exit 134) under the esbuild pipeline's full-app load — reproduced 3+ times, including with `NG_BUILD_MAX_WORKERS=1`/`UV_THREADPOOL_SIZE=1`. Isolated a single trivial `esbuild.build()` call to confirm esbuild itself isn't broken (it succeeded); a plain `find node_modules -path ...` also hung once during this investigation. This points at the network-mounted volume (see the note near the top of this file) failing under esbuild's concurrent I/O pattern specifically, not a code problem.
+
+Once the real bug was found, the need for the application-builder migration evaporated, so **it was reverted**: restored `server.ts` (repo root), `angular.json`, `tsconfig.app.json`, `tsconfig.server.json`, and `package.json`'s scripts section from `HEAD` (git show), keeping only the real fixes (`BrowserModule`, `@types/node`) plus the already-committed v19 package versions. One more small break surfaced by `esModuleInterop: true` (added by the aborted migration to the base `tsconfig.json`, kept since it's harmless): `server.ts`'s `import * as express`/`import * as bodyParser` had to become default imports. Confirmed clean after that — browser build, SSR build, 59/59 tests, `dev:ssr` smoke test (including a direct check that the Turnstile widget still renders correctly on the contact form).
+
+**Verdict for later:** the application-builder migration is likely still worth doing eventually (it's the officially recommended direction, and the legacy webpack builder won't be supported forever), but not blindly on this machine/volume — try it again once the network-mount flakiness is understood or the project is on local disk. Not required to reach v21.
+
+Committed as `2c4fcd0` "Upgrade Angular to v19" (21 files — `controllers/home.ts`, `package.json`, `package-lock.json`, `server.ts`, `tsconfig.json`, `src/app/app.module.ts`, plus the 15 components that got `standalone: false` added).
+
+### Next: v20, v21
+Same pattern each time — and per the v19 detour above, **don't reach for the application-builder migration reflexively if a build looks flaky; read the full untruncated error output first**:
+1. `npx ng update @angular/core@N @angular/cli@N --allow-dirty`.
+2. Fix any resulting compile/test breakage by hand — capture full build output to a file (not just a truncated `tail`) before concluding something is a builder bug rather than a real, findable error.
+3. Verify: `ng build`, `ng run portfolio3:server`, `ng test --watch=false --browsers=ChromeHeadless`, and a `dev:ssr` smoke test (curl `/`, `/data/projects`, and `/Contact/form` for the Turnstile widget markup — all real 200s with real content).
 4. `git diff --stat | awk '$0 !~ /\|\s+0$/'` to find just the real changes, stage only those, commit as "Upgrade Angular to vN".
 5. Update this file.
-
-### Still to do after v17
-- v18: `ng update @angular/core@18 @angular/cli@18 --allow-dirty` (watch for further peer-dep conflicts the same way as v16/v17).
-- v19, v20, v21: same pattern.
-- Final pass once at v21: full build + SSR build + tests + `dev:ssr` smoke test, then a summary for the user covering what moved and anything worth a future todo item (e.g. standalone/control-flow migration, was explicitly left out of scope).
+6. Final pass once at v21: full build + SSR build + tests + `dev:ssr` smoke test, then a summary for the user covering what moved and anything worth a future todo item (e.g. standalone/control-flow migration or revisiting the application builder, both explicitly left out of scope here).
 
 ### Standing rules for the rest of this task
 - Always `git diff --stat | awk '$0 !~ /\|\s+0$/'` before staging, to separate real changes from the pre-existing mode-bit noise (159 files, `.gitignore`'s `TODO.md` line) that isn't part of this task — never `git add -A`.
