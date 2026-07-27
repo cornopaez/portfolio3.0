@@ -115,7 +115,6 @@ Full build + SSR build (both default and production configs) + 59/59 tests + liv
 - The esbuild-based `application` builder migration (officially recommended direction, legacy webpack builder won't be supported forever) — deliberately avoided all session due to a reproducible SIGABRT crash under full-build load on this network volume specifically (see v19 section). Worth retrying once the volume/mount issue is better understood, or if the project moves to local disk.
 - Standalone-component migration and using `@if`/`@for` (and signals generally) more broadly than the mandatory v21 minimum — optional, not attempted.
 - `todo.md` items 2 (Express 5, MongoDB driver v7, Helmet, TSLint→ESLint) and 5 (remaining recaptcha-era bug fixes not entangled with the Turnstile swap) — explicitly out of scope for this pass, still open.
-- The NAS/SMB network-volume stall issue itself — diagnosed but not root-caused this session (see the environment note near the top of this file); currently mitigated by rebooting when it recurs.
 
 ### Standing rules for the rest of this task
 - Always `git diff --stat | awk '$0 !~ /\|\s+0$/'` before staging, to separate real changes from the pre-existing mode-bit noise (159 files, `.gitignore`'s `TODO.md` line) that isn't part of this task — never `git add -A`.
