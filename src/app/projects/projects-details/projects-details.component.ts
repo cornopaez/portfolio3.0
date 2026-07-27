@@ -4,9 +4,10 @@ import { Title } from '@angular/platform-browser'
 import { ProjectDetails } from './project-details'
 
 @Component({
-  selector: 'app-projects-details',
-  templateUrl: './projects-details.component.html',
-  styleUrls: ['./projects-details.component.sass']
+    selector: 'app-projects-details',
+    templateUrl: './projects-details.component.html',
+    styleUrls: ['./projects-details.component.sass'],
+    standalone: false
 })
 export class ProjectsDetailsComponent implements OnInit {
 

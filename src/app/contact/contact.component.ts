@@ -2,9 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { Title }     from '@angular/platform-browser';
 
 @Component({
-  selector: 'app-contact',
-  templateUrl: './contact.component.html',
-  styleUrls: ['./contact.component.sass']
+    selector: 'app-contact',
+    templateUrl: './contact.component.html',
+    styleUrls: ['./contact.component.sass'],
+    standalone: false
 })
 export class ContactComponent implements OnInit {
 

@@ -4,9 +4,10 @@ import { Title } from '@angular/platform-browser'
 import { ProjectCard } from '../project-card'
 
 @Component({
-  selector: 'app-projects-home',
-  templateUrl: './projects-home.component.html',
-  styleUrls: ['./projects-home.component.sass']
+    selector: 'app-projects-home',
+    templateUrl: './projects-home.component.html',
+    styleUrls: ['./projects-home.component.sass'],
+    standalone: false
 })
 export class ProjectsHomeComponent implements OnInit {
 

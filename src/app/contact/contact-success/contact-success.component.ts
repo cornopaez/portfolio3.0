@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-contact-success',
-  templateUrl: './contact-success.component.html',
-  styleUrls: ['./contact-success.component.sass']
+    selector: 'app-contact-success',
+    templateUrl: './contact-success.component.html',
+    styleUrls: ['./contact-success.component.sass'],
+    standalone: false
 })
 export class ContactSuccessComponent implements OnInit {
 

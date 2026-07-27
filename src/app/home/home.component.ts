@@ -3,9 +3,10 @@ import { Title }     from '@angular/platform-browser'
 import { Router } from '@angular/router'
 
 @Component({
-  selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.sass']
+    selector: 'app-home',
+    templateUrl: './home.component.html',
+    styleUrls: ['./home.component.sass'],
+    standalone: false
 })
 export class HomeComponent implements OnInit {
 

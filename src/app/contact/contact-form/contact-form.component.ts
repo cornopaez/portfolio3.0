@@ -9,9 +9,10 @@ import { Message } from './message'
 import { environment } from '../../../environments/environment'
 
 @Component({
-  selector: 'app-contact-form',
-  templateUrl: './contact-form.component.html',
-  styleUrls: ['./contact-form.component.sass']
+    selector: 'app-contact-form',
+    templateUrl: './contact-form.component.html',
+    styleUrls: ['./contact-form.component.sass'],
+    standalone: false
 })
 export class ContactFormComponent implements OnInit {
 

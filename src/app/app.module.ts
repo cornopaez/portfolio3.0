@@ -49,7 +49,7 @@ import { UbuntuHdAudioComponent } from './musings/ubuntu-hd-audio/ubuntu-hd-audi
         MusingsHomeComponent,
         UbuntuHdAudioComponent
     ],
-    bootstrap: [AppComponent], imports: [BrowserModule.withServerTransition({ appId: 'serverApp' }),
+    bootstrap: [AppComponent], imports: [BrowserModule,
         BrowserAnimationsModule,
         AppRoutingModule,
         ReactiveFormsModule,

@@ -5,9 +5,10 @@ import { Router } from '@angular/router';
 import { BACKGROUND, LANGUAGES, EXPERIENCE, EDUCATION } from './about'
 
 @Component({
-  selector: 'app-about',
-  templateUrl: './about.component.html',
-  styleUrls: ['./about.component.sass']
+    selector: 'app-about',
+    templateUrl: './about.component.html',
+    styleUrls: ['./about.component.sass'],
+    standalone: false
 })
 export class AboutComponent implements OnInit {
 

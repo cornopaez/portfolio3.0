@@ -1,10 +1,10 @@
 import 'zone.js/node';
 
-import * as express from 'express';
+import express from 'express';
 import { join } from 'path';
 import * as connection from 'middlewares/mongo-connection';
 import * as data from 'controllers/data';
-import * as bodyParser from 'body-parser';
+import bodyParser from 'body-parser';
 import helmet from 'helmet';
 import * as home from 'controllers/home';
 import bootstrap from './src/main.server';

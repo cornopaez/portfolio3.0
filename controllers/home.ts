@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { APP_BASE_HREF } from '@angular/common';
-import { CommonEngine } from '@angular/ssr';
+import { CommonEngine } from '@angular/ssr/node';
 import { existsSync } from 'fs';
 import { join } from 'path';
 import bootstrap from '../src/main.server';
