@@ -48,7 +48,7 @@ describe('HomeComponent', () => {
   })
 
   it('should have the correct description links', () =>{
-    for (var i = 0; i < currentContent.content.description_links.length; ++i) {
+    for (let i = 0; i < currentContent.content.description_links.length; ++i) {
       expect(compiled.querySelector("a[href='/" + currentContent.content.description_links[i] + "']").textContent).toEqual(currentContent.content.description_links[i])
     }
   })

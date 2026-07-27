@@ -29,7 +29,7 @@ export class DatabaseService {
                                         and returns an empty array.
   */
   getProjectsCards() : Observable<ProjectCard[]> {
-    return this.http.get<Array<ProjectCard>>(this.getProjectsCardsUrl)
+    return this.http.get<ProjectCard[]>(this.getProjectsCardsUrl)
     .pipe(
       retry(3),
       catchError(this.handleError('getProjectsCards',[]))
@@ -46,7 +46,7 @@ export class DatabaseService {
 
   */
   getProjectDetails(name: string) : Observable<any> {
-    let url = this.getProjectDetailsUrl + name
+    const url = this.getProjectDetailsUrl + name
     return this.http.get(url)
       .pipe(
         retry(3),
@@ -63,7 +63,7 @@ export class DatabaseService {
                                   returns a null observable.
   */
   submitContactForm(contactInformation) : Observable<ContactSuccess> {
-    let url = this.submitContactFormUrl
+    const url = this.submitContactFormUrl
     return this.http.post<ContactSuccess>(url, contactInformation)
       .pipe(
         retry(3),

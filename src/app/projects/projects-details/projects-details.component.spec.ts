@@ -90,7 +90,7 @@ describe('ProjectsDetailsComponent', () => {
 
     it('should have icons in jumbotron footnotes',()=>{
       expect(compiled.querySelector(".jumbotron .footnotes h4").textContent).toEqual('Tech used')
-      for (var i = 0; i < project.content.icons.length; ++i) {
+      for (let i = 0; i < project.content.icons.length; ++i) {
          expect(compiled.querySelector(".jumbotron .footnotes ul li i[class='" + project.content.icons[i] + "']")).toBeTruthy()
       }
     })

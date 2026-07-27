@@ -26,7 +26,7 @@ export class ProjectDetailResolver  {
   */
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) : Observable<ProjectDetails> {
     // Get the project name from route
-    var projectName = route.paramMap.get('name')
+    const projectName = route.paramMap.get('name')
 
     return this.dbs.getProjectDetails(projectName).pipe(map(project => {
       if (project !== null) {
