@@ -33,7 +33,6 @@
     "ngx-turnstile": "^1.0.0",
     "rxjs": "~6.5.5",
     "saslprep": "^1.0.3",
-    "socket.io": "^2.4.1",
     "tslib": "^2.2.0",
     "zone.js": "~0.15.1"
   },
@@ -59,7 +58,6 @@
     "karma-jasmine": "~4.0.0",
     "karma-jasmine-html-reporter": "^1.6.0",
     "karma-spec-reporter": "0.0.32",
-    "loadtest": "^5.1.2",
     "lodash": "^4.17.21",
     "mocha": "^10.0.0",
     "protractor": "~7.0.0",
