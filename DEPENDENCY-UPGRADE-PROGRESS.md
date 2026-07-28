@@ -20,7 +20,7 @@ Full plan: phased approach, one commit per phase, covering `todo.md` item 2 ("Up
 - `npm install`: vulnerabilities dropped 47 → 42 (killed the `codelyzer` → vulnerable old `@angular/compiler` chain, one of the two "high severity" entries at the top of the original audit).
 - First real `ng lint` run: 107 findings across the codebase (expected — no lint had ever run against 6 Angular-major-versions worth of code). Ran `npx eslint --fix` for the mechanically-safe subset (11 auto-fixable — mostly `no-var`/`prefer-const`/`prefer-for-of`), dropping it to 96. Left the remaining 96 alone per plan scope (this task is about dependencies/vulnerabilities, not a lint cleanup pass) — they're architectural-preference findings, not bugs: `@angular-eslint/prefer-standalone` (all components still NgModule-based, matches the deliberate Angular-upgrade scope decision to skip standalone migration), `@angular-eslint/prefer-inject` (constructor injection still used throughout), `@angular-eslint/template/alt-text` (missing `alt` on a handful of `<img>` tags in the musings pages), assorted unused imports/vars. **Worth a future todo item**: 96 real lint findings now visible for the first time, listed above by category.
 - Verified: browser build ✓, SSR build ✓, 59/59 unit tests ✓, `npm run lint` now produces real output (previously a no-op).
-- Not yet committed — see below.
+- Committed as `534fbb2` "Replace tslint/codelyzer with ESLint".
 
 ## Phase 3: Migrate e2e from Protractor to Playwright — done
 - Removed `protractor`, `@types/jasminewd2`, `jasmine-spec-reporter`, `ts-node` from devDependencies (all were only used by the Protractor/e2e setup — confirmed `ts-node` had no other callers before removing).
