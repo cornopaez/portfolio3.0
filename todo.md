@@ -55,15 +55,15 @@ The `github` remote (`git@github.com:cornopaez/portfolio3.0.git`) is 34 commits 
 
 User pushed manually from their own terminal to work around this (2026-07-28) — scope/branches of that push not confirmed from this session, since `local-origin` is still unreachable here to verify via `git fetch`/`ls-remote`. **Next time this comes up**: (a) re-check whether `local-origin` is reachable from this session before assuming it still isn't, (b) if still unreachable, further connectivity diagnosis needs to happen from the user's side or by comparing routing/DNS config between the two environments — deferred, per explicit instruction, until the user wants to pick it up again.
 
-## 8. Site doesn't work well in Safari (works fine in Firefox)
+## 8. Site doesn't work well in Safari (works fine in Firefox) — FIXED (2026-07-28)
 
-Reported by user (2026-07-28) after reviewing the dark mode work locally, via `feature/dark-mode`. Not yet investigated/reproduced this session (no Safari available in this environment) — logging the reported symptoms for a future pass:
-- Images not loading.
-- Some icons not loading.
-- The new dark mode toggle doesn't respond.
-- `/Projects` and `/Musings` don't load at all.
+Reported by user (2026-07-28) after reviewing the dark mode work locally, via `feature/dark-mode`. Symptoms: images not loading, some icons not loading, the dark-mode toggle unresponsive, `/Projects` and `/Musings` not loading at all.
 
-**One concrete lead worth checking first**: `ng build`/`ng lint` runs earlier this session logged an Angular CLI warning that `.browserslistrc`'s generic queries (`> 0.5%`, `last 2 versions`, `Firefox ESR`, `not dead`, `not IE 9-11`) currently resolve to several browser versions — including `safari 26.5` and `ios_saf 26.5` — that fall outside this Angular version's own officially supported browser matrix, so they're excluded from build targeting. Since `/Projects` and `/Musings` failing outright (not just styling) suggests a JS-level break rather than a pure CSS issue, this is a plausible root cause: the compiled bundle may be relying on syntax/APIs that real current Safari doesn't actually support the way Angular's build assumed. Worth reproducing in real Safari (or Safari Technology Preview / an iOS simulator) with devtools open to check for console errors before digging further.
+The `.browserslistrc`/Safari-26-version lead logged here originally turned out to be a dead end — `caniuse-lite` was up to date and Safari 26.x is a real, current version (Apple aligned Safari's numbering to the OS year), not a phantom/unsupported one.
+
+**Actual root cause, confirmed via desktop Safari's Web Inspector against the real `dev:ssr` server**: not a Safari compatibility bug at all. `helmet()` in `server.ts` was sending `Strict-Transport-Security` (HSTS, `max-age=31536000`) and a CSP with `upgrade-insecure-requests` on every response, including from the plain-HTTP local dev/SSR servers. Once Safari picked up either signal (from an earlier session where a `--configuration production`-built server was tested locally, see item 2/the port-confusion note in memory), it cached "always use HTTPS for `localhost`" and began silently rewriting every subsequent `http://localhost:*` request — any port — to `https://`, which then failed with a TLS error since nothing was listening with TLS. That explains every symptom at once: `main.js`/`runtime.js`/`polyfills.js` failing to load meant Angular's client bundle never booted, which killed client-side routing (`/Projects`, `/Musings`) and the JS-driven theme toggle; `theme-init.js`, images, and `devicon.min.css` failed the same way. Firefox was unaffected because it never had that HSTS state cached for `localhost` in the first place — nothing Safari-specific about the underlying bug.
+
+**Fix**, on `fix/local-https-headers` (off `main`, 1 commit, not yet merged): extracted the Helmet CSP/HSTS config into `middlewares/security-headers.js#getHelmetOptions(isProduction)`, gating both HSTS and `upgrade-insecure-requests` behind `process.env.NODE_ENV === 'production'` — safe to keep in production since Heroku actually terminates TLS there. Added `mocha-tests/security-headers.test.js` (Mocha, not Karma — this is Express/Helmet config, no Angular code involved) asserting both headers are present in production and absent otherwise. Verified against the real `dev:ssr` server via `curl` headers before/after. All existing Mocha tests still pass.
 
 ## 9. Port content changes from a second, divergent local checkout
 
