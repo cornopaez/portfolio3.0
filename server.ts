@@ -23,8 +23,41 @@ export function app(): express.Express {
       process.exit(1);
     });
 
-  // Use Helmet for security
-  server.use(helmet());
+  // Use Helmet for security. Helmet 4+ enables a restrictive default CSP
+  // (v3 enabled none), so the external resources this site actually loads
+  // -- Bootstrap/jQuery/Popper CDNs, a Font Awesome Kit script, and
+  // Cloudflare Turnstile -- need to be allow-listed explicitly or they'd
+  // silently stop loading.
+  server.use(helmet({
+    contentSecurityPolicy: {
+      directives: {
+        scriptSrc: [
+          "'self'",
+          'https://code.jquery.com',
+          'https://cdnjs.cloudflare.com',
+          'https://stackpath.bootstrapcdn.com',
+          'https://kit.fontawesome.com',
+          'https://challenges.cloudflare.com',
+        ],
+        styleSrc: [
+          "'self'",
+          "'unsafe-inline'",
+          'https://stackpath.bootstrapcdn.com',
+          'https://*.fontawesome.com',
+          'https://fonts.googleapis.com',
+        ],
+        // Bootstrap/jQuery/a third-party widget attach at least one inline
+        // event-handler attribute (e.g. onclick=) at runtime -- this is a
+        // separate, narrower allowance than scriptSrc itself, which stays
+        // locked down to the specific origins above.
+        scriptSrcAttr: ["'unsafe-inline'"],
+        fontSrc: ["'self'", 'data:', 'https://*.fontawesome.com', 'https://fonts.gstatic.com'],
+        imgSrc: ["'self'", 'data:', 'https://*.fontawesome.com'],
+        connectSrc: ["'self'", 'https://challenges.cloudflare.com', 'https://*.fontawesome.com'],
+        frameSrc: ["'self'", 'https://challenges.cloudflare.com'],
+      },
+    },
+  }));
 
   server.use(express.json()); // support json encoded bodies
   server.use(express.urlencoded({ extended: true })); // support encoded bodies

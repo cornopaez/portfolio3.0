@@ -28,7 +28,7 @@
     "@angular/ssr": "^21.2.19",
     "dotenv": "^8.6.0",
     "express": "^5.2.1",
-    "helmet": "^3.23.3",
+    "helmet": "^8.3.0",
     "mongodb": "^7.5.0",
     "ngx-turnstile": "^1.0.0",
     "rxjs": "~6.5.5",
