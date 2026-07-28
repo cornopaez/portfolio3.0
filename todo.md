@@ -51,4 +51,14 @@ The `github` remote (`git@github.com:cornopaez/portfolio3.0.git`) is 34 commits 
 - **Gitea-side**: initial push failed with "Push to create is not enabled for users" — the target repo didn't exist yet on the Gitea instance and `ENABLE_PUSH_CREATE_USER` was off. User has full admin access to the instance, so this is fixable on their end (create the repo manually, or flip that `app.ini` setting).
 - **Network-layer, specific to this Claude Code session's environment**: every attempt to reach `rpi5.cornopaez.net:222` from this session's Bash tool fails with "No route to host" / "Undefined error: 0" — confirmed via `ssh -vT`, `git ls-remote`/`git fetch`, `nc -zv`, and `ping`, and confirmed *not* a sandboxing artifact (identical failure with `dangerouslyDisableSandbox: true`). The user's own terminal can reach the same host successfully. Cause not yet root-caused — could be this environment's network path, DNS, or something Pi/router-side that only affects non-interactive/sandboxed connections.
 
+## 8. Site doesn't work well in Safari (works fine in Firefox)
+
+Reported by user (2026-07-28) after reviewing the dark mode work locally, via `feature/dark-mode`. Not yet investigated/reproduced this session (no Safari available in this environment) — logging the reported symptoms for a future pass:
+- Images not loading.
+- Some icons not loading.
+- The new dark mode toggle doesn't respond.
+- `/Projects` and `/Musings` don't load at all.
+
+**One concrete lead worth checking first**: `ng build`/`ng lint` runs earlier this session logged an Angular CLI warning that `.browserslistrc`'s generic queries (`> 0.5%`, `last 2 versions`, `Firefox ESR`, `not dead`, `not IE 9-11`) currently resolve to several browser versions — including `safari 26.5` and `ios_saf 26.5` — that fall outside this Angular version's own officially supported browser matrix, so they're excluded from build targeting. Since `/Projects` and `/Musings` failing outright (not just styling) suggests a JS-level break rather than a pure CSS issue, this is a plausible root cause: the compiled bundle may be relying on syntax/APIs that real current Safari doesn't actually support the way Angular's build assumed. Worth reproducing in real Safari (or Safari Technology Preview / an iOS simulator) with devtools open to check for console errors before digging further.
+
 User pushed manually from their own terminal to work around this (2026-07-28) — scope/branches of that push not confirmed from this session, since `local-origin` is still unreachable here to verify via `git fetch`/`ls-remote`. **Next time this comes up**: (a) re-check whether `local-origin` is reachable from this session before assuming it still isn't, (b) if still unreachable, further connectivity diagnosis needs to happen from the user's side or by comparing routing/DNS config between the two environments — deferred, per explicit instruction, until the user wants to pick it up again.
