@@ -85,7 +85,7 @@ export class DatabaseService {
 
       // TODO: better job of transforming error for user consumption
       console.error(`Could not perform the action requested. Specifically, ${operation}() failed: ${error.message}.`);
-      console.error('The baseUrl for this env is ${environment.baseUrl}')
+      console.error(`The baseUrl for this env is ${environment.baseUrl}`)
 
       // Let the app keep running by returning an empty result.
       return of(result as T);
