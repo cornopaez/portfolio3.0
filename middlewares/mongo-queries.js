@@ -35,15 +35,16 @@ function getProjectsCards() {
 		var sort = {'lastUpdate':-1}
 		var cursor = db.collection('projects').find().sort(sort).project(projection)
 
-		cursor.toArray((err, docs) => {
-			// console.log(docs)
-			if (docs === null || docs === undefined) {
-				// res.redirect("/error");
-				reject('Meine Damen und Herren, dieser Inhalt ist verboten')
-			} else {
-				resolve(docs)
-			}
-		});
+		cursor.toArray()
+			.then(docs => {
+				if (docs === null || docs === undefined) {
+					// res.redirect("/error");
+					reject('Meine Damen und Herren, dieser Inhalt ist verboten')
+				} else {
+					resolve(docs)
+				}
+			})
+			.catch(error => reject(error))
 	})
 }
 
@@ -58,12 +59,8 @@ function postContactRequest(info) {
 			"date": Date()
 		}
 
-		var cursor = db.collection('requests').insertOne(query, (error, response) => {
-			if (error) {
-				reject(error)
-			} else {
-				resolve(response)
-			}
-		})
+		db.collection('requests').insertOne(query)
+			.then(response => resolve(response))
+			.catch(error => reject(error))
 	})
 }

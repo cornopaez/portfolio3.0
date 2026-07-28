@@ -1,6 +1,4 @@
-const express = require("express");
 const MongoClient = require('mongodb').MongoClient
-const assert = require('assert');
 var _db = null;
 const dotenv = require('dotenv').config();
 
@@ -12,27 +10,19 @@ module.exports =  {
 const url = process.env.MONGOLAB_COPPER_URI ? process.env.MONGOLAB_COPPER_URI : process.env.MONGODB_LOCAL
 
 // Creates a connection to MongoDB and returns the db object.
-function connect(log = true) {
-
-	options = {
-		useUnifiedTopology: true
-	};
-
-	return new Promise((resolve, reject) => {
-		MongoClient.connect(url, options, (err, db) => {
-			if (err) {
-				console.log(err)
-				reject(false)
-			}
-
-			if (log) {
-				console.log("Connected successfully to database")
-			}
-			var dbName = db.s.options.dbName
-			_db = db.db(dbName)
-			resolve(true)
-		});
-	});
+async function connect(log = true) {
+	try {
+		const client = await MongoClient.connect(url);
+		if (log) {
+			console.log("Connected successfully to database")
+		}
+		// No args -> the database named in the connection string's path.
+		_db = client.db()
+		return true;
+	} catch (err) {
+		console.log(err)
+		return Promise.reject(false)
+	}
 };
 
 // Gets the db object created by MongoClient.connect()

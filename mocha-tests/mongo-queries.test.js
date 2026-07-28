@@ -3,7 +3,7 @@ const assert = require('assert').strict
 const connection = require('../middlewares/mongo-connection.js')
 const expect = require('expect.js')
 const _ = require('lodash')
-const { ObjectId } = require('mongoDb')
+const { ObjectId } = require('mongodb')
 const rs = require('randomstring')
 
 describe('MongoDB queries',(done)=>{
@@ -58,7 +58,7 @@ describe('MongoDB queries',(done)=>{
     })
 
     // Retrieve the inserted message
-    const findResponse = await db.collection('requests').findOne({'_id':ObjectId(insertResponse.insertedId)})
+    const findResponse = await db.collection('requests').findOne({'_id': new ObjectId(insertResponse.insertedId)})
 
     // Conpare the values
     expect(findResponse.name).to.equal(info.name)
