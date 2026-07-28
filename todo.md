@@ -21,6 +21,8 @@ No prior dark-mode work was ever found (checked all local branches and the curre
 - Verified end-to-end via a Playwright driver script against the real SSR+Express server (real CSP headers, real `/data` API): light→dark toggle, persistence across reload (confirmed the attribute is already correct at `commit`, before Angular loads) and navigation, and the system-preference fallback when no explicit choice is stored — zero console errors.
 - Incidental SASS cleanup done alongside (see item 5 for the pattern): removed `_base.sass`'s dead/redundant per-component `@import`s (home/about/app.component styles were already being compiled independently via each component's own `styleUrls` — Angular's own pipeline, not this global one), and deduplicated an identical ~50-line block that `rpi-twonky.component.sass`/`ubuntu-hd-audio.component.sass` had copy-pasted verbatim into a shared `musings-jumbotron` mixin.
 
+Not yet merged to `main` — holding on the Safari investigation (item 8) first, found while reviewing this work locally. 4 commits on `feature/dark-mode`.
+
 ## 4. New pages from Notes entries
 
 Placeholder — no source data or access yet. Revisit once the Notes export/integration is available.
@@ -51,6 +53,8 @@ The `github` remote (`git@github.com:cornopaez/portfolio3.0.git`) is 34 commits 
 - **Gitea-side**: initial push failed with "Push to create is not enabled for users" — the target repo didn't exist yet on the Gitea instance and `ENABLE_PUSH_CREATE_USER` was off. User has full admin access to the instance, so this is fixable on their end (create the repo manually, or flip that `app.ini` setting).
 - **Network-layer, specific to this Claude Code session's environment**: every attempt to reach `rpi5.cornopaez.net:222` from this session's Bash tool fails with "No route to host" / "Undefined error: 0" — confirmed via `ssh -vT`, `git ls-remote`/`git fetch`, `nc -zv`, and `ping`, and confirmed *not* a sandboxing artifact (identical failure with `dangerouslyDisableSandbox: true`). The user's own terminal can reach the same host successfully. Cause not yet root-caused — could be this environment's network path, DNS, or something Pi/router-side that only affects non-interactive/sandboxed connections.
 
+User pushed manually from their own terminal to work around this (2026-07-28) — scope/branches of that push not confirmed from this session, since `local-origin` is still unreachable here to verify via `git fetch`/`ls-remote`. **Next time this comes up**: (a) re-check whether `local-origin` is reachable from this session before assuming it still isn't, (b) if still unreachable, further connectivity diagnosis needs to happen from the user's side or by comparing routing/DNS config between the two environments — deferred, per explicit instruction, until the user wants to pick it up again.
+
 ## 8. Site doesn't work well in Safari (works fine in Firefox)
 
 Reported by user (2026-07-28) after reviewing the dark mode work locally, via `feature/dark-mode`. Not yet investigated/reproduced this session (no Safari available in this environment) — logging the reported symptoms for a future pass:
@@ -70,5 +74,3 @@ User has another clone of this repo at `/Users/mauriciopaez/projects/websites/po
 - Also has an **uncommitted** local edit to its own `TODO.md` (different file from this repo's lowercase `todo.md`) adding a "Test Coverage" section listing specs to flesh out — overlaps somewhat with the test-coverage work already done here (item 5's Mocha/Karma additions), worth comparing before assuming it's still needed.
 
 Not yet diffed or scoped in detail — just confirmed the checkout exists and skimmed its `git log`/pending diff. Next step: a proper content diff (probably page-by-page for the two new Musings sections, since the underlying Angular scaffolding has moved on too much for a mechanical merge) before deciding how to port it into the current Angular-21 codebase.
-
-User pushed manually from their own terminal to work around this (2026-07-28) — scope/branches of that push not confirmed from this session, since `local-origin` is still unreachable here to verify via `git fetch`/`ls-remote`. **Next time this comes up**: (a) re-check whether `local-origin` is reachable from this session before assuming it still isn't, (b) if still unreachable, further connectivity diagnosis needs to happen from the user's side or by comparing routing/DNS config between the two environments — deferred, per explicit instruction, until the user wants to pick it up again.
