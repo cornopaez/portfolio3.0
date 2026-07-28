@@ -1,8 +1,6 @@
 const queryDb = require('../middlewares/mongo-queries.js')
-const assert = require('assert').strict
 const connection = require('../middlewares/mongo-connection.js')
 const expect = require('expect.js')
-const _ = require('lodash')
 const { ObjectId } = require('mongodb')
 const rs = require('randomstring')
 
@@ -57,14 +55,19 @@ describe('MongoDB queries',(done)=>{
       done()
     })
 
-    // Retrieve the inserted message
-    const findResponse = await db.collection('requests').findOne({'_id': new ObjectId(insertResponse.insertedId)})
+    try {
+      // Retrieve the inserted message
+      const findResponse = await db.collection('requests').findOne({'_id': new ObjectId(insertResponse.insertedId)})
 
-    // Conpare the values
-    expect(findResponse.name).to.equal(info.name)
-    expect(findResponse.email).to.equal(info.email)
-    expect(findResponse.text).to.equal(info.message)
-    expect(findResponse.urgent).to.equal(info.urgent)
+      // Conpare the values
+      expect(findResponse.name).to.equal(info.name)
+      expect(findResponse.email).to.equal(info.email)
+      expect(findResponse.text).to.equal(info.message)
+      expect(findResponse.urgent).to.equal(info.urgent)
+    } finally {
+      // Clean up so this test doesn't leave dummy documents in the real collection
+      await db.collection('requests').deleteOne({'_id': new ObjectId(insertResponse.insertedId)})
+    }
 
   })
 })
