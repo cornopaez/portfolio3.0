@@ -4,7 +4,6 @@ import express from 'express';
 import { join } from 'path';
 import * as connection from 'middlewares/mongo-connection';
 import * as data from 'controllers/data';
-import bodyParser from 'body-parser';
 import helmet from 'helmet';
 import * as home from 'controllers/home';
 import bootstrap from './src/main.server';
@@ -27,8 +26,8 @@ export function app(): express.Express {
   // Use Helmet for security
   server.use(helmet());
 
-  server.use(bodyParser.json()); // support json encoded bodies
-  server.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
+  server.use(express.json()); // support json encoded bodies
+  server.use(express.urlencoded({ extended: true })); // support encoded bodies
 
   server.set('view engine', 'html');
   server.set('views', distFolder);
@@ -36,13 +35,18 @@ export function app(): express.Express {
   // Routes for getting and posting data in the site
   server.use('/data', data);
 
-  // Serve static files from /browser
-  server.get('*.*', express.static(distFolder, {
-    maxAge: '1y'
+  // Serve static files from /browser. index: false so that '/' (and other
+  // extensionless routes) still fall through to the Angular SSR handler
+  // below instead of being served the static, unrendered index.html shell.
+  server.use(express.static(distFolder, {
+    maxAge: '1y',
+    index: false
   }));
 
-  // All regular routes use the Angular engine
-  server.get('*', home.home);
+  // All regular routes use the Angular engine. The braces make the
+  // wildcard optional so this also matches the bare '/' route, not just
+  // '/foo' and deeper paths.
+  server.get('/{*splat}', home.home);
 
   return server;
 }
