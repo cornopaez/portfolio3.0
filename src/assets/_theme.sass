@@ -1,0 +1,55 @@
+// Theme tokens (CSS custom properties), consumed via var(--token-name)
+// anywhere in the app -- no @import needed per-file, custom properties
+// cascade from :root through the whole document regardless of Angular's
+// (emulated, attribute-selector-based) view encapsulation.
+//
+// Explicit theme choice: the ThemeService sets data-theme="dark"/"light"
+// on <html> and persists it to localStorage; theme-init.js re-applies it
+// on the next load before first paint. Until the user picks one, the
+// prefers-color-scheme media query below drives the default.
+:root
+	--color-bg: #ffffff
+	--color-surface: #ffffff
+	--color-text: #212121
+	--color-text-muted: #6c757d
+	--color-link: #007bff
+	--color-border: #000000
+
+@media (prefers-color-scheme: dark)
+	:root:not([data-theme="light"])
+		--color-bg: #121212
+		--color-surface: #1e1e1e
+		--color-text: #e8e8e8
+		--color-text-muted: #a0a0a0
+		--color-link: #6cb2ff
+		--color-border: #e8e8e8
+
+:root[data-theme="dark"]
+	--color-bg: #121212
+	--color-surface: #1e1e1e
+	--color-text: #e8e8e8
+	--color-text-muted: #a0a0a0
+	--color-link: #6cb2ff
+	--color-border: #e8e8e8
+
+// Bootstrap 4 (loaded from a CDN in index.html, not themeable on its own)
+// assumes a light page: .card, .text-muted and .form-control all hardcode
+// a light background/dark text. Re-pointing them at the same tokens above
+// means they pick up the current theme automatically instead of needing a
+// separate dark-specific override block -- in light mode these resolve to
+// the same colors Bootstrap already used, so there's no visible change.
+.card
+	background-color: var(--color-surface)
+	color: var(--color-text)
+
+.text-muted
+	color: var(--color-text-muted) !important
+
+.form-control
+	background-color: var(--color-surface)
+	color: var(--color-text)
+	border-color: var(--color-border)
+
+	&:focus
+		background-color: var(--color-surface)
+		color: var(--color-text)

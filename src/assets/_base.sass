@@ -1,12 +1,21 @@
 html
 	font-size: 16px
-	background: white
+	background: var(--color-bg)
+
+// Safety net for plain <a> tags (e.g. inside innerHTML-bound content in
+// about.ts) that aren't covered by a Bootstrap .btn/.nav-link class and
+// would otherwise fall back to the browser's default link-blue, which
+// has poor contrast against a dark background.
+a
+	color: var(--color-link)
 
 body
-	
+
 	font-family: 'Open Sans'
 	max-width: 1552px
 	margin: 0 auto
+	background: var(--color-bg)
+	color: var(--color-text)
 
 	@media screen and (min-width: 768px)
 		height: 100vh
@@ -19,15 +28,5 @@ body
 	// Navbar specific import
 	@import './nav'
 
-	// View specific imports
-	@import '../app/home/home.component'
-	// @import './app/projects/projects.component'
-	@import '../app/about/about.component'
-	// @import './app/contact/contact.component'
-	// @import './app/projects/project_details/project-details.component'
-
 // Style for the array-look for Pills
 @import './array'
-
-// Style for Footer
-@import '../app/app.component'

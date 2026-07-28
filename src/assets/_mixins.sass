@@ -43,3 +43,55 @@
 
 	@media screen and (min-width: 640px)
 		background-image: url($big)
+
+// Shared by the musings sub-pages (rpi-twonky, ubuntu-hd-audio), which were
+// otherwise carrying an identical ~50-line block save for the banner image.
+@mixin musings-jumbotron($small, $big)
+	.btn-link
+		padding: 0.5em 0.75em 1.5em 2em
+
+	.code-green
+		color: #2AB536
+
+	.code-red
+		color: #bf0d40
+
+	.code-burnt-yellow
+		color: #A8A333
+
+	.jumbotron
+		position: relative
+		padding: 0
+		height: 25em
+		filter: grayscale(30%)
+
+		@include dynamic-banner-background($small, $big)
+
+		background:
+			size: cover
+			position: center
+			repeat: no-repeat
+
+		.footnotes
+			position: absolute
+			bottom: 0
+			right: 0
+			padding: 0 2em 2em 2em
+			color: white
+
+			h4
+				text-align: right
+
+			ul
+				padding: 0
+				margin: 0
+				display: flex
+				flex-direction: row-reverse
+				list-style: none
+
+				li
+					padding: 0 0.4em
+					@include icon-size(2.5em)
+
+					img
+						height: 3em
