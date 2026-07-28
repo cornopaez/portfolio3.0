@@ -6,6 +6,7 @@
   @for (project of currentCards; track project) {
     <div
       class="project {{ project.card.card_class }}"
+      [style.backgroundImage]="project.card.background_image ? 'url(' + project.card.background_image + ')' : null"
       routerLink="/Projects/{{ project.project_name }}">
       <h3>{{ project.card.title }}</h3>
       @if (project.card.subtitle) {

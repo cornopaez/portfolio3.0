@@ -174,6 +174,18 @@ describe('ProjectsHomeComponent', () => {
       expect(compiled.querySelector("div.project." + card.card_class + " img[src='" + card.image + "']")).toBeFalsy()
     })
 
+    it('should have a background image', ()=>{
+      const card = cards.projects[5].card
+      const el = compiled.querySelector("div.project." + card.card_class)
+      expect(el.style.backgroundImage).toContain(card.background_image)
+    })
+
+    it('should NOT have a background image', ()=>{
+      const card = cards.projects[0].card
+      const el = compiled.querySelector("div.project." + card.card_class)
+      expect(el.style.backgroundImage).toBeFalsy()
+    })
+
     it('should have icons', ()=>{
       const card = cards.projects[3].card
       expect(compiled.querySelector("div.project." + card.card_class + " div.icons." + card.icons.class_name)).toBeTruthy()
