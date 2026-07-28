@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Theme, ThemeService } from './shared/theme.service';
 
 @Component({
     selector: 'app-root',
@@ -6,7 +7,7 @@ import { Component } from '@angular/core';
     styleUrls: ['./app.component.sass'],
     standalone: false
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   links = [
     {
       'name':'twitter',
@@ -21,4 +22,16 @@ export class AppComponent {
       'link':'https://www.codewars.com/users/cornopaez'
     }
   ]
+
+  currentTheme: Theme = 'light';
+
+  constructor(private themeService: ThemeService) {}
+
+  ngOnInit() {
+    this.currentTheme = this.themeService.getCurrentTheme();
+  }
+
+  toggleTheme() {
+    this.currentTheme = this.themeService.toggle();
+  }
 }

@@ -17,6 +17,7 @@ import { ProjectsResolver } from './projects/projects-resolver.component';
 import { ProjectDetailResolver } from './projects/projects-details/project-details-resolver.component';
 import { DialogService } from './shared/dialog.service';
 import { CanDeactivateGuard } from './shared/can-deactivate-guard.service';
+import { ThemeService } from './shared/theme.service';
 
 // Turnstile imports
 import { NgxTurnstileModule } from 'ngx-turnstile';
@@ -61,6 +62,7 @@ import { UbuntuHdAudioComponent } from './musings/ubuntu-hd-audio/ubuntu-hd-audi
         DatabaseService,
         DialogService,
         CanDeactivateGuard,
+        ThemeService,
         provideHttpClient(withFetch(), withInterceptorsFromDi())
     ] })
 export class AppModule { }
