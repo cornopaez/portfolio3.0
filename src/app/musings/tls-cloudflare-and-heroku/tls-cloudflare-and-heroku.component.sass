@@ -1,6 +1,6 @@
-@import '../../../assets/mixins'
+@use '../../../assets/mixins'
 
-@include musings-jumbotron('../assets/flyd-ZNOxwCEj5mw-unsplash-640w.jpeg', '../assets/flyd-ZNOxwCEj5mw-unsplash-1000w.jpeg')
+@include mixins.musings-jumbotron('../assets/flyd-ZNOxwCEj5mw-unsplash-640w.jpeg', '../assets/flyd-ZNOxwCEj5mw-unsplash-1000w.jpeg')
 
 .project-detail
 	.important-note-1
@@ -35,10 +35,10 @@
 
 
 	.cloudflare
-		@include screenshot-dynamic-width()
+		@include mixins.screenshot-dynamic-width()
 
 	.terminal
-		@include screenshot-dynamic-width()
+		@include mixins.screenshot-dynamic-width()
 
 	.heroku
-		@include screenshot-dynamic-width()
+		@include mixins.screenshot-dynamic-width()

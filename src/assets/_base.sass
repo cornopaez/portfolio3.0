@@ -1,3 +1,4 @@
+@use "sass:meta"
 html
 	font-size: 16px
 	background: var(--color-bg)
@@ -26,7 +27,7 @@ body
 	position: relative
 
 	// Navbar specific import
-	@import './nav'
+	@include meta.load-css('nav')
 
 // Style for the array-look for Pills
-@import './array'
+@include meta.load-css('array')
