@@ -3,7 +3,7 @@
 Working branch: `feature/angular-upgrade` (created off `feature/gen-maintenance`).
 Full plan: see the plan approved at the start of this effort — one commit per major version, `ng update` one hop at a time, non-Angular packages only bumped if they genuinely block a step.
 
-## Status: DONE. All six major-version hops (16→21) are committed on `feature/angular-upgrade`. Final verification pass (default config + Heroku's actual production build config) complete.
+## Status: DONE. All six major-version hops (16→21) are committed on `feature/angular-upgrade`. Final verification pass (default config + Heroku's actual production build config) complete. Merged to `main` (commit `a6ee0be`), pushed to `local-origin` and `heroku` — see `todo.md` item 1.
 
 ### Important environment note for future steps
 This project lives on a **network-mounted SMB share** (`//mauriciopaez@rpi5.cornopaez.net/Rome`, a Raspberry Pi 5 NAS, ZFS pool of 3x 8TB HDDs in a mirror, no SLOG device, served via Samba, both machines on 1GbE Ethernet), not local disk. This causes real, recurring flakiness: corrupted `node_modules` entries mid-install, `rm -rf` hitting "Resource busy", a hung `ssr-dev-server` file watcher, and — most seriously — the esbuild-based `application` builder consistently crashing with SIGABRT under full-build load (see the v19 section below). A trivial isolated `esbuild.build()` call works fine; only sustained/heavy concurrent file I/O seems to trigger it.

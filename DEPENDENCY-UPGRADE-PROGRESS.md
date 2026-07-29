@@ -1,5 +1,7 @@
 # Dependency Upgrade + Vulnerability Cleanup — Progress Log
 
+**Status: DONE, merged and pushed.** See `todo.md` item 2 for current status.
+
 Working branch: `feature/dependency-upgrade` (created off `main`, right after the Angular 15→21 upgrade merged).
 Full plan: phased approach, one commit per phase, covering `todo.md` item 2 ("Update all other npm packages") plus clearing everything `npm audit` reports.
 
@@ -82,7 +84,7 @@ Full plan: phased approach, one commit per phase, covering `todo.md` item 2 ("Up
   - Default config: browser build ✓, SSR build ✓, 59/59 unit tests ✓, 6/6 mocha integration tests ✓ (real Atlas cluster), `npm run lint` unchanged at 96 findings, Playwright e2e ✓.
   - **Production config** (`ng build --configuration production` + `ng run portfolio3:server:production`, the actual `heroku-postbuild` path): both build cleanly. Live-route smoke test on the compiled bundle: `/` and `/About` and `/Contact/form` all render real SSR content correctly; `/Projects` shows the same already-documented (Angular-upgrade-era) limitation where the production config's SSR resolver calls out to the real public domain and gets blocked by Cloudflare's bot protection when hit from this dev machine — a pre-existing architectural property, not a regression from this work.
   - **Real end-to-end write-path test**: POST to `/data/contact` with a deliberately invalid Turnstile token → correctly rejected (302 to `/error`, confirmed via response headers, no DB write) — exercises Express 5's JSON body parsing, the Turnstile validation call, and confirms the CSP headers are present and correctly formed on a real response, all through the fully upgraded stack.
-- Not merged to `main` or pushed anywhere — holding per standing instruction, same as the Angular upgrade.
+- Merged to `main` 2026-07-28; pushed to `local-origin` and `heroku` 2026-07-29 (see `todo.md` items 2, 7, 10).
 
 ## Summary: what moved
 
