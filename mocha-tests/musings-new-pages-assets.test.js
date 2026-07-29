@@ -77,3 +77,12 @@ describe('new Musings pages banner images', () => {
     expect(fs.existsSync(path.join(ASSETS_DIR, 'markus-winkler-SZ98vfIx0pw-unsplash-1000w.jpeg'))).to.be(true)
   })
 })
+
+// todo.md item 11: devicon.min.css never actually had a jupyter glyph, so
+// the musings-home card icon for this page was silently rendering nothing.
+// Replaced with a real image asset instead of the font glyph.
+describe('tls-for-local-lab musings-home card icon', () => {
+  it('devicon-jupyter-original.svg exists', () => {
+    expect(fs.existsSync(path.join(ASSETS_DIR, 'devicon-jupyter-original.svg'))).to.be(true)
+  })
+})

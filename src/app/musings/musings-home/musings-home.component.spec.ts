@@ -44,4 +44,11 @@ describe('MusingsHomeComponent', () => {
     expect(link).toBeTruthy()
     expect(link.textContent).toEqual('Get started')
   })
+
+  it('should render the TLS for local lab card icon as an image, not the unavailable devicon-jupyter-plain glyph', ()=>{
+    const icon = compiled.querySelector('img.jupyter-icon')
+    expect(icon).toBeTruthy()
+    expect(icon.getAttribute('src')).toEqual('/assets/devicon-jupyter-original.svg')
+    expect(compiled.querySelector('.devicon-jupyter-plain')).toBeFalsy()
+  })
 })
