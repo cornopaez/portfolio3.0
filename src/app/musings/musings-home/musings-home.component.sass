@@ -42,4 +42,20 @@
 			-webkit-background-clip: text
 			-webkit-text-fill-color: transparent
 
+		// devicon.min.css has no jupyter glyph (see todo.md item 11), so
+		// this one icon is a plain <img> instead of the others' font
+		// glyphs -- sized to match icon-size(10em)'s breakpoints below,
+		// using width instead of font-size.
+		.jupyter-icon
+			height: auto
+
+			@media screen and (max-width: 319px)
+				width: 9em
+
+			@media screen and (min-width: 320px)
+				width: 10em
+
+			@media screen and (min-width: 768px)
+				width: 10.5em
+
 @include icon-size(10em)
