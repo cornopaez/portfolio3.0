@@ -15,6 +15,16 @@ export function app(): express.Express {
   const server = express();
   const distFolder = join(process.cwd(), 'dist/portfolio3/browser');
 
+  // Fail fast if the Turnstile secret is missing -- without it,
+  // reCaptcha-validation.js silently posts to Cloudflare's siteverify
+  // endpoint with no `secret` field (JSON.stringify drops undefined),
+  // so the contact form's bot protection quietly does nothing instead
+  // of erroring, and there's no client-visible symptom to catch it.
+  if (!process.env.TURNSTILE_SECRET_KEY) {
+    console.log("Missing TURNSTILE_SECRET_KEY env var. Exiting program.");
+    process.exit(1);
+  }
+
   // Start MongoDB connection
   connection.connect()
     .then((response) => {
