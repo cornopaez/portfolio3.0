@@ -4,6 +4,7 @@ import express from 'express';
 import { join } from 'path';
 import * as connection from 'middlewares/mongo-connection';
 import * as data from 'controllers/data';
+import * as bots from 'controllers/bots';
 import helmet from 'helmet';
 import { getHelmetOptions } from 'middlewares/security-headers';
 import * as home from 'controllers/home';
@@ -38,6 +39,10 @@ export function app(): express.Express {
 
   server.set('view engine', 'html');
   server.set('views', distFolder);
+
+  // 404 known-junk crawler paths (bad Google Search Console traffic) before
+  // they reach the SSR catch-all.
+  server.use(bots);
 
   // Routes for getting and posting data in the site
   server.use('/data', data);
