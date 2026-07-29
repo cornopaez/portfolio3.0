@@ -1,13 +1,13 @@
-@import '../../../assets/mixins'
+@use '../../../assets/mixins'
 
-@include musings-jumbotron('../assets/markus-winkler-SZ98vfIx0pw-unsplash-640w.jpeg', '../assets/markus-winkler-SZ98vfIx0pw-unsplash-1000w.jpeg')
+@include mixins.musings-jumbotron('../assets/markus-winkler-SZ98vfIx0pw-unsplash-640w.jpeg', '../assets/markus-winkler-SZ98vfIx0pw-unsplash-1000w.jpeg')
 
 .project-detail
 	.project-container
 		pre
-			@include bash-code-highlight()
+			@include mixins.bash-code-highlight()
 		.cloudflare
-			@include screenshot-dynamic-width()
+			@include mixins.screenshot-dynamic-width()
 
 		.pihole
-			@include screenshot-dynamic-width()
+			@include mixins.screenshot-dynamic-width()

@@ -1,3 +1,6 @@
+@use "sass:meta"
+@use 'assets/theme'
+
 /* You can add global styles to this file, and also import other style files */
 // Fonts
 @import url('https://fonts.googleapis.com/css?family=Roboto:100,300')
@@ -5,10 +8,9 @@
 @import url('https://fonts.googleapis.com/css?family=Open+Sans:300,400|Raleway:200,300,400,500')
 
 // Theme tokens (must come first: everything below consumes these)
-@import './assets/theme'
 
 // Mixins import
-@import './assets/mixins'
+@include meta.load-css('assets/mixins')
 
 // Base import
-@import './assets/base'
+@include meta.load-css('assets/base')
