@@ -16,7 +16,13 @@ function buildApp() {
 }
 
 describe('controllers/bots.js', () => {
-  const junkPaths = ['/account', '/cart/foo', '/search?q=x', '/wpmSomething', '/v1', '/comment', '/comments', '/pages/1', '/collections/all', '/saved_resource', '/cdn-cgi/l/email-protection']
+  const junkPaths = [
+    '/account', '/cart/foo', '/checkout', '/search?q=x', '/wpmSomething', '/v1',
+    '/comment', '/comments', '/pages/1', '/product/foo', '/products/foo', '/collections/all', '/collection/foo',
+    '/saved_resource', '/cdn-cgi/l/email-protection', '/shop',
+    '/wp-admin/', '/wp-login.php', '/wp-content/uploads/x.php', '/wp-includes/foo', '/wp-json/wp/v2/users',
+    '/xmlrpc.php', '/phpmyadmin/', '/pma/', '/.env', '/.git/config', '/.aws/credentials', '/feed'
+  ]
 
   junkPaths.forEach((path) => {
     it(`404s ${path}`, async () => {
