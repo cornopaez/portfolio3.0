@@ -4,11 +4,11 @@ Project backlog — not in priority order.
 
 ## 1. Update Angular — DONE (2026-07-27)
 
-Upgraded 15 → 21 one major version at a time on `feature/angular-upgrade`, merged to `main` (commit `a6ee0be`). Full writeup in `ANGULAR-UPGRADE-PROGRESS.md`.
+Upgraded 15 → 21 one major version at a time on `feature/angular-upgrade`, merged to `main` (commit `a6ee0be`). The detailed step-by-step writeup (`ANGULAR-UPGRADE-PROGRESS.md`) was retired 2026-07-29 now that the upgrade is long done and stable; its two genuinely forward-looking findings — the network-volume flakiness/esbuild `application`-builder `SIGABRT` crash, and the `CommonEngine`/`allowedHosts` SSR gotcha — were folded into `CLAUDE.md`'s "Known rough edges" and Architecture sections respectively, which is where that kind of standing knowledge belongs.
 
 ## 2. Update all other npm packages — DONE (2026-07-28)
 
-Upgraded on `feature/dependency-upgrade` (off `main`, post Angular-21-merge), phased one commit per package/area: dead-dependency removal (`socket.io`, `loadtest`, `guess-parser`), tslint/codelyzer → ESLint, Protractor → Playwright, Express 4→5, MongoDB driver 3→7, Helmet 3→8 with an explicit CSP, and a batch of lower-risk bumps (`dotenv`, `mocha`, `jasmine-core`, karma family, `lodash`, `randomstring`). Also cleared everything reasonably clearable from `npm audit`: 53 → 39 vulnerabilities, with the remainder fully traced to Angular's own bundled tooling (`protractor`/`postcss`/`@modelcontextprotocol/sdk` inside `@angular-devkit/build-angular`/`@angular/cli`) or `browser-sync` (a genuine peer dependency of the `dev:ssr` builder) — none reachable from this app's actual runtime code. `rxjs` 6→7 was left for a future pass (not included in this batch). Full writeup in `DEPENDENCY-UPGRADE-PROGRESS.md`. Merged to `main` (2026-07-28), along with a follow-up round of bug fixes and test-coverage improvements (item 5 below, plus new/expanded Mocha and Karma specs). Pushed to `local-origin` and `heroku` as part of item 7/10's reconciliation (2026-07-29).
+Upgraded on `feature/dependency-upgrade` (off `main`, post Angular-21-merge), phased one commit per package/area: dead-dependency removal (`socket.io`, `loadtest`, `guess-parser`), tslint/codelyzer → ESLint, Protractor → Playwright, Express 4→5, MongoDB driver 3→7, Helmet 3→8 with an explicit CSP, and a batch of lower-risk bumps (`dotenv`, `mocha`, `jasmine-core`, karma family, `lodash`, `randomstring`). Also cleared everything reasonably clearable from `npm audit`: 53 → 39 vulnerabilities, with the remainder fully traced to Angular's own bundled tooling (`protractor`/`postcss`/`@modelcontextprotocol/sdk` inside `@angular-devkit/build-angular`/`@angular/cli`) or `browser-sync` (a genuine peer dependency of the `dev:ssr` builder) — none reachable from this app's actual runtime code. `rxjs` 6→7 was left for a future pass (still open — see `CLAUDE.md`'s "Known rough edges"). Merged to `main` (2026-07-28), along with a follow-up round of bug fixes and test-coverage improvements (item 5 below, plus new/expanded Mocha and Karma specs). Pushed to `local-origin` and `heroku` as part of item 7/10's reconciliation (2026-07-29). The detailed phase-by-phase writeup (`DEPENDENCY-UPGRADE-PROGRESS.md`) was retired 2026-07-29 alongside item 1's — its one open finding (the ESLint migration surfacing real lint debt) is now tracked directly as item 14 below.
 
 ## 3. Finish dark mode feature — DONE (2026-07-28)
 
@@ -37,13 +37,13 @@ Placeholder — no source data or access yet. Revisit once the Notes export/inte
 
 **reCAPTCHA validation never actually blocked anything — already fixed, no longer applies:** this was rewritten wholesale when `ng-recaptcha` was swapped for Cloudflare Turnstile (item 6 below, commit `6e2d04a`). Current `controllers/data.js` correctly checks `if (body.success)` (not an assignment), and `middlewares/reCaptcha-validation.js#validate()` now uses `fetch(...).then(response => response.json())`, so `body.success` is a real boolean, not a raw string.
 
-**`middlewares/mongo-connection.js#connect()` throwing instead of rejecting cleanly — already fixed, no longer applies:** resolved incidentally during the MongoDB driver 3→7 upgrade (Phase 5, `DEPENDENCY-UPGRADE-PROGRESS.md`) when the function was rewritten to `async`/`try`-`catch`.
+**`middlewares/mongo-connection.js#connect()` throwing instead of rejecting cleanly — already fixed, no longer applies:** resolved incidentally during item 2's MongoDB driver 3→7 upgrade when the function was rewritten to `async`/`try`-`catch`.
 
 **`controllers/home.ts` calling `dotenv.config()` on every request — already fixed, no longer applies:** current `controllers/home.ts` doesn't call `dotenv.config()` at all.
 
 ## 6. Migrate from ng-recaptcha to a Cloudflare-based option — DONE
 
-Replaced with `ngx-turnstile` (Cloudflare Turnstile) prior to the Angular 19 hop. Full writeup in `ANGULAR-UPGRADE-PROGRESS.md`.
+Replaced with `ngx-turnstile` (Cloudflare Turnstile) prior to the Angular 19 hop, on commit `6e2d04a`. See item 15 for a related production incident (the env-var rename this commit made never landed on Heroku) diagnosed and fixed 2026-07-29.
 
 ## 7. Push `feature/angular-upgrade`/`main` (and now `feature/dependency-upgrade`) to the local Gitea instance — DONE (2026-07-29)
 
@@ -137,3 +137,28 @@ Fixed on `fix/icon-mixin-budget` (off `main`, merged to `main` and pushed to `lo
 **Deliberately left `projects-details.component.sass` unnarrowed**: its footnote icons come from MongoDB (`view.content.icons` per project document — confirmed by querying the local DB directly: 7 projects, 14 distinct icon classes today), which is live, user-editable data, not code. Narrowing to only currently-used icons risked silently under-sizing any future project's icon added via the database rather than a code change. Per user decision, kept this call generic (still uses the full default list) and bumped `angular.json`'s `anyComponentStyle` `maximumWarning` from `6kb` to `8kb` instead (`maximumError` unchanged at `10kb` — real headroom either way).
 
 Verified: compiled every touched file and confirmed the exact right icon selectors are present, nothing dropped (about: 4.9kB, down from 7.5kB; tls-cloudflare-and-heroku: 2.7kB; tls-for-local-lab: 2.2kB — all comfortably under budget now). Fresh production build has zero warnings of any kind (Sass deprecation *and* budget). Full Mocha (58) and Karma (108) suites pass. Playwright screenshots of every touched page (`/About`, `/Musings`, `/Musings/rpi-twonky`, `/Musings/ubuntu-hd-audio`, `/Musings/tls-cloudflare-and-heroku`, `/Musings/tls-for-local-lab`, `/Projects/PYTDance`) plus a DOM-level check of every icon's computed `font-size` against the real `dev:ssr` server confirm no icon lost its sizing.
+
+## 14. Fix all `ng lint` (ESLint) issues we've been carrying forward
+
+Not started. 108 real findings as of 2026-07-29 (was 96 right after the ESLint migration in item 2 — grown slightly since, from newly-ported content in item 9c and elsewhere). No lint target existed at all before item 2's ESLint migration, so this is years of accumulated style debt surfacing for the first time, not any single regression. Confirmed 2026-07-29 (during item 16 below) that the count is identical under Node 20 and Node 24 — not tooling/runtime-version sensitive.
+
+Breakdown by rule, from the current `npm run lint` output:
+- `@angular-eslint/prefer-inject` — constructor injection used throughout instead of the `inject()` function (largest single category).
+- `@angular-eslint/prefer-standalone` — no components have been migrated to standalone; this was a deliberate skip during item 1's Angular upgrade, revisit together.
+- `@typescript-eslint/no-unused-vars` — unused imports/params across several files.
+- `@typescript-eslint/no-explicit-any`, `@typescript-eslint/prefer-for-of`, `@typescript-eslint/no-wrapper-object-types`, `@angular-eslint/no-empty-lifecycle-method` / `@typescript-eslint/no-empty-function` — smaller one-off counts.
+- `@angular-eslint/template/alt-text` — at least one `<img>` missing alt text (`projects-home.component.html`).
+
+Worth deciding upfront whether `prefer-standalone` is in scope here or split into its own item — it's a much bigger structural change (touches every component's module wiring) than the rest of this list, which are mostly mechanical/local fixes.
+
+## 15. Diagnose and fix Cloudflare Turnstile "siteverify isn't being called" warning — DONE (2026-07-29)
+
+User reported a Cloudflare Turnstile dashboard warning for the `portfolio-form` widget: siteverify wasn't being called, meaning contact-form tokens weren't actually validated server-side. Root cause traced to commit `6e2d04a` (item 6's Turnstile migration, 2026-07-27): the commit renamed the required secret env var `RECAPTCHA_SECRET` → `TURNSTILE_SECRET_KEY`, but only in the local, uncommitted `.env` — Heroku's config var was never renamed. So for ~2 days, `process.env.TURNSTILE_SECRET_KEY` was `undefined` in production; `JSON.stringify` silently dropped the missing `secret` field from every siteverify POST, so Cloudflare never linked those malformed calls to the widget — exactly the dashboard's symptom. The Heroku config var was already fixed (by the user, outside this session) shortly before the investigation; confirmed via `heroku releases`/`heroku config` and then end-to-end by the user submitting a real form message and confirming both a successful `/Contact/FormSuccess` and that the Cloudflare warning cleared.
+
+**Hardening added** so this exact failure mode can't recur silently: `server.ts` now fails fast at boot (logs and `process.exit(1)`s) if `TURNSTILE_SECRET_KEY` is unset, mirroring the existing Mongo-connection fail-fast check right above it. See `CLAUDE.md`'s Environment section for the env-var detail. Verified via `tsc --noEmit` and the existing `mocha-tests/recaptcha-validation.test.js` (2/2 passing, real Cloudflare siteverify calls using documented dummy secrets).
+
+## 16. Bump local dev Node to match Heroku's runtime — DONE (2026-07-29)
+
+Heroku's build log showed it auto-resolving to Node 24.18.0 (no `engines` field pinned, so it always takes current LTS); local dev was still on 20.20.2. User chose a global machine-wide swap over a project-scoped version-manager setup, after being told this would also move ~28 other, some old, Node projects on the machine to Node 24 by default (no nvm/volta/fnm was in use — `~/.zshrc`'s `PATH` entry was the only thing pinning a version).
+
+Installed `node@24` via Homebrew alongside the existing `node@20` (kept installed, untouched, as a rollback path — just change `~/.zshrc`'s `PATH` line back if ever needed), repointed `~/.zshrc` at it, did a clean `node_modules` reinstall (which also purged ~130 stale transitive lockfile entries left over from item 2's Protractor→Playwright migration that a prior incremental install never cleaned up), and bumped `@types/node` `^20.19.0` → `^24.13.3` to match. Verified on Node 24: `tsc` clean, ESLint output identical to the Node 20 baseline (see item 14), 108/108 Karma tests, 65/65 Mocha tests, `build:ssr` output matching Heroku's build log line-for-line, and the compiled server boots/connects/serves correctly. Committed and pushed to `local-origin`; no Heroku push needed since production was already on 24.18.0.
