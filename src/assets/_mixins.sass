@@ -1,40 +1,20 @@
-@mixin icon-size($size: 3.5em)
-	.devicon-html5-plain-wordmark,
-	.devicon-css3-plain-wordmark,
-	.devicon-sass-original,
-	.devicon-javascript-plain,
-	.devicon-jquery-plain-wordmark,
-	.devicon-angularjs-plain,
-	.devicon-bootstrap-plain-wordmark,
-	.devicon-java-plain,
-	.fa-database,
-	.devicon-git-plain-wordmark,
-	.devicon-github-plain-wordmark,
-	.fa-font-awesome,
-	.devicon-nodejs-plain,
-	.devicon-heroku-plain,
-	.devicon-postgresql-plain-wordmark,
-	.devicon-ruby-plain,
-	.devicon-rails-plain-wordmark,
-	.devicon-mongodb-plain-wordmark,
-	.devicon-express-original-wordmark,
-	.fa-facebook-official,
-	.fa-twitter-square,
-	.fa-linkedin,
-	.fa-envelope-o,
-	.fa-raspberry-pi,
-	.fa-terminal,
-	.devicon-typescript-plain,
-	.fa-ubuntu,
-	.devicon-python-plain,
-	.fa-cloudflare,
-	.fa-shield-halved
+// Every tech-icon selector ever used across the site. Callers that size a
+// fixed, known set of icons (a static template/data array in a .ts file)
+// should pass their own narrower $selectors list instead of relying on this
+// default -- it's a lot of dead CSS otherwise (this default list alone is
+// the majority of projects-details.component.sass's compiled size). Kept
+// as the default because projects-details' icons come from MongoDB, not
+// code, so it can't safely be narrowed to only what's used today.
+$all-tech-icon-selectors: ".devicon-html5-plain-wordmark", ".devicon-css3-plain-wordmark", ".devicon-sass-original", ".devicon-javascript-plain", ".devicon-jquery-plain-wordmark", ".devicon-angularjs-plain", ".devicon-bootstrap-plain-wordmark", ".devicon-java-plain", ".fa-database", ".devicon-git-plain-wordmark", ".devicon-github-plain-wordmark", ".fa-font-awesome", ".devicon-nodejs-plain", ".devicon-heroku-plain", ".devicon-postgresql-plain-wordmark", ".devicon-ruby-plain", ".devicon-rails-plain-wordmark", ".devicon-mongodb-plain-wordmark", ".devicon-express-original-wordmark", ".fa-facebook-official", ".fa-twitter-square", ".fa-linkedin", ".fa-envelope-o", ".fa-raspberry-pi", ".fa-terminal", ".devicon-typescript-plain", ".fa-ubuntu", ".devicon-python-plain", ".fa-cloudflare", ".fa-shield-halved"
+
+@mixin icon-size($size: 3.5em, $selectors: $all-tech-icon-selectors)
+	#{$selectors}
 		@media screen and (max-width: 319px)
 			font-size: $size - 1em
 
 		@media screen and (min-width: 320px)
 			font-size: $size
-		
+
 
 		@media screen and (min-width: 768px)
 			font-size: $size + 0.5em
@@ -48,7 +28,7 @@
 
 // Shared by the musings sub-pages (rpi-twonky, ubuntu-hd-audio), which were
 // otherwise carrying an identical ~50-line block save for the banner image.
-@mixin musings-jumbotron($small, $big)
+@mixin musings-jumbotron($small, $big, $footnote-icons: $all-tech-icon-selectors)
 	.btn-link
 		padding: 0.5em 0.75em 1.5em 2em
 
@@ -93,7 +73,7 @@
 
 				li
 					padding: 0 0.4em
-					@include icon-size(2.5em)
+					@include icon-size(2.5em, $footnote-icons)
 
 					img
 						height: 3em
