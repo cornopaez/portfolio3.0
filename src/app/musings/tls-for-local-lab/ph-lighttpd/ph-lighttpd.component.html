@@ -1,0 +1,15 @@
+<pre>
+<span class="hash-bang">#!/bin/bash</span>
+
+<span class="bash-comment"># Combine cert and key for lighttpd</span>
+<span class="bash-command">cat</span> /root/.acme.sh/mycustomdomain.local_ecc/mycustomdomain.local.key /root/.acme.sh/mycustomdomain.local_ecc/mycustomdomain.local.cer > /root/.acme.sh/mycustomdomain.local_ecc/combined.pem
+
+<span class="bash-comment"># Make backup of old key</span>
+<span class="bash-command">mv</span> /etc/lighttpd/combined.pem /etc/lighttpd/combined.pem.old
+
+<span class="bash-comment"># Move new key into place</span>
+<span class="bash-command">mv</span> /root/.acme.sh/mycustomdomain.local_ecc/combined.pem /etc/lighttpd/combined.pem
+
+<span class="bash-comment"># Restart lighttpd</span>
+<span class="bash-command">service</span> lighttpd restart
+</pre>  

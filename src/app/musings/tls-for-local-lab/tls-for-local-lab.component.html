@@ -1,0 +1,279 @@
+<meta name="keywords" content="ssl tls pihole pi-hole ad blocker jupyterlab jupyter notbook local home lab custom domains domain acme.sh ipv6 config">
+<meta name="description" content="How to enable SSL/TLS for your local lab and apps, including Pi-Hole and JupyterLab, using a custom domain.">
+<meta name="author" content="Mauricio Paez - Developer">
+<div class="btn-container">
+  <a routerLink="/Musings" class="btn btn-link"><i class="fas fa-chevron-left"></i>  Back to Musings</a>  
+</div>
+
+<div class="jumbotron">
+  <div class="footnotes">
+    <h4>Tech used</h4>
+    <ul>
+      @for (icon of currentContent.content.icons; track icon) {
+        <li>
+          <i class="{{icon}}"></i>
+        </li>
+      }
+    </ul>
+  </div>
+</div>
+
+<div class="detail project-detail">
+  <h1>How to enable SSL/TLS for your local lab and apps, including Pi-Hole and JupyterLab, using a custom domain</h1>
+  <small class="text-muted">Updated 2024-04-25</small><br>
+  <small class="text-muted">Photo by <a href="https://unsplash.com/@markuswinkler">Markus Winkler</a> on Unsplash</small>
+  <br>
+  <br>
+  <div class="project-container">
+    <p>This guide walks you through setting up SSL/TLS for your home lab and apps, specifically focusing on securing the web interface of Pi-Hole (a well-known ad-blocking app) and JupyterLab (a well-known Python development app). Of course, the steps taken here should help you figure out how to secure other local apps as well -- the skills are universal.</p>
+    <p>This guide assumes you have a domain registered with Cloudflare. It also asumes that you have fully functional Pi-Hole and JupyterLab instances in an Ubuntu server. However, the instructions may be applicable or modified accordingly for other OS. On the other hand, you do not need to know about <kbd>acme.sh</kbd> which we'll use to generate the certs. If you do not know where to start on Pi-Hole and JupyterLab, these links should help you get started:</p>
+    <ul>
+      <li>
+        <a href="https://pi-hole.net/">Official Pi-Hole Page</a>
+      </li>
+      <li>
+        <a href="https://jupyter.org/">Official JupyterLab Page</a>
+      </li>
+    </ul>
+    <h2>Table of Contents</h2>
+    <ol>
+      <li>
+        <a routerLink="../tls-for-local-lab" fragment="intro">Intro. Also, why do this?</a>
+      </li>
+      <li>
+        <a routerLink="../tls-for-local-lab" fragment="acme"><code>acme.sh</code> Setup</a>
+      </li>
+      <ul>
+        <li>
+          <a routerLink="../tls-for-local-lab" fragment="acme-command"><code>acme.sh</code> command</a>
+        </li>
+        <li>
+          <a routerLink="../tls-for-local-lab" fragment="acme-post-hook"><code>post-hook</code> file</a>
+        </li>
+        <li>
+          <a routerLink="../tls-for-local-lab" fragment="acme-pre-hook">Notes about the <code>pre-hook</code> file</a>
+        </li>
+        <li>
+          <a routerLink="../tls-for-local-lab" fragment="acme-cf-zone-token">Cloudflare Zone ID and API Token</a>
+        </li>
+        <li>
+          <a routerLink="../tls-for-local-lab" fragment="acme-command-run">Run the <code>acme.sh</code> command</a>
+        </li>
+      </ul>
+      <li>
+        <a routerLink="../tls-for-local-lab" fragment="pi-hole">Pi-Hole Setup</a>
+      </li>
+      <ul>
+        <li>
+          <a routerLink="../tls-for-local-lab" fragment="dns-updates">Update your local or Cloudflare DNS settings</a>
+        </li>
+      </ul>
+      <li>
+        <a routerLink="../tls-for-local-lab" fragment="jupyterlab">JupyterLab Setup</a>
+      </li>
+      <li>
+        <a routerLink="../tls-for-local-lab" fragment="musings">Musings</a>
+      </li>
+    </ol>
+    <br>
+    <h2 id="intro">Intro. Also, why do this?</h2>
+    <p>
+      This guide makes little sense for some. The two apps I list in this guide, after all, are usually internal apps (inside of your firewall) and, as such, an SSL/TLS certificate should not be needed. This was true in the past, back in the days when browsers were not defaulting to secure connections and displaying warnings about visiting sites without them. However, browsers now display those warnings by default which are annoying but do protect our valudable and sensitive information from prying eyes. 
+    </p>
+    <p> 
+      Of course, you still can just click through the prompts to visit your site and forget about it. But, why not do things properly? If you're here, you are likely already on board and, to that end, let's spend the 10 minutes this guide takes to implement. If not, let's spend 10 minutes anyways getting you setup.
+    </p>
+
+    <h2 id="acme"><code>acme.sh</code> Setup</h2>
+    <h3 id="acme-command"><code>acme.sh</code> command</h3>
+    <p>
+      As the first step, let's work on the certificates first. We'll be using <kbd>acme.sh</kbd> to create them but you could also use <kbd>certbot</kbd> (though we don't cover that here). Go ahead and download <kbd>acme.sh</kbd> according to their instructions on their <a href="https://github.com/acmesh-official/acme.sh">official GitHub repo</a>. It is good practice to avoid piping scripts into bash (though, convenient it is). Use whichever method you prefer. We'll run all the commands as <code>root</code> since it's recommended by the software itself. You may look for better ways to do this once you've gotten the process down.
+    </p>
+    <p>
+      Note that the software, unlike other, does not need a manual config file. It also does not need to be manually configured to renew certs when the time is right. By running the commands below, the creation of the certs, adding them to the local <kbd>acme.sh</kbd> db, and renewing when necessary will be taken care of automatically. It even includes a cool feature to run custom scripts before and after the creation or refreshing of certs! This was not plainly obvious in their documentation and it is worth spelling out for novices like me.
+    </p>
+    <p>
+      With this in mind, let's break down the command we'll be issuing once <kbd>acme.sh</kbd> is installed. <b>NOTE: DON'T RUN THIS COMMAND YET!</b>
+    </p>
+      <pre>
+<span class="bash-command">acme.sh</span> --issue --dns dns_cf -d mycustomdomain.local -d '*.mycustomdomain.local' --server letsencrypt --pre-hook /usr/local/bin/acme-pre.sh --post-hook /usr/local/bin/acme-post.sh
+    </pre>
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>Parameter</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (command of currentContent.acme_commands; track command.parameter) {
+          <tr>
+            <td>{{command.parameter}}</td>
+            <td [innerHTML]="command.description"></td>
+          </tr>
+        }
+      </tbody>
+    </table>
+    <p>
+      Of course, you may not need <code>pre-hook</code> or <code>post-hook</code> scripts for other tech stacks -- you can certainly adapt that command to suit your needs. However, in this case, we will need at least the <code>post-hook</code> script to compile the combined keys file Pi-Hole needs, move it into place, and restart <kbd>lighttpd</kbd> so it can pick up the newly created file. The <code>pre-hook</code> and <code>post-hook</code> files <b>must</b> exist but don't need to have anything in them at the time the command is run and, as such, you can fill them later. Failure to create the files results in having to start again from scratch for this domain. Don't forget to create them!
+    </p>
+    <h3 id="acme-post-hook"><code>post-hook</code> file</h3>
+    <p>
+      Let's create the file we're going to be using for the <code>post-hook</code>.
+    </p>
+    <p>
+      First, let's move to <kbd>sudo</kbd> using the following command:
+    </p>
+    <pre>
+<span class="bash-command">sudo</span> su
+    </pre>
+    <p>
+      Then, let's create the file:
+    </p>
+    <pre>
+<span class="bash-command">nano</span> /usr/local/bin/acme-post.sh
+    </pre>
+    <p>
+      The contents of the file, with replacements for your own domain, are as follows:
+    </p>
+    <h4>lighttpd file</h4>
+    <app-ph-lighttpd></app-ph-lighttpd>
+    <h4>JupyterLab file</h4>
+    <app-ph-jupyterlab></app-ph-jupyterlab>
+    <p>
+      Finally, let's make sure that the file has execution permissions:<br>
+    </p>
+    <pre>
+<span class="bash-command">chmod</span> +x /usr/local/bin/acme-post.sh
+    </pre>
+    <h3 id="acme-pre-hook">Notes about the <code>pre-hook</code> file</h3>
+    The instructions above for the <code>post-hook</code> file can be used to create a <code>pre-hook</code> file all the same. I will not include a template for such a file here since there's no use for it in this guide. However, and this is very important, <b><i>the file should be created prior to running the <kbd>acme.sh</kbd> command. Failure to do so will result in you having to start over again or figure out how to add it to the config file manually (which is not easy).</i></b>
+    <h3 id="acme-cf-zone-token">Cloudflare Zone ID and API Token</h3>
+    <p>
+      Now that we have everything lined up, the command has been crafted, the files have been created and/or populated, we are almost ready to run the command.
+    </p>
+    <p>
+      The last piece of preparation we need is to get two pieces of data from Cloudflare: the Zone ID and the API Token. To fetch those, log into your Cloudflare dashboard. For the Zone ID, it can be found in the <kbd>domain</kbd> overview page, right hand side, near the bottom of the page:
+    </p>
+    <div class="cloudflare">
+      <img src="{{currentContent.content.cloudflare[0].img}}" alt="{{currentContent.content.cloudflare[0].alt}}">
+    </div>
+    <p>
+      Note that there's a handy link to get an API token right there. Click it and then hit the <kbd>Create Token</kbd> button:
+    </p>
+    <div class="cloudflare">
+      <img src="{{currentContent.content.cloudflare[1].img}}" alt="{{currentContent.content.cloudflare[1].alt}}">
+    </div>
+    <p>
+      When creating the token, make sure you select the appropriate zone and permissions needed. You'll need <kbd>read</kbd> and <kbd>write</kbd> permissions. To this end, be sure to keep this token safe as it can seriously mess up your domain.
+    </p>
+    <p>
+      Once you've gotten your API Token and your Zone ID, issue the following commands in your terminal to load the values as environment variables:
+    </p>
+    <pre>
+export CF_Token="[your_token_goes_here]"
+export CF_Zone_ID="[your_zone_id_goes_here]"
+    </pre>
+    <h3 id="acme-command-run">Run the <code>acme.sh</code> command</h3>
+    <p>
+      We are now ready to run the command. However, if you are unsure as to what we've done so far, here's a quick refresher:
+    </p>
+    <app-acme-command-recap></app-acme-command-recap>
+    <p>
+      To those commands, we'll add the following one that actually fetches the certificates and keys. Replace your domain accordingly:
+    </p>
+    <pre>
+<span class="bash-command">acme.sh</span> --issue --dns dns_cf -d mycustomdomain.local -d '*.mycustomdomain.local' --server letsencrypt --post-hook /usr/local/bin/acme-post.sh
+    </pre>
+    <p>
+      If all went well, the output would look something like this:
+    </p>
+    <app-acme-command-output></app-acme-command-output>
+    <p>
+      There's a possibility the output includes an error that reads <code>/etc/lighttpd/combined.pem: path or file does not exist.</code> This is expected, as the first time the script runs the file does not exist. Afterwards, though, the file does and the error is not going to be around anymore.
+    </p>
+    <p>
+      Also, since my local <kbd>acme.sh</kbd> had already the domain I used to capture outputs for this guide, there's some steps in the output that are missing. If the domain needs to be verified for the first time, validation entries in Cloudflare will appear in the output. You'll also see timers in place to wait for changes to propagate prior to attempting the validation. All of this is normal.
+    </p>
+    <h2 id="pi-hole">Pi-Hole Setup</h2>
+    <p>
+      Now that we have certs, let's setup Pi-Hole's web UI to use the cert we've created. You may notice that part of the <code>post-hook</code> file was to combine the <code>key</code> and <code>cer</code> files into a single one. This was done because <kbd>lighttpd</kbd> requires such a file in order to work correctly and it is not provided by <kbd>acme.sh</kbd> by default. You may also notice we placed the combined file in <kbd>lighttpd</kbd>'s folder under <code>/etc</code>. You don't need to put it there but it helps since <kbd>lighttpd</kbd> is already the owner of that folder and you don't have to work too hard to make sure the permissions are correct.
+    </p>
+    <h3 id="dns-updates">Update your local or Cloudflare DNS settings</h3>
+    <p>
+      Since we're going to use an SSL/TLS connection to serve PI-Hole's UI, we need to make sure that your DNS settings are updated accordingly. The certificate we've created needs the domain in the URL to match its contents. This means we can't hit the IP address of the box running Pi-Hole directly and get served over SSL/TLS.
+    </p>
+    <p>
+      Pi-Hole allows you to create your own local DNS entries and that can be one way to ensure the domain matches. Just navigate to the <kbd>Local DNS</kbd> tab on the right hand, and then click on <kbd>DNS Entries</kbd>. Add and entry for the IPv4 address and one for the IPv6 address (if applicable) of the box that's running Pi-Hole:
+    </p>
+    <div class="pihole">
+      <img src="{{currentContent.content.pihole[0].img}}" alt="{{currentContent.content.pihole[0].alt}}">
+    </div>
+    <div class="pihole">
+      <img src="{{currentContent.content.pihole[1].img}}" alt="{{currentContent.content.pihole[1].alt}}">
+    </div>
+    <p>
+      If you have not done so, this would be a good time to set a static IPv4 address for your Pi-hole box -- that is, if it's hosted locally, inside your network and not somewhere like AWS. If you're running IPv6 in your home network, it's best to use <kbd>ddclient</kbd> or any other to Dynamic DNS software to update the DNS settings of your domain at your registrar. Since IPv6 addresses are global in nature, you don't have to worry about setting a static IPv6 locally. This is ideal for ISPs that like to switch IPv6 prefixes to avoid giving people static prefixes (for which they charge money). Plus, you can still set the static IPv4 there -- even if it's in the reserved blocks of addresses like 10.0.0.0/8 or 192.168.0.0/8.
+    </p>
+    <h3>Installing a new <kbd>lighttpd</kbd> version</h3>
+    <p>
+      As of 2024-04-15, the default Pi-Hole installation does not install a version of <kbd>lighttpd</kbd> that includes the <code>mod_openssl</code> module it needs to serve the site using SSL/TLS certificates. To this end, we'll start by installing backing up Pi-Hole's <kbd>lighttpd.conf</kbd> and then install a new version of <kbd>lighttpd</kbd>:
+    </p>
+    <app-pihole-lighttpd-mod-openssl-install></app-pihole-lighttpd-mod-openssl-install>
+    <p>
+      Once the package is installed and you have verified the service is up and running without issues, we'll need to create the following file (if it doesn't exist already) to ensure that <kbd>lighttpd</kbd> serves the UI without issues: <code>/etc/lighttpd/external.conf</code>. Use the following template to fill that new file in:
+    </p>
+    <app-pihole-lighttpd-external></app-pihole-lighttpd-external>
+    <p>
+      Once the file is populated, go ahead and restart <kbd>lighttpd</kbd>. If all went well, the service should come up without errors and you should be able to hit Pi-Hole's UI while it being served with an SSL/TLS connection.
+    </p>
+    <h2 id="jupyterlab">JupyterLab Setup</h2>
+    <p>
+      If you've made it this far, we don't have much left. Setting up JupyterLab is not different from what we've accomplished so far. We'll reuse as many things as possible.
+    </p>
+    <p>
+      To start, we'll need to update the <code>post-hook</code> file for <kbd>acme.sh</kbd> (if JupyterLab runs on the same box as Pi-Hole) or create a new one (if they are different boxes). By now, though, you've become a professional and this new challenge does not phase you -- you've got this with unerring confidence (but not cockiness).
+    </p>
+    <p>
+      <b>Side Note:</b> If you have no clue what we're talking about here, go to the <a routerLink="../tls-for-local-lab" fragment="acme"><code>acme.sh</code> Setup</a> section to get started. I've included a tab in that section with the contents for the <code>post-hook</code> file that contains the info for <kbd>JupyterLab</kbd> for ease of reference.
+    </p>
+    <p>
+      In any case, whether you have a <code>post-hook</code> file or you need to create one, the code needed for <kbd>JupyterLab</kbd> is as follows:
+    </p>
+    <app-ph-jupyterlab></app-ph-jupyterlab>
+    <p>
+      Once you've dealt with the <kbd>acme.sh</kbd> setup to get the certificates and move them to their appropriate places, we just need to make a couple of updates to the <code>jupyter_lab_config.py</code> file to tie everything up.
+    </p> 
+    <p>
+      Of course, and this is also important, the same that applies to Pi-Hole's UI applies here: this is a good time to set a static IPv4 address for your JupyterLab box and, in you have IPv6 in your network, use a Dynamic DNS like <kbd>ddclient</kbd> to keep track of that address within your domain. Go to <a routerLink="../tls-for-local-lab" fragment="dns-updates">Update your local or Cloudflare DNS settings</a> for more details about how to achieve this.
+    </p>
+    <p>
+      The updates to the <code>jupyter_lab_config.py</code> as as follows:
+    </p>
+    <app-jupyter-config-updates></app-jupyter-config-updates>
+    <p>
+      The order in which these settings are in here may not be the same as in the actual config file. Be sure to search for those lines and update them as needed. Please note each setting starts at the beginning of the line as there's no indentation needed.
+    </p>
+    <p>
+      Once you're done making the updates to your local/Cloudflare DNS, <kbd>acme.sh</kbd>, and the <code>jupyter_lab_config.py</code> file, simply restart <kbd>JupyterLab</kbd> to get going. If all went well, you should be able to hit the UI without issues while being served through an SSL/TLS connection:
+    </p>
+    <div class="pihole">
+      <img src="{{currentContent.content.jupyterlab[0].img}}" alt="{{currentContent.content.jupyterlab[0].alt}}">
+    </div>
+    <h2 id="musings">Musings</h2>
+    <ul>
+      <li>
+        I went down this rabbit hole due to a great article in Ars Technica titled <a href="https://arstechnica.com/information-technology/2024/03/banish-oem-self-signed-certs-forever-and-roll-your-own-private-letsencrypt/">Banish OEM self-signed certs forever and roll your own private LetsEncrypt</a>. The guide was a great way to get a handle of things and understand some of this technology -- specifically <kbd>acme.sh</kbd> -- in a safe, non-critical way. That guide uses a self-hosted Certificate Authority (CA) to issue certificates and keys. Setting up the CA and getting it to issue certs worked beautifully but I hit a wall when getting devices on the network to accept those certificates. I was not brave enough to figure out how to deploy Identity Management for macOS and iOS devices so they would trust those certificates. It got even more complicated when some devices only access the network occasionally and managing those was more complexity than I wanted. To this end, I preferred using Let's Encrypt as those certs are already part of the trust chain in most devices.
+      </li>
+      <li>
+        I struggled a lot with Pi-Hole's <kbd>lighttpd</kbd> installation. As I mentioned in the guide, the default installation of the package provided by Pi-Hole does not include the <kbd>mod-openssl</kbd> module that's needed to serve the UI using SSL/TLS. There's a <a href="https://discourse.pi-hole.net/t/enabling-https-for-your-pi-hole-web-interface/5771">wiki in their website</a> that all but fails to mention that this is not included by default -- or maybe it was back then. Looking around the web also resulted in "it should be there already" but it is clearly not the case. I wanted to build on that guide to make sure I included information for IPv6, as it's more and more common, and some sure fire instructions to get the desired results.
+      </li>
+      <li>
+        When installing the new version of <kbd>lighttpd</kbd> and creating or filling in the <code>external.conf</code> file, there's an opportunity to run Pi-Hole's UI on which ever port you desire. This is specially useful if port <code>443</code> is already taken by another process. As I mention in the comments of that file, you can update that to whatever port you want to use, including <code>443</code>.
+      </li>
+      <li>
+        I admit that the instructions to setup JupyterLab include a <code>chmod</code> command that opens wide the access of the certificate key. I did not try too hard to figure out exactly what the minimum access is needed by JupyterHub is which is poor practice. If you figure this out, <a href="mailto:contact@cornopaez.com">reach out</a> and I'll update the guide with the better access.
+      </li>
+    </ul>
+	</div>
+</div>

@@ -1,0 +1,19 @@
+<pre>
+<span class="bash-comment"># You may need to run all of this as root to avoid permissions issues</span>
+
+<span class="bash-comment"># Backup the existing lighttpd.conf file to avoid losing Pi-Hole's configs</span>
+<span class="bash-command">cp</span> /etc/lighttpd/lightpd.conf /etc/lighttpd/lightpd.conf.og 
+
+<span class="bash-comment"># Install new version of lighttpd that includes the openSSL module</span>
+<span class="bash-command">apt</span> install lighttpd-mod-openssl
+
+<span class="bash-comment"># Stop service to replace config files</span>
+<span class="bash-command">service</span> lighttpd stop
+
+<span class="bash-comment"># Replace OG lighttpd.conf since it was likely replaced by the install</span>
+<span class="bash-command">mv</span> /etc/lighttpd/lightpd.conf /etc/lighttpd/lightpd.conf.new 
+<span class="bash-command">mv</span> /etc/lighttpd/lightpd.conf.og /etc/lighttpd/lightpd.conf 
+
+<span class="bash-comment"># Start service</span>
+<span class="bash-command">service</span> lighttpd start
+</pre>

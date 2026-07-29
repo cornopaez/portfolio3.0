@@ -1,0 +1,44 @@
+@import '../../../assets/mixins'
+
+@include musings-jumbotron('../assets/flyd-ZNOxwCEj5mw-unsplash-640w.jpeg', '../assets/flyd-ZNOxwCEj5mw-unsplash-1000w.jpeg')
+
+.project-detail
+	.important-note-1
+		color:  #eb3711
+		font-size: 1.5em
+
+	.blkqt-one
+		&:before
+			content:'"'
+			width: 5em
+			opacity: 0.25
+			font-size: 5em
+			line-height: .85
+			position: absolute
+			left: 1rem
+
+	blockquote
+		margin-left: 3em
+		border-left: 0.3em solid #ffbd33
+		padding: 0 1em
+
+		&:before
+			// content: open-quote
+			font-size: 4em
+			line-height: 0.1em
+			margin: 0 0.25em 0 0
+			vertical-align: -0.4em
+
+		p
+			display: inline
+
+
+
+	.cloudflare
+		@include screenshot-dynamic-width()
+
+	.terminal
+		@include screenshot-dynamic-width()
+
+	.heroku
+		@include screenshot-dynamic-width()

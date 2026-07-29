@@ -32,4 +32,16 @@ describe('MusingsHomeComponent', () => {
   it('should have at least one card', ()=>{
     expect(compiled.querySelector('div.card-container div.card')).toBeTruthy()
   })
+
+  it('should have a card linking to the TLS Cloudflare/Heroku musing', ()=>{
+    const link = compiled.querySelector('a[routerLink="./tls-cloudflare-and-heroku"]')
+    expect(link).toBeTruthy()
+    expect(link.textContent).toEqual('Get started')
+  })
+
+  it('should have a card linking to the TLS for local lab musing', ()=>{
+    const link = compiled.querySelector('a[routerLink="./tls-for-local-lab"]')
+    expect(link).toBeTruthy()
+    expect(link.textContent).toEqual('Get started')
+  })
 })

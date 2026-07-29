@@ -31,6 +31,15 @@ import { MusingsComponent } from './musings/musings.component';
 import { RpiTwonkyComponent } from './musings/rpi-twonky/rpi-twonky.component';
 import { MusingsHomeComponent } from './musings/musings-home/musings-home.component';
 import { UbuntuHdAudioComponent } from './musings/ubuntu-hd-audio/ubuntu-hd-audio.component';
+import { TlsCloudflareAndHerokuComponent } from './musings/tls-cloudflare-and-heroku/tls-cloudflare-and-heroku.component';
+import { TlsForLocalLabComponent } from './musings/tls-for-local-lab/tls-for-local-lab.component';
+import { AcmeCommandOutputComponent } from './musings/tls-for-local-lab/acme-command-output/acme-command-output.component';
+import { AcmeCommandRecapComponent } from './musings/tls-for-local-lab/acme-command-recap/acme-command-recap.component';
+import { JupyterConfigUpdatesComponent } from './musings/tls-for-local-lab/jupyter-config-updates/jupyter-config-updates.component';
+import { PhJupyterlabComponent } from './musings/tls-for-local-lab/ph-jupyterlab/ph-jupyterlab.component';
+import { PhLighttpdComponent } from './musings/tls-for-local-lab/ph-lighttpd/ph-lighttpd.component';
+import { PiholeLighttpdExternalComponent } from './musings/tls-for-local-lab/pihole-lighttpd-external/pihole-lighttpd-external.component';
+import { PiholeLighttpdModOpensslInstallComponent } from './musings/tls-for-local-lab/pihole-lighttpd-mod-openssl-install/pihole-lighttpd-mod-openssl-install.component';
 
 
 @NgModule({ declarations: [
@@ -48,7 +57,16 @@ import { UbuntuHdAudioComponent } from './musings/ubuntu-hd-audio/ubuntu-hd-audi
         MusingsComponent,
         RpiTwonkyComponent,
         MusingsHomeComponent,
-        UbuntuHdAudioComponent
+        UbuntuHdAudioComponent,
+        TlsCloudflareAndHerokuComponent,
+        TlsForLocalLabComponent,
+        AcmeCommandOutputComponent,
+        AcmeCommandRecapComponent,
+        JupyterConfigUpdatesComponent,
+        PhJupyterlabComponent,
+        PhLighttpdComponent,
+        PiholeLighttpdExternalComponent,
+        PiholeLighttpdModOpensslInstallComponent
     ],
     bootstrap: [AppComponent], imports: [BrowserModule,
         BrowserAnimationsModule,
