@@ -79,4 +79,30 @@ User has another clone of this repo at `/Users/mauriciopaez/projects/websites/po
 - Most recent commit: `cbf2016` "Remove dead code and fix string interpolation bug". Earlier history includes what look like **two entire new Musings sections never ported here**: a "pihole" writeup and an "acme"/TLS-for-lab writeup (commits like "First draft of pihole section is complete", "Initial draft of acme section is complete", "Migrated most `pre` tags into components to improve maintainability", "Updated sitemap to include new musing"), plus assorted content/style fixes ("Fixed various style inconsistencies for images and size breaks", "Cleaned up inconsistent tags and spelling errors").
 - Also has an **uncommitted** local edit to its own `TODO.md` (different file from this repo's lowercase `todo.md`) adding a "Test Coverage" section listing specs to flesh out — overlaps somewhat with the test-coverage work already done here (item 5's Mocha/Karma additions), worth comparing before assuming it's still needed.
 
-Not yet diffed or scoped in detail — just confirmed the checkout exists and skimmed its `git log`/pending diff. Next step: a proper content diff (probably page-by-page for the two new Musings sections, since the underlying Angular scaffolding has moved on too much for a mechanical merge) before deciding how to port it into the current Angular-21 codebase.
+**Investigation complete (2026-07-28).** Diffed page-by-page against the second checkout. `/Home` and `/Projects` have nothing to port — all diffs there are Angular 16→21 syntax noise or active-side-only improvements (this repo is ahead). Three real content areas found, split into three separate branches/efforts per user decision:
+
+### 9a. `/About` — port EDUCATION content (branch: `content/about-education-port`)
+- Second checkout's `src/app/about/about.ts` has an updated EDUCATION block: CMU Tepper "Strategy and Innovation" and Cornell "Machine Learning" certs marked **completed** (active has them as in-progress), reordered (Cornell first), plus a new entry — Cornell "Python for Data Science Certificate" (Expected Completion July 2024).
+- Missing asset: `eCornell - MLCertificateReport.pdf` (exists in second checkout's `src/assets/`, linked from the Machine Learning cert entry) — needs copying to active's `src/assets/`.
+- User decision: port **all** of this content as found in the clone.
+- Status: not started.
+
+### 9b. `/Contact` — port Bluesky card + date, fix Facebook label (branch: `content/contact-updates-port`)
+- Second checkout has a full extra contact card for **Bluesky** (`contact-home.component.html`, icon `fa-brands fa-bluesky`, link `https://bsky.app/profile/cornopaez.com`) plus matching `.social0` sass rules — missing from active.
+- "Site last updated on" date: active says `2023-07-18`, second checkout says `2024-04-15` — needs updating (to current date at time of port, not blindly to `2024-04-15`, since active has since moved further ahead than the second checkout in other respects).
+- Facebook button label: active says "Go to Facebook", second checkout says "Don't Use Facebook" (both buttons `disabled` either way). **User decision: use "Don't Use Facebook."**
+- Do NOT port the second checkout's Google reCAPTCHA markup in `contact-form` — active already migrated to Cloudflare Turnstile (`ngx-turnstile`), a completed upgrade that must stay.
+- Status: not started.
+
+### 9c. `/Musings` — port two new write-ups (branch: `content/musings-new-pages-port`)
+- `tls-cloudflare-and-heroku/` (~395 lines across `.ts`/`.html`/`.sass`/`.spec.ts`) — references 10 images (`cloudflare-1..6.png`, `terminal-1..3.png`, `heroku-1.png`), none present in active's `src/assets/`.
+- `tls-for-local-lab/` (~428 lines, the Pi-hole/ACME/JupyterLab writeup) — references `twonkyicon-120x120.png`, `cloudflare-7/8.png`, `pihole-1/2.png`, `jupyterlab-1.png` (missing from active), plus 7 small inline sub-components used only via selector tags: `acme-command-output/`, `acme-command-recap/`, `jupyter-config-updates/`, `ph-jupyterlab/`, `ph-lighttpd/`, `pihole-lighttpd-external/`, `pihole-lighttpd-mod-openssl-install/`.
+- All of the above use old Angular 16 syntax (`*ngIf`/`*ngFor`, no `standalone` flag) — needs mechanical conversion to `@if`/`@for` + explicit `standalone: false` to match active's fully-converted codebase (zero old-syntax usage remains anywhere in active's `src/app`).
+- Registration wiring needed (pattern already present for `rpi-twonky`/`ubuntu-hd-audio`, use as template):
+  1. `src/app/app-routing.module.ts` — 2 imports + 2 route entries inside Musings' `children` array.
+  2. `src/app/app.module.ts` (NgModule-based, not standalone) — imports + declarations for the 2 page components + all 7 sub-components.
+  3. `src/app/musings/musings-home/musings-home.component.html` — 2 new hardcoded `<div class="card">` blocks (active already refactored away from the second checkout's data-driven `Musing[]` array approach — `src/app/musings/musings.ts` is a vestigial 0-byte file from that refactor, don't resurrect it). Card text from second checkout's `musings-home.component.ts`: TLS Cloudflare/Heroku → header "New!", icon `fa-solid fa-shield-halved`, title "TLS Full (Strict) Mode between Cloudflare and Heroku", link `tls-cloudflare-and-heroku`; TLS for local lab → icon `devicon-jupyter-plain colored`, title "SSL/TLS setup for your local lab", link `tls-for-local-lab`.
+  4. `src/sitemap.xml` (repo root `src/`) — 2 new `<url>` entries, priority `0.64` matching existing Musings entries.
+  5. Copy ~16 missing image assets from second checkout's `src/assets/` to active's.
+- User decision: proceed as planned above.
+- Status: not started.
