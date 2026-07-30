@@ -4,11 +4,17 @@ import { CommonEngine } from '@angular/ssr/node';
 import { existsSync } from 'fs';
 import { join } from 'path';
 import bootstrap from '../src/main.server';
+import { INTERNAL_BASE_URL } from '../src/app/shared/internal-base-url.token';
 
 const distFolder = join(process.cwd(), 'dist/portfolio3/browser');
 const commonEngine = new CommonEngine({
   allowedHosts: ['localhost', 'cornopaez.com', 'www.cornopaez.com'],
 });
+
+// The port this same process is actually listening on (server.ts). SSR
+// resolvers use this to call /data over loopback instead of the public
+// domain -- see INTERNAL_BASE_URL's doc comment for why.
+const internalBaseUrl = `http://localhost:${process.env['PORT'] || 4000}`;
 
 export const home = (req: Request, res: Response, next: NextFunction) => {
   // Check for secure connection
@@ -29,7 +35,10 @@ export const home = (req: Request, res: Response, next: NextFunction) => {
       documentFilePath: indexHtml,
       url: `${protocol}://${headers.host}${originalUrl}`,
       publicPath: distFolder,
-      providers: [{ provide: APP_BASE_HREF, useValue: baseUrl }],
+      providers: [
+        { provide: APP_BASE_HREF, useValue: baseUrl },
+        { provide: INTERNAL_BASE_URL, useValue: internalBaseUrl },
+      ],
     })
     .then((html) => res.send(html))
     .catch((err) => next(err));

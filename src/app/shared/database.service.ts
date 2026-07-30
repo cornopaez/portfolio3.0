@@ -9,16 +9,18 @@ import { environment } from '../../environments/environment';
 import { ProjectCard } from '../projects/project-card'
 import { ProjectDetails } from '../projects/projects-details/project-details'
 import { ContactSuccess } from '../contact/contact-success/contact-success'
+import { INTERNAL_BASE_URL } from './internal-base-url.token'
 
 
 @Injectable()
 export class DatabaseService {
   private http = inject(HttpClient);
   private router = inject(Router);
+  private baseUrl = inject(INTERNAL_BASE_URL, { optional: true }) ?? environment.baseUrl;
 
-  getProjectsCardsUrl = environment.baseUrl + '/data/projects'
-  getProjectDetailsUrl = environment.baseUrl + '/data/'
-  submitContactFormUrl = environment.baseUrl + '/data/contact'
+  getProjectsCardsUrl = this.baseUrl + '/data/projects'
+  getProjectDetailsUrl = this.baseUrl + '/data/'
+  submitContactFormUrl = this.baseUrl + '/data/contact'
 
   /**
     Retrieves the data necessary from the database for the view.
