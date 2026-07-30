@@ -144,12 +144,11 @@ Not started. 108 real findings as of 2026-07-29 (was 96 right after the ESLint m
 
 Breakdown by rule, from the current `npm run lint` output:
 - `@angular-eslint/prefer-inject` — constructor injection used throughout instead of the `inject()` function (largest single category).
-- `@angular-eslint/prefer-standalone` — no components have been migrated to standalone; this was a deliberate skip during item 1's Angular upgrade, revisit together.
 - `@typescript-eslint/no-unused-vars` — unused imports/params across several files.
 - `@typescript-eslint/no-explicit-any`, `@typescript-eslint/prefer-for-of`, `@typescript-eslint/no-wrapper-object-types`, `@angular-eslint/no-empty-lifecycle-method` / `@typescript-eslint/no-empty-function` — smaller one-off counts.
 - `@angular-eslint/template/alt-text` — at least one `<img>` missing alt text (`projects-home.component.html`).
 
-Worth deciding upfront whether `prefer-standalone` is in scope here or split into its own item — it's a much bigger structural change (touches every component's module wiring) than the rest of this list, which are mostly mechanical/local fixes.
+**Decided 2026-07-30: `@angular-eslint/prefer-standalone` (24 findings, one per component) split out into item 17** — it's a much bigger structural change (touches every component's module wiring, both bootstrap entrypoints, and SSR) than the rest of this list, which are mostly mechanical/local fixes. Plan is to clear the rest of this item first; the mechanical fixes are lower-risk and shouldn't be blocked on the bigger migration.
 
 ## 15. Diagnose and fix Cloudflare Turnstile "siteverify isn't being called" warning — DONE (2026-07-29)
 
@@ -162,3 +161,11 @@ User reported a Cloudflare Turnstile dashboard warning for the `portfolio-form` 
 Heroku's build log showed it auto-resolving to Node 24.18.0 (no `engines` field pinned, so it always takes current LTS); local dev was still on 20.20.2. User chose a global machine-wide swap over a project-scoped version-manager setup, after being told this would also move ~28 other, some old, Node projects on the machine to Node 24 by default (no nvm/volta/fnm was in use — `~/.zshrc`'s `PATH` entry was the only thing pinning a version).
 
 Installed `node@24` via Homebrew alongside the existing `node@20` (kept installed, untouched, as a rollback path — just change `~/.zshrc`'s `PATH` line back if ever needed), repointed `~/.zshrc` at it, did a clean `node_modules` reinstall (which also purged ~130 stale transitive lockfile entries left over from item 2's Protractor→Playwright migration that a prior incremental install never cleaned up), and bumped `@types/node` `^20.19.0` → `^24.13.3` to match. Verified on Node 24: `tsc` clean, ESLint output identical to the Node 20 baseline (see item 14), 108/108 Karma tests, 65/65 Mocha tests, `build:ssr` output matching Heroku's build log line-for-line, and the compiled server boots/connects/serves correctly. Committed and pushed to `local-origin`; no Heroku push needed since production was already on 24.18.0.
+
+## 17. Migrate all components to standalone (`@angular-eslint/prefer-standalone`)
+
+Split out of item 14 (2026-07-30) as its own item — this is a structural migration, not a mechanical lint fix. User's call: clear the rest of item 14 first, since those mechanical fixes are independent, lower-risk, and not wasted effort regardless of when this item happens.
+
+Current codebase is 100% classic NgModule-based: every one of the 24 components (`about.component.ts` etc.) explicitly declares `standalone: false`, `app.module.ts` has a single flat `declarations: [...]` registering all of them, `app-routing.module.ts` is an `NgModule` wrapping `RouterModule.forRoot(routes)`, `main.ts` bootstraps via `platformBrowserDynamic().bootstrapModule(AppModule)`, and `app.server.module.ts` is `AppModule + ServerModule` wrapped in another `NgModule` for SSR. This was a deliberate skip during item 1's Angular upgrade.
+
+Plan: use Angular's official codemod (`ng generate @angular/core:standalone`, run in its three schematic passes — convert declarations to standalone, prune now-empty NgModules, migrate bootstrap) rather than a fully manual per-component rewrite, then hand-review the result — particularly the SSR bootstrap path (`app.server.module.ts` has no direct standalone equivalent generated automatically) and anything module-specific like `NgxTurnstileModule`. Verify with the full Karma/Mocha suites plus Playwright screenshots against the real `dev:ssr` server (same verification bar as item 12's Sass codemod), since a break here would hit both the browser bundle and Angular Universal SSR at once.
