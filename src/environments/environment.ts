@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  baseUrl: 'http://localhost:4200',
+  baseUrl: '',
   turnstileSiteKey: '0x4AAAAAAD_Dk8T6hHqfvrIP'
 };
 
