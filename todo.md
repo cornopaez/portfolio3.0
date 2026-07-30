@@ -138,17 +138,23 @@ Fixed on `fix/icon-mixin-budget` (off `main`, merged to `main` and pushed to `lo
 
 Verified: compiled every touched file and confirmed the exact right icon selectors are present, nothing dropped (about: 4.9kB, down from 7.5kB; tls-cloudflare-and-heroku: 2.7kB; tls-for-local-lab: 2.2kB — all comfortably under budget now). Fresh production build has zero warnings of any kind (Sass deprecation *and* budget). Full Mocha (58) and Karma (108) suites pass. Playwright screenshots of every touched page (`/About`, `/Musings`, `/Musings/rpi-twonky`, `/Musings/ubuntu-hd-audio`, `/Musings/tls-cloudflare-and-heroku`, `/Musings/tls-for-local-lab`, `/Projects/PYTDance`) plus a DOM-level check of every icon's computed `font-size` against the real `dev:ssr` server confirm no icon lost its sizing.
 
-## 14. Fix all `ng lint` (ESLint) issues we've been carrying forward
+## 14. Fix all `ng lint` (ESLint) issues we've been carrying forward — DONE (2026-07-30), excluding `prefer-standalone` (item 17)
 
-Not started. 108 real findings as of 2026-07-29 (was 96 right after the ESLint migration in item 2 — grown slightly since, from newly-ported content in item 9c and elsewhere). No lint target existed at all before item 2's ESLint migration, so this is years of accumulated style debt surfacing for the first time, not any single regression. Confirmed 2026-07-29 (during item 16 below) that the count is identical under Node 20 and Node 24 — not tooling/runtime-version sensitive.
+108 real findings as of 2026-07-29 (was 96 right after the ESLint migration in item 2 — grown slightly since, from newly-ported content in item 9c and elsewhere). No lint target existed at all before item 2's ESLint migration, so this was years of accumulated style debt surfacing for the first time, not any single regression. Confirmed 2026-07-29 (during item 16) that the count was identical under Node 20 and Node 24 — not tooling/runtime-version sensitive.
 
-Breakdown by rule, from the current `npm run lint` output:
-- `@angular-eslint/prefer-inject` — constructor injection used throughout instead of the `inject()` function (largest single category).
-- `@typescript-eslint/no-unused-vars` — unused imports/params across several files.
-- `@typescript-eslint/no-explicit-any`, `@typescript-eslint/prefer-for-of`, `@typescript-eslint/no-wrapper-object-types`, `@angular-eslint/no-empty-lifecycle-method` / `@typescript-eslint/no-empty-function` — smaller one-off counts.
-- `@angular-eslint/template/alt-text` — at least one `<img>` missing alt text (`projects-home.component.html`).
+**Decided 2026-07-30: `@angular-eslint/prefer-standalone` (24 findings, one per component) split out into item 17** — it's a much bigger structural change (touches every component's module wiring, both bootstrap entrypoints, and SSR) than the rest of this list, which was mostly mechanical/local fixes. The remaining 84 findings were cleared first, on `fix/lint-cleanup` (off `main`):
 
-**Decided 2026-07-30: `@angular-eslint/prefer-standalone` (24 findings, one per component) split out into item 17** — it's a much bigger structural change (touches every component's module wiring, both bootstrap entrypoints, and SSR) than the rest of this list, which are mostly mechanical/local fixes. Plan is to clear the rest of this item first; the mechanical fixes are lower-risk and shouldn't be blocked on the bigger migration.
+- `@angular-eslint/prefer-inject` (largest single category) — fixed via Angular's official `ng generate @angular/core:inject` codemod across 12 files, plus manual cleanup of double-blank-line formatting artifacts the codemod left behind.
+- `@typescript-eslint/no-unused-vars` — removed unused imports/params, including dropping now-dead `route`/`state` resolver params that the resolver body never read (`ProjectsResolver`, `ProjectDetailResolver`).
+- `@typescript-eslint/no-explicit-any` (`database.service.ts`) — `getProjectDetails()` now returns `Observable<ProjectDetails>` instead of `Observable<any>`; `handleError()`'s error param is typed `HttpErrorResponse` instead of `any` (re-added that import now that it's actually used; `HttpResponse`/`HttpHeaders` stayed removed as genuinely unused).
+- `@typescript-eslint/no-wrapper-object-types` (`theme.service.ts`) — `Object` → `object`.
+- `@angular-eslint/no-empty-lifecycle-method` / `@typescript-eslint/no-empty-function` — removed empty `constructor()`/`ngOnInit()` pairs on components with no real init logic (8 components); left `ngOnInit` in place wherever it does real work (e.g. setting the page title).
+- `@typescript-eslint/prefer-for-of` — converted 7 simple index-based `for` loops in spec files to `for...of`.
+- `@angular-eslint/template/alt-text` — added descriptive alt text to the 7 flagged `<img>` elements (`home`, `projects-home`, `rpi-twonky`, and 5 in `ubuntu-hd-audio`).
+
+**One real regression found and fixed along the way**: the `prefer-inject` codemod broke three specs that constructed classes directly with `new` instead of going through Angular's DI (`ProjectsResolver`, `ProjectDetailResolver`, `ThemeService`) — `inject()` only works inside an injection context, so `new X(mockA, mockB)` no longer type-checked (and would have failed at runtime even if it had). Rewrote those three specs to use `TestBed`/`TestBed.inject()` instead of direct construction.
+
+Verified: `ng lint` now reports only the 24 `prefer-standalone` findings tracked under item 17; `tsc --noEmit` clean on the app, spec, and server tsconfigs; full Karma suite (108/108) and Mocha suite (58/58, excluding the two tests requiring a live MongoDB connection) pass. Not yet merged to `main` or pushed.
 
 ## 15. Diagnose and fix Cloudflare Turnstile "siteverify isn't being called" warning — DONE (2026-07-29)
 
