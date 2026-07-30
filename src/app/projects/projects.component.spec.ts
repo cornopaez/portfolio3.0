@@ -5,7 +5,6 @@ import { ProjectsComponent } from './projects.component'
 describe('ProjectsComponent', () => {
   let component: ProjectsComponent
   let fixture: ComponentFixture<ProjectsComponent>
-  let app
   let compiled
 
   beforeEach(waitForAsync(() => {
@@ -19,7 +18,6 @@ describe('ProjectsComponent', () => {
     fixture = TestBed.createComponent(ProjectsComponent)
     component = fixture.componentInstance
     fixture.detectChanges()
-    app = fixture.debugElement.componentInstance
     compiled = fixture.debugElement.nativeElement
   }))
 
@@ -37,9 +35,9 @@ describe('ProjectsComponent', () => {
 
     it('should have the correct links in pills',()=>{
       const links = component.currentContent.navbar.links
-      for (let i = 0; i < links.length; ++i) {
-        expect(compiled.querySelector("a[href='/" + links[i] + "']").textContent).toEqual(links[i])
-        expect(compiled.querySelector("a[href='/" + links[i] + "']")).toBeTruthy()
+      for (const link of links) {
+        expect(compiled.querySelector("a[href='/" + link + "']").textContent).toEqual(link)
+        expect(compiled.querySelector("a[href='/" + link + "']")).toBeTruthy()
       }
     })
   })

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { Title }     from '@angular/platform-browser';
 
 @Component({
@@ -8,6 +8,7 @@ import { Title }     from '@angular/platform-browser';
     standalone: false
 })
 export class ContactComponent implements OnInit {
+	private title = inject(Title);
 
 	currentContent = {
       view_title: 'Mauricio_Páez | Contact',
@@ -21,10 +22,6 @@ export class ContactComponent implements OnInit {
         ]
       }
     };
-
-  constructor(
-  	private title : Title
-  	) { }
 
   ngOnInit() {
   	// Set the title for this view

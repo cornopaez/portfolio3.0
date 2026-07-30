@@ -15,7 +15,7 @@
         </li>
       }
       <li class="hd_audio">
-        <img src="{{currentContent.content.hd_audio}}">
+        <img src="{{currentContent.content.hd_audio}}" alt="Hi-Res Audio logo">
       </li>
     </ul>
   </div>
@@ -65,16 +65,16 @@
               <h3 id="alsamixer">Alsamixer Setup</h3>
               <p>To get started, open a Terminal window ,type <kbd>alsamixer</kbd>, and hit <kbd>enter</kbd>. You'll be greeted with something like this:</p>
               <div class="alsamixer">
-                <img src="{{currentContent.content.alsamixer[0]}}">
+                <img src="{{currentContent.content.alsamixer[0]}}" alt="alsamixer running in a terminal window">
               </div>
               We can hit <kbd>F6</kbd> on the keyboard to bring up the list of sound cards and we should look for the one that matches the specs of the motherboard. Unfortunately, the names are not very descriptive so one does have to try each one until the relevant one is found. In the case of the B550 Plus, we're looking for "Realtek ALC S1200A" to be present in some form. Depending on how many GPUs you have attached to the motherboard, you may get more or less options here. Once you've found the right card, it should look like this:
               <div class="alsamixer">
-                <img src="{{currentContent.content.alsamixer[1]}}">
+                <img src="{{currentContent.content.alsamixer[1]}}" alt="alsamixer with the Realtek ALC S1200A sound card selected">
               </div>
               <p><em>Quick note:</em> Be sure to disable the Auto-Mute Mode. This can cause no-sound to be output even if everything else looks right. To disable it, use the horizontal arrow keys in the keyboard to navigate the different items, and use the vertical ones to enable/disable.</p>
               <p>Once you find the correct card, make a note of its position in the list as you'll need it coming up. In my case it is #3:</p>
               <div class="alsamixer">
-                <img src="{{currentContent.content.alsamixer[2]}}">
+                <img src="{{currentContent.content.alsamixer[2]}}" alt="alsamixer showing the sound card's position (#3) in the card list">
               </div>
               <br>
                 <p>Once Auto-Mute Mode is disabled in the correct card, you can hit <kbd>esc</kbd> to close out of <kbd>alsamixer</kbd>.</p>
@@ -103,7 +103,7 @@
                 <p>Lastly, be sure to explicitly tell Ubuntu which audio output to use. So far, we've ensured that important Ubuntu packages know which audio card to use and which parameters to apply to the audio output. This step, while simple, can save lots of frustrations when troubleshooting the lack of audio on playback.</p>
                 <p>Head over to the Ubuntu settings, top right of screen and then click Settings. Under the Audio section, select the correct Output Device:</p>
                 <div class="ubuntu-settings">
-                  <img src="{{currentContent.content.ubuntu_settings[0]}}">
+                  <img src="{{currentContent.content.ubuntu_settings[0]}}" alt="Ubuntu Sound settings with the correct output device selected">
                 </div>
                 <p>For this guide I chose HDMI because I know it has the bandwidth available to cope with this demand.</p>
                 <h2 id="musings">Musings</h2>

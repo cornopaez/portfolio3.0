@@ -5,7 +5,6 @@ import { HomeComponent } from './home.component'
 describe('HomeComponent', () => {
   let component: HomeComponent
   let fixture: ComponentFixture<HomeComponent>
-  let app
   const currentContent = {
       view_title: 'Mauricio_Páez | Developer',
       content: {
@@ -35,7 +34,6 @@ describe('HomeComponent', () => {
     fixture = TestBed.createComponent(HomeComponent)
     component = fixture.componentInstance
     fixture.detectChanges()
-    app = fixture.debugElement.componentInstance
     compiled = fixture.debugElement.nativeElement
   }))
 
@@ -48,8 +46,8 @@ describe('HomeComponent', () => {
   })
 
   it('should have the correct description links', () =>{
-    for (let i = 0; i < currentContent.content.description_links.length; ++i) {
-      expect(compiled.querySelector("a[href='/" + currentContent.content.description_links[i] + "']").textContent).toEqual(currentContent.content.description_links[i])
+    for (const descriptionLink of currentContent.content.description_links) {
+      expect(compiled.querySelector("a[href='/" + descriptionLink + "']").textContent).toEqual(descriptionLink)
     }
   })
 

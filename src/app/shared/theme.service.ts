@@ -1,4 +1,4 @@
-import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
+import { Injectable, PLATFORM_ID, inject } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 
 export type Theme = 'light' | 'dark';
@@ -14,7 +14,7 @@ const STORAGE_KEY = 'theme';
  */
 @Injectable()
 export class ThemeService {
-  constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
+  private platformId = inject<object>(PLATFORM_ID);
 
   getCurrentTheme(): Theme {
     if (!isPlatformBrowser(this.platformId)) {

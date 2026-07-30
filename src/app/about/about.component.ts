@@ -1,7 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { AppComponent } from '../app.component'
+import { Component, OnInit, inject } from '@angular/core';
 import { Title }     from '@angular/platform-browser';
-import { Router } from '@angular/router';
 import { BACKGROUND, LANGUAGES, EXPERIENCE, EDUCATION } from './about'
 
 @Component({
@@ -11,6 +9,7 @@ import { BACKGROUND, LANGUAGES, EXPERIENCE, EDUCATION } from './about'
     standalone: false
 })
 export class AboutComponent implements OnInit {
+    private title = inject(Title);
 
     currentContent = {
     view_title: 'Mauricio_Páez | About',
@@ -29,10 +28,6 @@ export class AboutComponent implements OnInit {
   languages = LANGUAGES
   experience = EXPERIENCE
   education = EDUCATION
-
-  constructor(
-    private title : Title
-    ) { }
 
   ngOnInit() {
     // Set the title for this view

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
     selector: 'app-ubuntu-hd-audio',
@@ -6,7 +6,7 @@ import { Component, OnInit } from '@angular/core';
     styleUrls: ['./ubuntu-hd-audio.component.sass'],
     standalone: false
 })
-export class UbuntuHdAudioComponent implements OnInit {
+export class UbuntuHdAudioComponent {
   currentContent = {
     content: {
       icons: [
@@ -23,11 +23,6 @@ export class UbuntuHdAudioComponent implements OnInit {
         '../../../../assets/ubuntu-settings-1.png',
       ]
     }
-  }
-
-  constructor() { }
-
-  ngOnInit(): void {
   }
 
 }

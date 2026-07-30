@@ -1,25 +1,24 @@
-import { Injectable, Inject, Optional } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { HttpClient, HttpErrorResponse, HttpResponse, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 // import { ErrorObservable } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { environment } from '../../environments/environment';
 
 import { ProjectCard } from '../projects/project-card'
+import { ProjectDetails } from '../projects/projects-details/project-details'
 import { ContactSuccess } from '../contact/contact-success/contact-success'
 
 
 @Injectable()
 export class DatabaseService {
+  private http = inject(HttpClient);
+  private router = inject(Router);
+
   getProjectsCardsUrl = environment.baseUrl + '/data/projects'
   getProjectDetailsUrl = environment.baseUrl + '/data/'
   submitContactFormUrl = environment.baseUrl + '/data/contact'
-
-  constructor(
-    private http: HttpClient,
-    private router: Router,
-    ) {}
 
   /**
     Retrieves the data necessary from the database for the view.
@@ -45,7 +44,7 @@ export class DatabaseService {
                                           returns a null observable
 
   */
-  getProjectDetails(name: string) : Observable<any> {
+  getProjectDetails(name: string) : Observable<ProjectDetails> {
     const url = this.getProjectDetailsUrl + name
     return this.http.get(url)
       .pipe(
@@ -78,7 +77,7 @@ export class DatabaseService {
    * @param result - optional value to return as the observable result
    */
   private handleError<T> (operation = 'operation', result?: T) {
-    return (error: any): Observable<T> => {
+    return (error: HttpErrorResponse): Observable<T> => {
 
       // TODO: send the error to remote logging infrastructure
       console.error(JSON.stringify(error)); // log to console instead

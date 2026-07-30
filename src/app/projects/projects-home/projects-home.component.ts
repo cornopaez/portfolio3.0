@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, ParamMap } from '@angular/router';
+import { Component, OnInit, inject } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { Title } from '@angular/platform-browser'
 import { ProjectCard } from '../project-card'
 
@@ -10,13 +10,10 @@ import { ProjectCard } from '../project-card'
     standalone: false
 })
 export class ProjectsHomeComponent implements OnInit {
+  private route = inject(ActivatedRoute);
+  private title = inject(Title);
 
   currentCards: ProjectCard[]
-
-  constructor(
-    private route: ActivatedRoute,
-    private title : Title
-    ) { }
 
   ngOnInit() {
   	// Get the data for the projects

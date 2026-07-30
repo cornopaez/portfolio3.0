@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-tls-cloudflare-and-heroku',
@@ -6,7 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./tls-cloudflare-and-heroku.component.sass'],
   standalone: false
 })
-export class TlsCloudflareAndHerokuComponent implements OnInit {
+export class TlsCloudflareAndHerokuComponent {
   currentContent = {
     content: {
       icons: [
@@ -80,8 +80,4 @@ export class TlsCloudflareAndHerokuComponent implements OnInit {
       ]
   }
 
-  constructor() { }
-
-  ngOnInit(): void {
-  }
 }

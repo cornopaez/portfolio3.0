@@ -1,11 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { DialogService }  from '../../shared/dialog.service';
 
 import { DatabaseService } from '../../shared/database.service'
-import { Message } from './message'
 import { environment } from '../../../environments/environment'
 
 @Component({
@@ -14,18 +13,17 @@ import { environment } from '../../../environments/environment'
     styleUrls: ['./contact-form.component.sass'],
     standalone: false
 })
-export class ContactFormComponent implements OnInit {
+export class ContactFormComponent {
+  private fb = inject(UntypedFormBuilder);
+  private dbs = inject(DatabaseService);
+  private router = inject(Router);
+  private ds = inject(DialogService);
 
   contactForm : UntypedFormGroup
   formSent : boolean
   turnstileSiteKey = environment.turnstileSiteKey
 
-  constructor(
-    private fb: UntypedFormBuilder,
-    private dbs: DatabaseService,
-    private router : Router,
-    private ds: DialogService
-    ) { 
+  constructor() { 
     this.createForm()
   }
 
@@ -65,7 +63,7 @@ export class ContactFormComponent implements OnInit {
         }
         
       },
-      error => {
+      () => {
         this.router.navigate(['/Error'])
       }
     )
@@ -79,9 +77,6 @@ export class ContactFormComponent implements OnInit {
     // Otherwise ask the user with the dialog service and return its
     // observable which resolves to true or false when the user decides
     return this.ds.confirm('Are you sure you want to discard changes?');
-  }
-
-  ngOnInit() {
   }
 
 }

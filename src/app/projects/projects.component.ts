@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Title }     from '@angular/platform-browser';
 
 @Component({
@@ -7,7 +7,8 @@ import { Title }     from '@angular/platform-browser';
     styleUrls: ['./projects.component.sass'],
     standalone: false
 })
-export class ProjectsComponent implements OnInit {
+export class ProjectsComponent {
+  private title = inject(Title);
 
   // private currentContent
   currentContent = {
@@ -23,17 +24,9 @@ export class ProjectsComponent implements OnInit {
       }
     }
 
-  constructor(
-  	    private title : Title
-  	) { }
-
-  
   setViewTitle(viewTitle){
     // Set the title for this view
     this.title.setTitle(viewTitle)
-  }
-
-  ngOnInit() {
   }
 
 }

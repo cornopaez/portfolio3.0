@@ -1,4 +1,17 @@
+import { PLATFORM_ID } from '@angular/core';
+import { TestBed } from '@angular/core/testing';
 import { ThemeService } from './theme.service';
+
+function createService(platformId: 'browser' | 'server'): ThemeService {
+  TestBed.resetTestingModule();
+  TestBed.configureTestingModule({
+    providers: [
+      ThemeService,
+      { provide: PLATFORM_ID, useValue: platformId }
+    ]
+  });
+  return TestBed.inject(ThemeService);
+}
 
 describe('ThemeService', () => {
   let service: ThemeService;
@@ -6,7 +19,7 @@ describe('ThemeService', () => {
   beforeEach(() => {
     document.documentElement.removeAttribute('data-theme');
     localStorage.removeItem('theme');
-    service = new ThemeService('browser');
+    service = createService('browser');
   });
 
   afterEach(() => {
@@ -57,7 +70,7 @@ describe('ThemeService', () => {
 
   describe('on the server (SSR)', () => {
     it('always reports light without touching the DOM or localStorage', () => {
-      const serverService = new ThemeService('server');
+      const serverService = createService('server');
       expect(serverService.getCurrentTheme()).toBe('light');
     });
   });

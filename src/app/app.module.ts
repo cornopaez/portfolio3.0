@@ -1,7 +1,7 @@
 import { BrowserModule, Title } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
-import { ReactiveFormsModule, FormsModule }   from '@angular/forms';
+import { ReactiveFormsModule }   from '@angular/forms';
 import { provideHttpClient, withFetch, withInterceptorsFromDi } from '@angular/common/http';
 
 

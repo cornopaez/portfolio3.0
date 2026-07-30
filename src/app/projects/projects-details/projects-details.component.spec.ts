@@ -1,7 +1,6 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing'
 import { RouterTestingModule } from '@angular/router/testing'
 import { ProjectsDetailsComponent } from './projects-details.component'
-import { ProjectDetails } from './project-details'
 import { ActivatedRoute } from '@angular/router'
 import { of } from 'rxjs'
 
@@ -90,8 +89,8 @@ describe('ProjectsDetailsComponent', () => {
 
     it('should have icons in jumbotron footnotes',()=>{
       expect(compiled.querySelector(".jumbotron .footnotes h4").textContent).toEqual('Tech used')
-      for (let i = 0; i < project.content.icons.length; ++i) {
-         expect(compiled.querySelector(".jumbotron .footnotes ul li i[class='" + project.content.icons[i] + "']")).toBeTruthy()
+      for (const icon of project.content.icons) {
+         expect(compiled.querySelector(".jumbotron .footnotes ul li i[class='" + icon + "']")).toBeTruthy()
       }
     })
 

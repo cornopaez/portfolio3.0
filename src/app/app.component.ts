@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { Theme, ThemeService } from './shared/theme.service';
 
 @Component({
@@ -8,6 +8,8 @@ import { Theme, ThemeService } from './shared/theme.service';
     standalone: false
 })
 export class AppComponent implements OnInit {
+  private themeService = inject(ThemeService);
+
   links = [
     {
       'name':'twitter',
@@ -24,8 +26,6 @@ export class AppComponent implements OnInit {
   ]
 
   currentTheme: Theme = 'light';
-
-  constructor(private themeService: ThemeService) {}
 
   ngOnInit() {
     this.currentTheme = this.themeService.getCurrentTheme();

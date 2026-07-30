@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
     selector: 'app-rpi-twonky',
@@ -6,7 +6,7 @@ import { Component, OnInit } from '@angular/core';
     styleUrls: ['./rpi-twonky.component.sass'],
     standalone: false
 })
-export class RpiTwonkyComponent implements OnInit {
+export class RpiTwonkyComponent {
   currentContent = {
     content: {
       icons: [
@@ -15,11 +15,6 @@ export class RpiTwonkyComponent implements OnInit {
       ],
       twonky: '../../../../assets/twonkyicon-120x120.png'
     }
-  }
-
-  constructor() { }
-
-  ngOnInit(): void {
   }
 
 }

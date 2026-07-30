@@ -61,8 +61,8 @@ describe('AppComponent', () => {
     })
 
     it('should contain three correct links',()=>{
-      for (let i = 0; i < links.length; ++i) {
-        expect(compiled.querySelector("a[href='" + links[i].link + "']").textContent).toEqual(links[i].name)
+      for (const linkItem of links) {
+        expect(compiled.querySelector("a[href='" + linkItem.link + "']").textContent).toEqual(linkItem.name)
       }
     })
   })

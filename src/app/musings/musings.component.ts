@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
     selector: 'app-musings',
@@ -6,7 +6,7 @@ import { Component, OnInit } from '@angular/core';
     styleUrls: ['./musings.component.sass'],
     standalone: false
 })
-export class MusingsComponent implements OnInit {
+export class MusingsComponent {
 
   currentContent = {
     view_title: 'Mauricio_Páez | Musings',
@@ -19,11 +19,6 @@ export class MusingsComponent implements OnInit {
         'Contact'
       ]
     }
-  }
-
-  constructor() { }
-
-  ngOnInit(): void {
   }
 
 }

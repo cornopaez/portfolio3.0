@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Title } from '@angular/platform-browser'
 import { ProjectDetails } from './project-details'
@@ -10,14 +10,11 @@ import { ProjectDetails } from './project-details'
     standalone: false
 })
 export class ProjectsDetailsComponent implements OnInit {
+  private route = inject(ActivatedRoute);
+  private title = inject(Title);
 
   // Class variables
   currentContent: ProjectDetails
-
-  constructor(
-  	private route : ActivatedRoute,
-    private title: Title
-  	) { }
 
   ngOnInit() {
   	// Assign the data to local variable for use

@@ -13,7 +13,7 @@
         <h6>{{ project.card.subtitle }}</h6>
       }
       @if (project.card.image) {
-        <img src="{{ project.card.image }}">
+        <img src="{{ project.card.image }}" alt="{{ project.card.title }}">
       }
       @if (project.card.icons) {
         <div class="{{ project.card.icons.class_name }}">

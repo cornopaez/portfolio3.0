@@ -38,9 +38,9 @@ describe('ContactComponent', () => {
 
     it('should have the correct links in the pills', ()=>{
       const links = component.currentContent.navbar.links
-      for (let i = 0; i < links.length; ++i) {
-        expect(compiled.querySelector("a[href='/" + links[i] + "']").textContent).toEqual(links[i])
-        expect(compiled.querySelector("a[href='/" + links[i] + "']")).toBeTruthy()
+      for (const link of links) {
+        expect(compiled.querySelector("a[href='/" + link + "']").textContent).toEqual(link)
+        expect(compiled.querySelector("a[href='/" + link + "']")).toBeTruthy()
       }
     })
   })

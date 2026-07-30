@@ -1,6 +1,5 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, inject } from '@angular/core'
 import { Title }     from '@angular/platform-browser'
-import { Router } from '@angular/router'
 
 @Component({
     selector: 'app-home',
@@ -9,6 +8,7 @@ import { Router } from '@angular/router'
     standalone: false
 })
 export class HomeComponent implements OnInit {
+  private title = inject(Title);
 
   currentContent = {
       view_title: 'Mauricio_Páez | Developer',
@@ -23,10 +23,6 @@ export class HomeComponent implements OnInit {
         ]
       }
     }
-
-  constructor(
-  	private title : Title
-  	) { }
 
   ngOnInit() {
   	// Set the title for this view
