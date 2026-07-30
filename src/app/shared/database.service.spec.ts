@@ -8,6 +8,7 @@ import { environment } from '../../environments/environment';
 import { ProjectCard } from '../projects/project-card';
 import { ProjectDetails } from '../projects/projects-details/project-details';
 import { ContactSuccess } from '../contact/contact-success/contact-success';
+import { INTERNAL_BASE_URL } from './internal-base-url.token';
 
 describe('DatabaseService', () => {
   let service: DatabaseService;
@@ -119,6 +120,34 @@ describe('DatabaseService', () => {
         httpMock.expectOne(environment.baseUrl + '/data/contact')
           .flush('simulated error', { status: 400, statusText: 'Bad Request' });
       }
+    });
+  });
+
+  // todo.md item 19: SSR requests must go over loopback instead of
+  // round-tripping through the public internet (and Cloudflare) to reach
+  // themselves. Every test above already covers the fallback case (no
+  // INTERNAL_BASE_URL provided -> environment.baseUrl, same as the
+  // browser); this covers the override controllers/home.ts provides
+  // per-request during SSR.
+  describe('INTERNAL_BASE_URL', () => {
+    it('takes precedence over environment.baseUrl when provided', (done) => {
+      TestBed.resetTestingModule();
+      TestBed.configureTestingModule({
+        imports: [RouterTestingModule],
+        providers: [
+          DatabaseService,
+          { provide: INTERNAL_BASE_URL, useValue: 'http://localhost:4000' },
+          provideHttpClient(withInterceptorsFromDi()),
+          provideHttpClientTesting()
+        ]
+      });
+      const scopedService = TestBed.inject(DatabaseService);
+      const scopedHttpMock = TestBed.inject(HttpTestingController);
+
+      scopedService.getProjectsCards().subscribe(() => done());
+
+      scopedHttpMock.expectOne('http://localhost:4000/data/projects').flush([]);
+      scopedHttpMock.verify();
     });
   });
 });
