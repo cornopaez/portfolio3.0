@@ -1,12 +1,13 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { Title }     from '@angular/platform-browser';
 import { BACKGROUND, LANGUAGES, EXPERIENCE, EDUCATION } from './about'
+import { RouterLink } from '@angular/router';
 
 @Component({
     selector: 'app-about',
     templateUrl: './about.component.html',
     styleUrls: ['./about.component.sass'],
-    standalone: false
+    imports: [RouterLink]
 })
 export class AboutComponent implements OnInit {
     private title = inject(Title);

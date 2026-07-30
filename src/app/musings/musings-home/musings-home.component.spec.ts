@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing'
+import { RouterTestingModule } from '@angular/router/testing'
 
 import { MusingsHomeComponent } from './musings-home.component'
 
@@ -9,8 +10,8 @@ describe('MusingsHomeComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ MusingsHomeComponent ]
-    })
+    imports: [MusingsHomeComponent, RouterTestingModule]
+})
     .compileComponents()
   }))
 

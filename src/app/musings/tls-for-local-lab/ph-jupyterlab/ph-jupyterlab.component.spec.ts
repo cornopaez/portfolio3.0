@@ -8,8 +8,8 @@ describe('PhJupyterlabComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PhJupyterlabComponent ]
-    })
+    imports: [PhJupyterlabComponent]
+})
     .compileComponents();
 
     fixture = TestBed.createComponent(PhJupyterlabComponent);

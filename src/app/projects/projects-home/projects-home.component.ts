@@ -1,5 +1,5 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Title } from '@angular/platform-browser'
 import { ProjectCard } from '../project-card'
 
@@ -7,7 +7,7 @@ import { ProjectCard } from '../project-card'
     selector: 'app-projects-home',
     templateUrl: './projects-home.component.html',
     styleUrls: ['./projects-home.component.sass'],
-    standalone: false
+    imports: [RouterLink]
 })
 export class ProjectsHomeComponent implements OnInit {
   private route = inject(ActivatedRoute);

@@ -24,11 +24,11 @@ describe('HomeComponent', () => {
   beforeEach(waitForAsync(() => {
     // Create test bed
     TestBed.configureTestingModule({
-      imports:[
-        RouterTestingModule
-      ],
-      declarations: [ HomeComponent ]
-    }).compileComponents()
+    imports: [
+        RouterTestingModule,
+        HomeComponent
+    ]
+}).compileComponents()
 
     // Create the fixtures
     fixture = TestBed.createComponent(HomeComponent)

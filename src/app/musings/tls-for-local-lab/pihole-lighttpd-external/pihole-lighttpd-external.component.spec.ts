@@ -8,8 +8,8 @@ describe('PiholeLighttpdExternalComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PiholeLighttpdExternalComponent ]
-    })
+    imports: [PiholeLighttpdExternalComponent]
+})
     .compileComponents();
 
     fixture = TestBed.createComponent(PiholeLighttpdExternalComponent);

@@ -9,9 +9,8 @@ describe('TlsCloudflareAndHerokuComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ RouterTestingModule ],
-      declarations: [TlsCloudflareAndHerokuComponent]
-    })
+    imports: [RouterTestingModule, TlsCloudflareAndHerokuComponent]
+})
     .compileComponents();
     
     fixture = TestBed.createComponent(TlsCloudflareAndHerokuComponent);

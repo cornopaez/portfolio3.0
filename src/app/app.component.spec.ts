@@ -29,16 +29,14 @@ describe('AppComponent', () => {
     localStorage.removeItem('theme')
 
     TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule
-      ],
-      declarations: [
+    imports: [
+        RouterTestingModule,
         AppComponent
-      ],
-      providers: [
+    ],
+    providers: [
         ThemeService
-      ],
-    }).compileComponents()
+    ],
+}).compileComponents()
     fixture = TestBed.createComponent(AppComponent)
     component = fixture.componentInstance
     fixture.detectChanges()

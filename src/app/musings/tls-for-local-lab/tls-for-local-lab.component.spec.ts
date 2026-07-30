@@ -16,18 +16,15 @@ describe('TlsForLocalLabComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ RouterTestingModule ],
-      declarations: [
-        TlsForLocalLabComponent,
+    imports: [RouterTestingModule, TlsForLocalLabComponent,
         AcmeCommandOutputComponent,
         AcmeCommandRecapComponent,
         JupyterConfigUpdatesComponent,
         PhJupyterlabComponent,
         PhLighttpdComponent,
         PiholeLighttpdExternalComponent,
-        PiholeLighttpdModOpensslInstallComponent
-      ]
-    })
+        PiholeLighttpdModOpensslInstallComponent]
+})
     .compileComponents();
 
     fixture = TestBed.createComponent(TlsForLocalLabComponent);

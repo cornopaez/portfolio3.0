@@ -8,8 +8,8 @@ describe('JupyterConfigUpdatesComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ JupyterConfigUpdatesComponent ]
-    })
+    imports: [JupyterConfigUpdatesComponent]
+})
     .compileComponents();
 
     fixture = TestBed.createComponent(JupyterConfigUpdatesComponent);

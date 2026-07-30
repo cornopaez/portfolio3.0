@@ -8,8 +8,8 @@ describe('PhLighttpdComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PhLighttpdComponent ]
-    })
+    imports: [PhLighttpdComponent]
+})
     .compileComponents();
 
     fixture = TestBed.createComponent(PhLighttpdComponent);

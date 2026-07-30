@@ -8,11 +8,11 @@ describe('AboutComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports:[
-        RouterTestingModule
-      ],
-      declarations: [ AboutComponent ]
-    })
+    imports: [
+        RouterTestingModule,
+        AboutComponent
+    ]
+})
     .compileComponents();
   }));
 

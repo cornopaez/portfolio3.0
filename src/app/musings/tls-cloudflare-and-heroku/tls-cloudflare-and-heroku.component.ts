@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
+import { RouterLink } from '@angular/router';
 
 @Component({
-  selector: 'app-tls-cloudflare-and-heroku',
-  templateUrl: './tls-cloudflare-and-heroku.component.html',
-  styleUrls: ['./tls-cloudflare-and-heroku.component.sass'],
-  standalone: false
+    selector: 'app-tls-cloudflare-and-heroku',
+    templateUrl: './tls-cloudflare-and-heroku.component.html',
+    styleUrls: ['./tls-cloudflare-and-heroku.component.sass'],
+    imports: [RouterLink]
 })
 export class TlsCloudflareAndHerokuComponent {
   currentContent = {

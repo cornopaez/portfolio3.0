@@ -8,8 +8,8 @@ describe('AcmeCommandOutputComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ AcmeCommandOutputComponent ]
-    })
+    imports: [AcmeCommandOutputComponent]
+})
     .compileComponents();
 
     fixture = TestBed.createComponent(AcmeCommandOutputComponent);

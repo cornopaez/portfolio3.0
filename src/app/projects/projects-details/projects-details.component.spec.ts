@@ -57,15 +57,15 @@ describe('ProjectsDetailsComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports:[
-        RouterTestingModule
-      ],
-      providers: [
-         // Properly provide the activated route mock object.
-         { provide: ActivatedRoute, useValue: { data : of(projectDetails) } }
-      ],
-      declarations: [ ProjectsDetailsComponent ]
-    })
+    imports: [
+        RouterTestingModule,
+        ProjectsDetailsComponent
+    ],
+    providers: [
+        // Properly provide the activated route mock object.
+        { provide: ActivatedRoute, useValue: { data: of(projectDetails) } }
+    ]
+})
     .compileComponents()
     fixture = TestBed.createComponent(ProjectsDetailsComponent)
     component = fixture.componentInstance

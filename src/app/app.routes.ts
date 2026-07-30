@@ -1,5 +1,4 @@
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { Routes } from '@angular/router';
 
 import { HomeComponent } from './home/home.component';
 import { AboutComponent } from './about/about.component';
@@ -21,18 +20,18 @@ import { ContactHomeComponent } from './contact/contact-home/contact-home.compon
 import { ContactSuccessComponent } from './contact/contact-success/contact-success.component'
 import { CanDeactivateGuard } from './shared/can-deactivate-guard.service'
 
-const routes: Routes = [
-	{ 
-    path: '', 
-    component: HomeComponent 
+export const routes: Routes = [
+	{
+    path: '',
+    component: HomeComponent
   },
-  { 
-    path: 'Home', 
-    redirectTo: '', 
+  {
+    path: 'Home',
+    redirectTo: '',
     pathMatch: 'full'
   },
-  { 
-    path: 'Projects', 
+  {
+    path: 'Projects',
     component: ProjectsComponent,
     children: [
       {
@@ -51,11 +50,11 @@ const routes: Routes = [
       }
     ]
   },
-  { 
-    path: 'About', 
-    component: AboutComponent 
+  {
+    path: 'About',
+    component: AboutComponent
   },
-  { 
+  {
     path: 'Contact',
     component: ContactComponent,
     children: [
@@ -101,21 +100,11 @@ const routes: Routes = [
     ]
   },
   {
-    path: 'Error', 
-    component: ErrorComponent 
+    path: 'Error',
+    component: ErrorComponent
   },
   {
     path: '**',
     redirectTo: 'Error'
   }
 ];
-
-@NgModule({
-  imports: [RouterModule.forRoot(routes, {
-    anchorScrolling: 'enabled',
-    initialNavigation: 'enabledBlocking',
-    scrollPositionRestoration: 'enabled'
-})],
-  exports: [RouterModule]
-})
-export class AppRoutingModule { }

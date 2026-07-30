@@ -8,8 +8,8 @@ describe('PiholeLighttpdModOpensslInstallComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PiholeLighttpdModOpensslInstallComponent ]
-    })
+    imports: [PiholeLighttpdModOpensslInstallComponent]
+})
     .compileComponents();
 
     fixture = TestBed.createComponent(PiholeLighttpdModOpensslInstallComponent);

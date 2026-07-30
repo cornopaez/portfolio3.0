@@ -9,11 +9,11 @@ describe('ProjectsComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports:[
-        RouterTestingModule
-      ],
-      declarations: [ ProjectsComponent ]
-    })
+    imports: [
+        RouterTestingModule,
+        ProjectsComponent
+    ]
+})
     .compileComponents()
     fixture = TestBed.createComponent(ProjectsComponent)
     component = fixture.componentInstance

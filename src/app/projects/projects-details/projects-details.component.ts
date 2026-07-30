@@ -1,13 +1,14 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Title } from '@angular/platform-browser'
 import { ProjectDetails } from './project-details'
+import { NgClass } from '@angular/common';
 
 @Component({
     selector: 'app-projects-details',
     templateUrl: './projects-details.component.html',
     styleUrls: ['./projects-details.component.sass'],
-    standalone: false
+    imports: [RouterLink, NgClass]
 })
 export class ProjectsDetailsComponent implements OnInit {
   private route = inject(ActivatedRoute);

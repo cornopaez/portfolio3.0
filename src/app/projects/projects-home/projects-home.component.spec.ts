@@ -120,17 +120,15 @@ describe('ProjectsHomeComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [
+    imports: [
+        RouterTestingModule,
         ProjectsHomeComponent
-      ],
-      imports:[
-        RouterTestingModule
-      ],
-      providers: [
-         // Properly provide the activated route mock object.
-         { provide: ActivatedRoute, useValue: { data : of(cards) } }
-      ],
-    }).compileComponents()
+    ],
+    providers: [
+        // Properly provide the activated route mock object.
+        { provide: ActivatedRoute, useValue: { data: of(cards) } }
+    ],
+}).compileComponents()
     fixture = TestBed.createComponent(ProjectsHomeComponent)
     component = fixture.componentInstance
     fixture.detectChanges()

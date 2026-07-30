@@ -10,11 +10,11 @@ describe('ContactComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports:[
-        RouterTestingModule
-      ],
-      declarations: [ ContactComponent ]
-    })
+    imports: [
+        RouterTestingModule,
+        ContactComponent
+    ]
+})
     .compileComponents()
   }))
 

@@ -23,14 +23,11 @@ describe('ContactFormComponent', () => {
     dsSpy = jasmine.createSpyObj('DialogService', ['confirm']);
 
     TestBed.configureTestingModule({
-    declarations: [
-        ContactFormComponent
-    ],
     imports: [FormsModule,
         ReactiveFormsModule,
         RouterTestingModule,
         NgxTurnstileModule,
-        NgxTurnstileFormsModule],
+        NgxTurnstileFormsModule, ContactFormComponent],
     providers: [
         { provide: DatabaseService, useValue: dbsSpy },
         { provide: DialogService, useValue: dsSpy },

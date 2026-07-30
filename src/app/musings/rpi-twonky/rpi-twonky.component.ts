@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
+import { RouterLink } from '@angular/router';
 
 @Component({
     selector: 'app-rpi-twonky',
     templateUrl: './rpi-twonky.component.html',
     styleUrls: ['./rpi-twonky.component.sass'],
-    standalone: false
+    imports: [RouterLink]
 })
 export class RpiTwonkyComponent {
   currentContent = {

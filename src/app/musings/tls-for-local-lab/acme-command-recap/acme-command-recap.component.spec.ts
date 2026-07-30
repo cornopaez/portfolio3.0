@@ -8,8 +8,8 @@ describe('AcmeCommandRecapComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ AcmeCommandRecapComponent ]
-    })
+    imports: [AcmeCommandRecapComponent]
+})
     .compileComponents();
 
     fixture = TestBed.createComponent(AcmeCommandRecapComponent);

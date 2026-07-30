@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
 
 import { UbuntuHdAudioComponent } from './ubuntu-hd-audio.component';
 
@@ -10,8 +11,8 @@ describe('UbuntuHdAudioComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ UbuntuHdAudioComponent ]
-    })
+    imports: [UbuntuHdAudioComponent, RouterTestingModule]
+})
     .compileComponents();
 
     fixture = TestBed.createComponent(UbuntuHdAudioComponent);

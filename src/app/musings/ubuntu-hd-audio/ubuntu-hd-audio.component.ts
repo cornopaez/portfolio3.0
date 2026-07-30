@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
+import { RouterLink } from '@angular/router';
 
 @Component({
     selector: 'app-ubuntu-hd-audio',
     templateUrl: './ubuntu-hd-audio.component.html',
     styleUrls: ['./ubuntu-hd-audio.component.sass'],
-    standalone: false
+    imports: [RouterLink]
 })
 export class UbuntuHdAudioComponent {
   currentContent = {

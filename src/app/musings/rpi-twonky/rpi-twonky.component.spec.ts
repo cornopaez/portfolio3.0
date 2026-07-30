@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing'
+import { RouterTestingModule } from '@angular/router/testing'
 
 import { RpiTwonkyComponent } from './rpi-twonky.component'
 
@@ -10,8 +11,8 @@ describe('RpiTwonkyComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ RpiTwonkyComponent ]
-    })
+    imports: [RpiTwonkyComponent, RouterTestingModule]
+})
     .compileComponents()
   }))
 

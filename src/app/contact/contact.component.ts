@@ -1,11 +1,12 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { Title }     from '@angular/platform-browser';
+import { RouterLink, RouterOutlet } from '@angular/router';
 
 @Component({
     selector: 'app-contact',
     templateUrl: './contact.component.html',
     styleUrls: ['./contact.component.sass'],
-    standalone: false
+    imports: [RouterLink, RouterOutlet]
 })
 export class ContactComponent implements OnInit {
 	private title = inject(Title);

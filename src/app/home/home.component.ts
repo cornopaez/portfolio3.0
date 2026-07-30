@@ -1,11 +1,12 @@
 import { Component, OnInit, inject } from '@angular/core'
 import { Title }     from '@angular/platform-browser'
+import { RouterLink } from '@angular/router';
 
 @Component({
     selector: 'app-home',
     templateUrl: './home.component.html',
     styleUrls: ['./home.component.sass'],
-    standalone: false
+    imports: [RouterLink]
 })
 export class HomeComponent implements OnInit {
   private title = inject(Title);

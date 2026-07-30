@@ -1,11 +1,12 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { Theme, ThemeService } from './shared/theme.service';
+import { RouterOutlet } from '@angular/router';
 
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.sass'],
-    standalone: false
+    imports: [RouterOutlet]
 })
 export class AppComponent implements OnInit {
   private themeService = inject(ThemeService);

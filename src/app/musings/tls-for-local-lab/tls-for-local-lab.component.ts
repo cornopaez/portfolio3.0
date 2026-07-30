@@ -1,10 +1,18 @@
 import { Component } from '@angular/core';
+import { RouterLink } from '@angular/router';
+import { PhLighttpdComponent } from './ph-lighttpd/ph-lighttpd.component';
+import { PhJupyterlabComponent } from './ph-jupyterlab/ph-jupyterlab.component';
+import { AcmeCommandRecapComponent } from './acme-command-recap/acme-command-recap.component';
+import { AcmeCommandOutputComponent } from './acme-command-output/acme-command-output.component';
+import { PiholeLighttpdModOpensslInstallComponent } from './pihole-lighttpd-mod-openssl-install/pihole-lighttpd-mod-openssl-install.component';
+import { PiholeLighttpdExternalComponent } from './pihole-lighttpd-external/pihole-lighttpd-external.component';
+import { JupyterConfigUpdatesComponent } from './jupyter-config-updates/jupyter-config-updates.component';
 
 @Component({
-  selector: 'app-tls-for-local-lab',
-  templateUrl: './tls-for-local-lab.component.html',
-  styleUrls: ['./tls-for-local-lab.component.sass'],
-  standalone: false
+    selector: 'app-tls-for-local-lab',
+    templateUrl: './tls-for-local-lab.component.html',
+    styleUrls: ['./tls-for-local-lab.component.sass'],
+    imports: [RouterLink, PhLighttpdComponent, PhJupyterlabComponent, AcmeCommandRecapComponent, AcmeCommandOutputComponent, PiholeLighttpdModOpensslInstallComponent, PiholeLighttpdExternalComponent, JupyterConfigUpdatesComponent]
 })
 export class TlsForLocalLabComponent {
   currentContent = {

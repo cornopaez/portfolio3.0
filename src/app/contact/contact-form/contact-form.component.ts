@@ -1,17 +1,18 @@
 import { Component, inject } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { UntypedFormBuilder, UntypedFormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { Router, RouterLink } from '@angular/router';
 import { Observable } from 'rxjs';
 import { DialogService }  from '../../shared/dialog.service';
 
 import { DatabaseService } from '../../shared/database.service'
 import { environment } from '../../../environments/environment'
+import { NgxTurnstileComponent, NgxTurnstileFormsModule } from 'ngx-turnstile';
 
 @Component({
     selector: 'app-contact-form',
     templateUrl: './contact-form.component.html',
     styleUrls: ['./contact-form.component.sass'],
-    standalone: false
+    imports: [RouterLink, ReactiveFormsModule, NgxTurnstileComponent, NgxTurnstileFormsModule]
 })
 export class ContactFormComponent {
   private fb = inject(UntypedFormBuilder);
