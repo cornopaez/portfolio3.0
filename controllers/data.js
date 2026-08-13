@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const dotenv = require('dotenv').config();
+const dotenv = require('dotenv').config({ quiet: true });
 const queryDb = require('../middlewares/mongo-queries.js')
 const validation = require('../middlewares/reCaptcha-validation.js')
 

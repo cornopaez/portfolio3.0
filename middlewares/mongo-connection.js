@@ -1,6 +1,6 @@
 const MongoClient = require('mongodb').MongoClient
 var _db = null;
-const dotenv = require('dotenv').config();
+const dotenv = require('dotenv').config({ quiet: true });
 
 module.exports =  {
 	getDb: getDb,

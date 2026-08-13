@@ -111,9 +111,17 @@ export const EDUCATION = {
   title: 'Education and Certifications',
   entities : [
     {
+      title : "Coursera",
+      points : [
+        "IBM Data Engineering Professional Certificate - March 2026 - [ <a href=\"https://coursera.org/share/1c26ffd47230537b991f96b2e441caeb\"> View Completion Certificate</a> ]",
+        "Stanford University - Machine Learning - 2019 - [ <a href=\"https://www.coursera.org/account/accomplishments/certificate/4QWWQ42J4C5V\"> View Completion Certificate</a> ]",
+        "Google IT Support Professional Certificate - 2018 - [ <a href=\"https://www.coursera.org/specializations/google-it-support\"> View Site Website</a> ]"
+      ]
+    },
+    {
       title: 'Cornell University (eCornell)',
       points: [
-          'Python for Data Science Certificate - Expected Completion July 2024.',
+          'Python for Data Science Certificate - July 2024 - [ <a href="/assets/eCornell-PythonDSCert.pdf">View Completion Certificate</a> ]',
           'Machine Learning Certificate - October 2023 - [ <a href="/assets/eCornell-MLCertificateReport.pdf">View Completion Certificate</a> ]'
         ]
     },
@@ -122,13 +130,6 @@ export const EDUCATION = {
       points: [
           'Strategy and Innovation Cohort - October 2023.'
         ]
-    },
-    {
-      title : "Coursera",
-      points : [
-        "Stanford University - Machine Learning - 2019 - [ <a href=\"https://www.coursera.org/account/accomplishments/certificate/4QWWQ42J4C5V\"> View Completion Certificate</a> ]",
-        "Google IT Support Professional Certificate - 2018 - [ <a href=\"https://www.coursera.org/specializations/google-it-support\"> View Site Website</a> ]"
-      ]
     },
     {
       title : "MongoDB University",
